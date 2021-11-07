@@ -1,6 +1,6 @@
 {
   "name": "html2figma",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "convert HTML to figma Layers",
   "license": "MIT",
   "author": "natumsol@gmail.com",
