@@ -1,5 +1,6 @@
 import type { AstStroke, AstStyle, AstTextStyle, ConvertWarning, NodeId } from "../schema/types";
 import { parseCssColor } from "../utils/color";
+import { firstFontFamily, normalizeFontWeight } from "../utils/font";
 import { parseOptionalPx } from "../utils/length";
 import { parseBoxShadow } from "../utils/shadow";
 import { createWarning } from "../utils/warnings";
@@ -98,9 +99,9 @@ function readTopBorder(style: CSSStyleDeclaration): AstStroke | undefined {
 function readTextStyle(style: CSSStyleDeclaration): AstTextStyle {
   const color = parseCssColor(style.color);
   const textStyle: AstTextStyle = {
-    fontFamily: style.fontFamily,
+    fontFamily: firstFontFamily(style.fontFamily),
     fontSize: parseOptionalPx(style.fontSize, 0),
-    fontWeight: parseFontWeight(style.fontWeight)
+    fontWeight: normalizeFontWeight(style.fontWeight)
   };
 
   if (style.fontStyle === "italic") {
@@ -127,16 +128,6 @@ function readTextStyle(style: CSSStyleDeclaration): AstTextStyle {
   }
 
   return textStyle;
-}
-
-function parseFontWeight(value: string): number {
-  const namedWeights: Record<string, number> = {
-    normal: 400,
-    bold: 700
-  };
-
-  const numericWeight = Number(value);
-  return namedWeights[value] ?? (Number.isFinite(numericWeight) ? numericWeight : 400);
 }
 
 function mapTextAlign(value: string): AstTextStyle["textAlign"] {

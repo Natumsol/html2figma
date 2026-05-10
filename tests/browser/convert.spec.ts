@@ -7,8 +7,13 @@ let server: ViteDevServer;
 let serverUrl: string;
 
 test.beforeAll(async () => {
+  // @ts-expect-error The project tsconfig does not include Node types.
+  const { fileURLToPath } = await import("node:url") as {
+    fileURLToPath: (url: URL) => string;
+  };
+
   server = await createServer({
-    root: new URL("../..", import.meta.url).pathname,
+    root: fileURLToPath(new URL("../..", import.meta.url)),
     server: {
       cors: true,
       host: "127.0.0.1",
@@ -87,4 +92,28 @@ test("converts reviewed DOM edge cases", async ({ page }) => {
   expect(rowReverse?.style.layout?.mode).toBe("horizontal");
   expect(empty?.type).toBe("frame");
   expect(copy?.children[0]?.source.path).toBe(`${copy?.source.path} > #text`);
+});
+
+test("applies maxDepth to text nodes", async ({ page }) => {
+  await page.setContent(`
+    <section id="root">
+      Direct text
+      <p>Nested text</p>
+    </section>
+  `);
+
+  const result = await page.evaluate(async (baseUrl) => {
+    const { convert } = await import(`${baseUrl}/src/convert.ts`);
+    return convert(document.querySelector("#root")!, { maxDepth: 1 });
+  }, serverUrl) as Html2FigmaDocument;
+
+  expect(result.root.children).toHaveLength(2);
+  expect(result.root.children[0]).toMatchObject({
+    type: "text",
+    text: "Direct text"
+  });
+  expect(result.root.children[1]).toMatchObject({
+    type: "frame",
+    children: []
+  });
 });

@@ -112,7 +112,12 @@ function convertChildren(
   const children: Html2FigmaNode[] = [];
 
   for (const child of Array.from(element.childNodes)) {
+    const childDepth = depth + 1;
     if (child.nodeType === Node.TEXT_NODE) {
+      if (context.options.maxDepth !== undefined && childDepth > context.options.maxDepth) {
+        continue;
+      }
+
       const text = collapseText(child.textContent ?? "");
       if (text) {
         children.push(createTextNode(text, context, parentStyle, parentBounds, parentPath));
@@ -121,7 +126,7 @@ function convertChildren(
     }
 
     if (child instanceof Element) {
-      const childNode = convertElement(child, context, depth + 1);
+      const childNode = convertElement(child, context, childDepth);
       if (childNode) {
         children.push(childNode);
       }
