@@ -49,14 +49,7 @@ describe("Html2FigmaDocument schema", () => {
               text: {
                 fontFamily: "Inter",
                 fontSize: 16,
-                fontWeight: 400,
-                lineHeight: 24,
-                textAlign: "left",
-                color: {
-                  r: 20,
-                  g: 24,
-                  b: 32
-                }
+                fontWeight: 400
               }
             },
             source: {
