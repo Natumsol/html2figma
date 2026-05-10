@@ -1,0 +1,36 @@
+src/render/create-node.ts
+  s_0eff101aacbcf6::t_347421b5a518f1 42,59-60,76-79,81-83,86,93-105
+example/blocks/icon-feature-card.html
+  s_0eff101aacbcf6::t_7f14a51f832752 1-53
+example/src/ui/blocks.ts
+  s_0eff101aacbcf6::t_ae51a67c537d2f 26-43
+example/vite.ui.config.ts
+  s_0eff101aacbcf6::t_04dbebff7da9be 9-13
+example/blocks/profile-media-card.html
+  s_0eff101aacbcf6::t_6783336ba73238 61
+  s_0eff101aacbcf6::t_9f27733b60bf28 1-60,62-74
+tests/unit/render.test.ts
+  s_0eff101aacbcf6::t_cd03078fc2501c 300-377
+tests/browser/convert.spec.ts
+  s_0eff101aacbcf6::t_5d193157d53251 182-191,194-197,200-217,226-229,258-261
+  s_0eff101aacbcf6::t_9d93077d86c988 192-193,198-199,218-225
+example/blocks/image-product-card.html
+  s_0eff101aacbcf6::t_8ee4d3a607ab75 1-46,48-53
+  s_0eff101aacbcf6::t_65c0dc2e59879a 47
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.4",
+  "base_commit_sha": "dace58b489748238b73f921693308d10ed95ab82",
+  "prompts": {},
+  "sessions": {
+    "s_0eff101aacbcf6": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "7196604f-b57f-44db-aa9f-9c34c518f62f",
+        "model": "composer-2-fast"
+      },
+      "human_author": "Natumsol <natumsol@gmail.com>"
+    }
+  }
+}
