@@ -128,10 +128,21 @@ test("warns when converting an element with unsupported transform CSS", async ({
     return convert(document.querySelector("#target")!);
   }, serverUrl) as Html2FigmaDocument;
 
-  expect(result.warnings).toContainEqual(
-    expect.objectContaining({
-      code: "unsupported-transform",
-      cssProperty: "transform"
-    })
-  );
+  expect(result.warnings).toHaveLength(1);
+  expect(result.root.warnings).toEqual(result.warnings);
+
+  const warning = result.warnings[0]!;
+  expect(warning).toMatchObject({
+    code: "unsupported-transform",
+    severity: "warning",
+    nodeId: result.root.id,
+    cssProperty: "transform",
+    message: expect.any(String)
+  });
+  expect(warning.message).not.toHaveLength(0);
+
+  if ("source" in warning) {
+    expect(warning.source).toEqual(expect.any(String));
+    expect(warning.source).not.toHaveLength(0);
+  }
 });
