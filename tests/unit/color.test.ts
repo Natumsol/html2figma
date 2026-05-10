@@ -28,4 +28,9 @@ describe("parseCssColor", () => {
     expect(parseCssColor("rgba(0, 0, 0, 0)")).toBeUndefined();
     expect(parseCssColor("transparent")).toBeUndefined();
   });
+
+  it("rejects empty rgb components", () => {
+    expect(parseCssColor("rgb(255,,0)")).toBeUndefined();
+    expect(parseCssColor("rgb(, 128, 0)")).toBeUndefined();
+  });
 });

@@ -23,4 +23,8 @@ describe("parseBoxShadow", () => {
   it("ignores inset shadows", () => {
     expect(parseBoxShadow("inset rgba(0, 0, 0, 0.25) 0px 4px 12px 0px")).toEqual([]);
   });
+
+  it("rejects shadows with non-px length tokens", () => {
+    expect(parseBoxShadow("rgba(0, 0, 0, 0.2) 0px auto 12px")).toEqual([]);
+  });
 });

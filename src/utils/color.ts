@@ -6,6 +6,7 @@ export interface ParsedCssColor {
 }
 
 const RGB_FUNCTION_RE = /^rgba?\((.*)\)$/i;
+const NUMERIC_COMPONENT_RE = /^-?(?:\d+|\d*\.\d+)$/;
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
@@ -32,9 +33,12 @@ export function parseCssColor(value: string): ParsedCssColor | undefined {
     return undefined;
   }
 
+  if (!parts.every((part) => NUMERIC_COMPONENT_RE.test(part))) {
+    return undefined;
+  }
+
   const [red, green, blue] = parts.slice(0, 3).map(Number);
   const rawOpacity = parts[3] === undefined ? 1 : Number(parts[3]);
-
   if (
     red === undefined ||
     green === undefined ||

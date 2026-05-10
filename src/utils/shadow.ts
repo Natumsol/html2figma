@@ -42,11 +42,15 @@ function parseSingleShadow(value: string): AstShadow | undefined {
   }
 
   const valueWithoutColor = value.replace(colorMatch[0], " ");
-  const lengths = valueWithoutColor
+  const lengthTokens = valueWithoutColor
     .trim()
     .split(/\s+/)
-    .map(parsePx)
-    .filter((length): length is number => length !== undefined);
+    .filter(Boolean);
+
+  const lengths = lengthTokens.map(parsePx);
+  if (lengths.some((length) => length === undefined)) {
+    return undefined;
+  }
 
   if (lengths.length < 2) {
     return undefined;
