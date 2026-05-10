@@ -51,9 +51,7 @@ describe("Html2FigmaDocument schema", () => {
                 fontSize: 16,
                 fontWeight: 400,
                 lineHeight: 24,
-                letterSpacing: 0,
                 textAlign: "left",
-                textDecoration: "none",
                 color: {
                   r: 20,
                   g: 24,

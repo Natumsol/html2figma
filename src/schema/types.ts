@@ -50,11 +50,11 @@ export interface AstTextStyle {
   fontSize: number;
   fontWeight: number;
   fontStyle?: "normal" | "italic";
-  lineHeight: number;
-  letterSpacing: number;
-  textAlign: "left" | "center" | "right" | "justified";
-  textDecoration: "none" | "underline" | "strikethrough";
-  color: Rgb;
+  lineHeight?: number;
+  letterSpacing?: number;
+  textAlign?: "left" | "center" | "right" | "justified";
+  textDecoration?: "none" | "underline" | "strikethrough";
+  color?: Rgb;
 }
 
 export interface AstFlexLayout {
@@ -138,7 +138,7 @@ export interface RectangleAstNode extends BaseAstNode {
 export interface ImageAstNode extends BaseAstNode {
   type: "image";
   resourceId: string;
-  alt: string;
+  alt?: string;
 }
 
 export interface SvgAstNode extends BaseAstNode {
@@ -155,7 +155,7 @@ export type Html2FigmaNode =
 
 export interface Html2FigmaDocument {
   version: 1;
-  root: FrameAstNode;
+  root: Html2FigmaNode;
   resources: ResourceRef[];
   warnings: ConvertWarning[];
   metadata: {
