@@ -21,7 +21,9 @@ export function applyBaseProperties(
     target.resize(source.bounds.width, source.bounds.height);
   }
 
-  applyStyle(target, source.style);
+  if (source.type !== "text") {
+    applyStyle(target, source.style);
+  }
 }
 
 export function applyStyle(target: RenderableNode, style: AstStyle): void {

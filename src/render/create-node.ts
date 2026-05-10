@@ -102,6 +102,10 @@ async function withResolvedImageFills(
   source: Html2FigmaNode,
   context: RenderContext
 ): Promise<Html2FigmaNode> {
+  if (source.type === "text") {
+    return source;
+  }
+
   let style = source.style;
 
   if (style.fills) {
@@ -168,12 +172,13 @@ async function applyTextProperties(
 ): Promise<void> {
   const textStyle = source.style.text;
   const fontName = toFontName(textStyle);
+  let loadedFontName = fontName;
 
   if (context.options.loadFonts !== false) {
-    await loadFont(fontName, source, context);
+    loadedFontName = await loadFont(fontName, source, context);
   }
 
-  target.fontName = fontName;
+  target.fontName = loadedFontName;
   target.characters = source.text;
 
   if (textStyle?.fontSize !== undefined) {
@@ -221,17 +226,20 @@ async function loadFont(
   fontName: FontName,
   source: Html2FigmaNode,
   context: RenderContext
-): Promise<void> {
+): Promise<FontName> {
   try {
     await context.adapter.loadFontAsync(fontName);
+    return fontName;
   } catch (error) {
+    const fallbackFontName = { family: "Inter", style: "Regular" };
     context.warnings.push(
       createWarning("font-load-failed", "Font failed to load; using fallback", "warning", {
         nodeId: source.id,
         source: `${fontName.family} ${fontName.style}`
       })
     );
-    await context.adapter.loadFontAsync({ family: "Inter", style: "Regular" });
+    await context.adapter.loadFontAsync(fallbackFontName);
+    return fallbackFontName;
   }
 }
 
