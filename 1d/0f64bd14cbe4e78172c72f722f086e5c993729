@@ -1,0 +1,65 @@
+example/package.json
+  s_0eff101aacbcf6::t_a5aef2780e1dbc 8
+tests/unit/render.test.ts
+  s_0eff101aacbcf6::t_884bc4145c02ea 166-215
+  s_0eff101aacbcf6::t_78252e574915fb 104-165
+  s_0eff101aacbcf6::t_985abc8b057d64 4,59-103
+  s_0eff101aacbcf6::t_b6ced12cb04380 255-299
+  s_0eff101aacbcf6::t_3d8e5141bb1f3b 216-254,542-570
+  s_0eff101aacbcf6::t_f293b378aae836 374-417
+tests/browser/convert.spec.ts
+  s_0eff101aacbcf6::t_1576ad4c2766fe 121-137,140-141
+  s_0eff101aacbcf6::t_7ed71ab3948c05 161-177,179-181
+  s_0eff101aacbcf6::t_b9bf6550f799fc 138-139
+  s_0eff101aacbcf6::t_82ba0753a6ab7b 142-160
+  s_0eff101aacbcf6::t_0bd564e6b23683 178
+docs/superpowers/plans/2026-05-10-example-plugin-implementation.md
+  s_0eff101aacbcf6::t_a5fa808e2cdf36 97,114,291
+  s_0eff101aacbcf6::t_24300bf1f45d18 144
+docs/superpowers/specs/2026-05-10-example-plugin-design.md
+  s_0eff101aacbcf6::t_0f4f18d9b7772b 97,117,219
+example/src/plugin/ui-shell.ts
+  s_0eff101aacbcf6::t_b57c590c20d745 3,52-59
+example/manifest.json
+  s_0eff101aacbcf6::t_dd0df15e5513f0 15
+example/example.config.ts
+  s_0eff101aacbcf6::t_504b64a61195ec 4
+src/render/apply-style.ts
+  s_0eff101aacbcf6::t_d03be449322ade 20-22
+  s_0eff101aacbcf6::t_407ccec7d20f13 114-115,128,130-132
+  s_0eff101aacbcf6::t_673e1c0b1d44a3 48-49,119
+  s_0eff101aacbcf6::t_83574646eacf31 84-85
+  s_0eff101aacbcf6::t_08ce9d43a72ec8 121-123,136-139
+src/convert/dom.ts
+  s_0eff101aacbcf6::t_7b74a1eb7909ca 154
+  s_0eff101aacbcf6::t_bf2bb039f61579 204,206,220-224
+  s_0eff101aacbcf6::t_340b5a3db17a19 165-169,186-198
+  s_0eff101aacbcf6::t_c862e9c14ce12e 170-175
+  s_0eff101aacbcf6::t_4cf9afe605f63e 205,209-219
+  s_0eff101aacbcf6::t_7f3bff5b8ca002 123,140,176-185,199-203,207-208,225-244
+example/vite.ui.config.ts
+  s_0eff101aacbcf6::t_c85c759b53bf4a 7
+example/vite.plugin.config.ts
+  s_0eff101aacbcf6::t_5f8944ef4101d9 17
+src/render/create-node.ts
+  s_0eff101aacbcf6::t_37d8c9aaf5cd9e 34,69
+  s_0eff101aacbcf6::t_5a3a9727c2607e 2,37-42,58-59,64-67,76-79,85-91
+  s_0eff101aacbcf6::t_8fea32fa34f1ba 15,234
+  s_0eff101aacbcf6::t_955691732ef7ef 145-150,153
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.4",
+  "base_commit_sha": "1d0f64bd14cbe4e78172c72f722f086e5c993729",
+  "prompts": {},
+  "sessions": {
+    "s_0eff101aacbcf6": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "7196604f-b57f-44db-aa9f-9c34c518f62f",
+        "model": "composer-2-fast"
+      },
+      "human_author": "Natumsol <natumsol@gmail.com>"
+    }
+  }
+}
