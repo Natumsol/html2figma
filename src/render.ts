@@ -3,12 +3,12 @@ import type {
   RenderOptions,
   RenderResult
 } from "./schema/types";
+import { renderWithAdapter } from "./render/create-node";
+import { createFigmaAdapter } from "./render/figma-adapter";
 
 export async function render(
   document: Html2FigmaDocument,
   options: RenderOptions = {}
 ): Promise<RenderResult> {
-  void document;
-  void options;
-  throw new Error("render requires the Figma rendering task");
+  return renderWithAdapter(document, createFigmaAdapter(), options);
 }
