@@ -1,0 +1,41 @@
+{
+  "name": "html2figma",
+  "version": "0.1.0",
+  "description": "Convert HTML DOM trees into Figma plugin scene nodes.",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./convert": {
+      "types": "./dist/convert.d.ts",
+      "import": "./dist/convert.js",
+      "require": "./dist/convert.cjs"
+    },
+    "./render": {
+      "types": "./dist/render.d.ts",
+      "import": "./dist/render.js",
+      "require": "./dist/render.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:browser": "playwright test",
+    "verify": "npm run typecheck && npm run test && npm run test:browser"
+  },
+  "devDependencies": {
+    "@figma/plugin-typings": "^1.108.0",
+    "@playwright/test": "^1.52.0",
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.3"
+  }
+}
