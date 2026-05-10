@@ -179,6 +179,54 @@ test("keeps mixed inline text bounds from overlapping inline element siblings", 
   expect(price?.bounds.width).toBeLessThan(120);
 });
 
+test("converts example blocks with inline svg and image resources", async ({ page }) => {
+  const cases = [
+    {
+      fixture: "icon-feature-card.html",
+      selector: ".h2f-icon-card",
+      expectedTypes: ["svg"]
+    },
+    {
+      fixture: "image-product-card.html",
+      selector: ".h2f-image-card",
+      expectedTypes: ["image"],
+      expectedImageMimeTypes: ["image/png"]
+    },
+    {
+      fixture: "profile-media-card.html",
+      selector: ".h2f-profile-card",
+      expectedTypes: ["image", "svg"],
+      expectedImageMimeTypes: ["image/png"]
+    }
+  ];
+
+  for (const example of cases) {
+    await page.goto(new URL(`../../example/blocks/${example.fixture}`, import.meta.url).href);
+
+    const result = await page.evaluate(async ({ baseUrl, selector }) => {
+      const { convert } = await import(`${baseUrl}/src/convert.ts`);
+      return convert(document.querySelector(selector)!);
+    }, {
+      baseUrl: serverUrl,
+      selector: example.selector
+    }) as Html2FigmaDocument;
+
+    const nodeTypes = flattenNodeTypes(result.root);
+
+    for (const expectedType of example.expectedTypes) {
+      expect(nodeTypes).toContain(expectedType);
+    }
+
+    if (example.expectedImageMimeTypes) {
+      const imageMimeTypes = result.resources
+        .filter((resource) => resource.type === "image")
+        .map((resource) => resource.mimeType);
+
+      expect(imageMimeTypes).toEqual(example.expectedImageMimeTypes);
+    }
+  }
+});
+
 test("warns when converting an element with unsupported transform CSS", async ({ page }) => {
   await page.setContent(
     `<div id="target" style="transform: rotate(8deg); width: 100px; height: 50px;">Box</div>`
@@ -207,3 +255,7 @@ test("warns when converting an element with unsupported transform CSS", async ({
     expect(warning.source).not.toHaveLength(0);
   }
 });
+
+function flattenNodeTypes(node: Html2FigmaDocument["root"]): string[] {
+  return [node.type, ...node.children.flatMap(flattenNodeTypes)];
+}

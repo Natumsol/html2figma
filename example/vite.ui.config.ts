@@ -6,7 +6,11 @@ export default defineConfig({
   server: {
     host: "localhost",
     port: 5173,
-    strictPort: true
+    strictPort: true,
+    cors: true,
+    headers: {
+      "Access-Control-Allow-Origin": "*"
+    }
   },
   build: {
     outDir: "dist/ui",

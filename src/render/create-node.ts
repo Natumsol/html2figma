@@ -39,7 +39,7 @@ export async function renderWithAdapter(
     x: options.x ?? document.root.bounds.x,
     y: options.y ?? document.root.bounds.y
   };
-  const root = await createRenderableNode(document.root, context, rootBounds);
+  const root = await createRenderableNode(document.root, context, rootBounds, false);
 
   adapter.appendChild(
     (options.parent as RenderableNode | undefined) ?? adapter.currentPage,
@@ -56,7 +56,8 @@ export async function renderWithAdapter(
 async function createRenderableNode(
   source: Html2FigmaNode,
   context: RenderContext,
-  bounds: AstBounds
+  bounds: AstBounds,
+  parentUsesAutoLayout: boolean
 ): Promise<RenderableNode> {
   const node = await createAdapterNode(source, context);
   const styledSource = await withResolvedImageFills(source, context);
@@ -72,14 +73,36 @@ async function createRenderableNode(
     await applyTextProperties(node, source, context);
   }
 
+  if (parentUsesAutoLayout) {
+    applyAutoLayoutItemProperties(node);
+  }
+
   for (const child of source.children) {
+    const childBounds = source.style.layout
+      ? autoLayoutChildBounds(child.bounds)
+      : relativeBounds(child.bounds, source.bounds);
     context.adapter.appendChild(
       node,
-      await createRenderableNode(child, context, relativeBounds(child.bounds, source.bounds))
+      await createRenderableNode(child, context, childBounds, Boolean(source.style.layout))
     );
   }
 
   return node;
+}
+
+function applyAutoLayoutItemProperties(node: RenderableNode): void {
+  node.layoutPositioning = "AUTO";
+  node.layoutSizingHorizontal = "FIXED";
+  node.layoutSizingVertical = "FIXED";
+}
+
+function autoLayoutChildBounds(bounds: AstBounds): AstBounds {
+  return {
+    x: 0,
+    y: 0,
+    width: bounds.width,
+    height: bounds.height
+  };
 }
 
 function relativeBounds(bounds: AstBounds, parentBounds: AstBounds): AstBounds {

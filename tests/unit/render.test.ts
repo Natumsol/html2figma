@@ -297,6 +297,84 @@ describe("renderWithAdapter", () => {
     expect(node.counterAxisSizingMode).toBe("FIXED");
   });
 
+  it("renders direct children of flex frames as auto-layout items", async () => {
+    const document = createDocument({
+      root: {
+        id: "root",
+        type: "frame",
+        name: "Flex Row",
+        bounds: {
+          x: 0,
+          y: 0,
+          width: 320,
+          height: 48
+        },
+        style: {
+          layout: {
+            mode: "horizontal",
+            gap: 16,
+            padding: {
+              top: 0,
+              right: 0,
+              bottom: 0,
+              left: 0
+            },
+            primaryAxisAlignItems: "space-between",
+            counterAxisAlignItems: "center",
+            wraps: false
+          }
+        },
+        source: {
+          tagName: "div",
+          path: "section > div"
+        },
+        warnings: [],
+        children: [
+          createTextNode({
+            id: "text-1",
+            bounds: {
+              x: 0,
+              y: 16,
+              width: 64,
+              height: 16
+            }
+          }),
+          {
+            id: "badge-1",
+            type: "frame",
+            name: "Badge",
+            bounds: {
+              x: 260,
+              y: 8,
+              width: 60,
+              height: 32
+            },
+            style: {},
+            source: {
+              tagName: "div",
+              path: "section > div > div"
+            },
+            warnings: [],
+            children: []
+          }
+        ]
+      }
+    });
+    const adapter = new FakeAdapter();
+
+    const result = await renderWithAdapter(document, adapter);
+    const root = result.root as unknown as RenderableNode;
+    const [label, badge] = root.children ?? [];
+
+    expect(root.layoutMode).toBe("HORIZONTAL");
+    expect(label?.layoutPositioning).toBe("AUTO");
+    expect(label?.layoutSizingHorizontal).toBe("FIXED");
+    expect(label?.layoutSizingVertical).toBe("FIXED");
+    expect(badge?.layoutPositioning).toBe("AUTO");
+    expect(badge?.layoutSizingHorizontal).toBe("FIXED");
+    expect(badge?.layoutSizingVertical).toBe("FIXED");
+  });
+
   it("renders a frame root with a text child through an adapter", async () => {
     const document: Html2FigmaDocument = {
       version: 1,
