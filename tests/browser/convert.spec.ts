@@ -62,3 +62,29 @@ test("converts a basic card DOM tree into an AST document", async ({ page }) => 
     text: "Hello Figma"
   });
 });
+
+test("converts reviewed DOM edge cases", async ({ page }) => {
+  await page.setContent(`
+    <section id="root">
+      <div class="row-reverse"><span>First</span><span>Second</span></div>
+      <div class="empty"></div>
+      <div class="copy">Nested text</div>
+    </section>
+    <style>
+      .row-reverse {
+        display: flex;
+        flex-direction: row-reverse;
+      }
+    </style>
+  `);
+
+  const result = await page.evaluate(async (baseUrl) => {
+    const { convert } = await import(`${baseUrl}/src/convert.ts`);
+    return convert(document.querySelector("#root")!);
+  }, serverUrl) as Html2FigmaDocument;
+
+  const [rowReverse, empty, copy] = result.root.children;
+  expect(rowReverse?.style.layout?.mode).toBe("horizontal");
+  expect(empty?.type).toBe("frame");
+  expect(copy?.children[0]?.source.path).toBe(`${copy?.source.path} > #text`);
+});

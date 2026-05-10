@@ -47,7 +47,7 @@ export function readFlexLayout(style: CSSStyleDeclaration): AstFlexLayout | unde
   }
 
   return {
-    mode: style.flexDirection === "row" ? "horizontal" : "vertical",
+    mode: style.flexDirection.startsWith("row") ? "horizontal" : "vertical",
     gap: parseOptionalPx(style.gap, 0),
     padding: {
       top: parseOptionalPx(style.paddingTop, 0),

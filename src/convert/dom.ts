@@ -43,7 +43,7 @@ export function convertElement(
   const { style, warnings } = readStyle(element, id);
   context.warnings.push(...warnings);
 
-  const children = convertChildren(element, context, depth, style, bounds);
+  const children = convertChildren(element, context, depth, style, bounds, source.path);
   const baseNode = {
     id,
     name: readableName(element),
@@ -106,7 +106,8 @@ function convertChildren(
   context: ConvertContext,
   depth: number,
   parentStyle: AstStyle,
-  parentBounds: AstBounds
+  parentBounds: AstBounds,
+  parentPath: string
 ): Html2FigmaNode[] {
   const children: Html2FigmaNode[] = [];
 
@@ -114,7 +115,7 @@ function convertChildren(
     if (child.nodeType === Node.TEXT_NODE) {
       const text = collapseText(child.textContent ?? "");
       if (text) {
-        children.push(createTextNode(text, context, parentStyle, parentBounds));
+        children.push(createTextNode(text, context, parentStyle, parentBounds, parentPath));
       }
       continue;
     }
@@ -134,7 +135,8 @@ function createTextNode(
   text: string,
   context: ConvertContext,
   parentStyle: AstStyle,
-  parentBounds: AstBounds
+  parentBounds: AstBounds,
+  parentPath: string
 ): TextAstNode {
   const id = nextNodeId(context);
 
@@ -147,7 +149,7 @@ function createTextNode(
     style: parentStyle,
     source: {
       tagName: "#text",
-      path: "#text"
+      path: `${parentPath} > #text`
     },
     warnings: [],
     children: []
@@ -165,7 +167,8 @@ function hasVisualBox(style: AstStyle): boolean {
     style.fills?.length ||
       style.strokes?.length ||
       style.effects?.length ||
-      style.cornerRadius
+      (style.cornerRadius &&
+        Object.values(style.cornerRadius).some((radius) => radius > 0))
   );
 }
 
