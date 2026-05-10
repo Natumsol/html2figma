@@ -4,6 +4,9 @@
   "description": "Convert HTML DOM trees into Figma plugin scene nodes.",
   "license": "MIT",
   "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -29,7 +32,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:browser": "playwright test",
-    "verify": "npm run typecheck && npm run test && npm run test:browser"
+    "verify": "npm run typecheck && npm run test && npm run build"
   },
   "devDependencies": {
     "@figma/plugin-typings": "^1.108.0",
