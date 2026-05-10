@@ -117,3 +117,21 @@ test("applies maxDepth to text nodes", async ({ page }) => {
     children: []
   });
 });
+
+test("warns when converting an element with unsupported transform CSS", async ({ page }) => {
+  await page.setContent(
+    `<div id="target" style="transform: rotate(8deg); width: 100px; height: 50px;">Box</div>`
+  );
+
+  const result = await page.evaluate(async (baseUrl) => {
+    const { convert } = await import(`${baseUrl}/src/convert.ts`);
+    return convert(document.querySelector("#target")!);
+  }, serverUrl) as Html2FigmaDocument;
+
+  expect(result.warnings).toContainEqual(
+    expect.objectContaining({
+      code: "unsupported-transform",
+      cssProperty: "transform"
+    })
+  );
+});
