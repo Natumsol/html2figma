@@ -1,6 +1,6 @@
 export function createUiShellHtml(uiDevUrl: string): string {
   const iframeUrl = escapeHtml(uiDevUrl);
-  const iframeOriginJson = JSON.stringify(new URL(uiDevUrl).origin);
+  const iframeOriginJson = JSON.stringify(readOrigin(uiDevUrl));
 
   return `<!doctype html>
 <html lang="en">
@@ -48,4 +48,13 @@ function escapeHtml(value: string): string {
     .replaceAll('"', "&quot;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;");
+}
+
+function readOrigin(value: string): string {
+  const match = value.match(/^(https?:\/\/[^/]+)/);
+  if (!match) {
+    throw new Error(`Invalid iframe URL: ${value}`);
+  }
+
+  return match[1];
 }

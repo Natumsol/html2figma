@@ -14,11 +14,12 @@ export function applyBaseProperties(
   target.name = source.name;
   target.x = source.bounds.x;
   target.y = source.bounds.y;
-  target.width = source.bounds.width;
-  target.height = source.bounds.height;
 
   if (typeof target.resize === "function") {
     target.resize(source.bounds.width, source.bounds.height);
+  } else {
+    target.width = source.bounds.width;
+    target.height = source.bounds.height;
   }
 
   if (source.type !== "text") {
@@ -44,6 +45,8 @@ export function applyStyle(target: RenderableNode, style: AstStyle): void {
         opacity: fill.opacity
       };
     });
+  } else if ("fills" in target || target.type === "FRAME" || target.type === "RECTANGLE") {
+    target.fills = [];
   }
 
   if (style.strokes) {
@@ -78,6 +81,8 @@ export function applyStyle(target: RenderableNode, style: AstStyle): void {
 
 function applyLayout(target: RenderableNode, layout: AstFlexLayout): void {
   target.layoutMode = layout.mode.toUpperCase();
+  target.primaryAxisSizingMode = "FIXED";
+  target.counterAxisSizingMode = "FIXED";
   target.itemSpacing = layout.gap;
   target.paddingTop = layout.padding.top;
   target.paddingRight = layout.padding.right;
@@ -106,21 +111,30 @@ function toFigmaEffect(effect: AstShadow): Record<string, unknown> {
     },
     radius: effect.blur,
     spread: effect.spread,
-    visible: true
+    visible: true,
+    blendMode: "NORMAL"
   };
 }
 
-function toFigmaRgb(color: Rgb): RGB {
+export function toFigmaRgb(color: Rgb): RGB {
   return {
-    r: color.r / 255,
-    g: color.g / 255,
-    b: color.b / 255
+    r: toFigmaColorChannel(color.r),
+    g: toFigmaColorChannel(color.g),
+    b: toFigmaColorChannel(color.b)
   };
 }
 
 function toFigmaRgba(color: Rgb, opacity: number): RGBA {
+  const rgb = toFigmaRgb(color);
   return {
-    ...toFigmaRgb(color),
+    r: rgb.r,
+    g: rgb.g,
+    b: rgb.b,
     a: opacity
   };
+}
+
+function toFigmaColorChannel(value: number): number {
+  const normalized = value > 1 ? value / 255 : value;
+  return Math.min(1, Math.max(0, normalized));
 }

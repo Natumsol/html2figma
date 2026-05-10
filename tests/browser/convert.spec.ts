@@ -118,6 +118,67 @@ test("applies maxDepth to text nodes", async ({ page }) => {
   });
 });
 
+test("uses inline text bounds instead of the parent element box", async ({ page }) => {
+  await page.setContent(`
+    <div id="target" style="padding: 12px 24px; width: 240px; font: 16px/20px Arial;">
+      Render this hero
+    </div>
+  `);
+
+  const result = await page.evaluate(async (baseUrl) => {
+    const { convert } = await import(`${baseUrl}/src/convert.ts`);
+    return convert(document.querySelector("#target")!);
+  }, serverUrl) as Html2FigmaDocument;
+
+  const text = result.root.children[0];
+
+  expect(text?.type).toBe("text");
+  expect(text?.bounds.x).toBeGreaterThan(result.root.bounds.x + 20);
+  expect(text?.bounds.y).toBeGreaterThan(result.root.bounds.y + 8);
+  expect(text?.bounds.width).toBeGreaterThan(150);
+  expect(text?.bounds.width).toBeLessThan(result.root.bounds.width);
+});
+
+test("uses the parent box for centered text bounds", async ({ page }) => {
+  await page.setContent(`
+    <div id="target" style="box-sizing: border-box; width: 240px; padding: 12px 24px; text-align: center; font: 16px/20px Arial;">
+      Centered label
+    </div>
+  `);
+
+  const result = await page.evaluate(async (baseUrl) => {
+    const { convert } = await import(`${baseUrl}/src/convert.ts`);
+    return convert(document.querySelector("#target")!);
+  }, serverUrl) as Html2FigmaDocument;
+
+  const text = result.root.children[0];
+
+  expect(text?.type).toBe("text");
+  expect(text?.bounds.x).toBe(result.root.bounds.x);
+  expect(text?.bounds.width).toBe(result.root.bounds.width);
+});
+
+test("keeps mixed inline text bounds from overlapping inline element siblings", async ({ page }) => {
+  await page.setContent(`
+    <p id="target" style="font: 800 48px/54px Arial; margin: 0;">
+      $29<span style="font-size: 16px; font-weight: 600;">/mo</span>
+    </p>
+  `);
+
+  const result = await page.evaluate(async (baseUrl) => {
+    const { convert } = await import(`${baseUrl}/src/convert.ts`);
+    return convert(document.querySelector("#target")!);
+  }, serverUrl) as Html2FigmaDocument;
+
+  const price = result.root.children[0];
+  const period = result.root.children[1];
+
+  expect(price?.type).toBe("text");
+  expect(period?.type).toBe("frame");
+  expect(price?.bounds.width).toBeGreaterThan(90);
+  expect(price?.bounds.width).toBeLessThan(120);
+});
+
 test("warns when converting an element with unsupported transform CSS", async ({ page }) => {
   await page.setContent(
     `<div id="target" style="transform: rotate(8deg); width: 100px; height: 50px;">Box</div>`

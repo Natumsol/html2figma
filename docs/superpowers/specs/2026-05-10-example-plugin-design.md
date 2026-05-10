@@ -94,7 +94,7 @@ The inline shell is intentionally tiny. It owns only iframe creation and message
 export default {
   pluginName: "html2figma Example",
   pluginId: "html2figma-example",
-  uiDevUrl: "http://127.0.0.1:5173",
+  uiDevUrl: "http://localhost:5173",
   uiWidth: 960,
   uiHeight: 720
 };
@@ -114,7 +114,7 @@ Generated manifest shape:
   "editorType": ["figma"],
   "networkAccess": {
     "allowedDomains": ["none"],
-    "devAllowedDomains": ["http://127.0.0.1:5173"]
+    "devAllowedDomains": ["http://localhost:5173"]
   }
 }
 ```
@@ -216,7 +216,7 @@ Render failures are caught and reported with `figma.notify("Failed to render blo
 {
   "scripts": {
     "dev": "concurrently \"npm run dev:ui\" \"npm run dev:plugin\"",
-    "dev:ui": "vite --config vite.ui.config.ts --host 127.0.0.1 --port 5173",
+    "dev:ui": "vite --config vite.ui.config.ts --host localhost --port 5173",
     "dev:plugin": "npm run sync-manifest && vite build --config vite.plugin.config.ts --watch",
     "build": "npm run sync-manifest && vite build --config vite.ui.config.ts && vite build --config vite.plugin.config.ts",
     "sync-manifest": "tsx scripts/sync-manifest.ts",

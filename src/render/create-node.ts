@@ -1,4 +1,5 @@
 import type {
+  AstBounds,
   AstFill,
   AstStyle,
   AstTextStyle,
@@ -11,7 +12,7 @@ import type {
 } from "../schema/types";
 import { createWarning } from "../utils/warnings";
 import type { FigmaAdapter, RenderableNode } from "./adapter";
-import { applyBaseProperties } from "./apply-style";
+import { applyBaseProperties, toFigmaRgb } from "./apply-style";
 
 interface RenderContext {
   adapter: FigmaAdapter;
@@ -30,10 +31,15 @@ export async function renderWithAdapter(
     adapter,
     document,
     options,
-    warnings: [...document.warnings],
+    warnings: document.warnings.slice(),
     nodes: []
   };
-  const root = await createRenderableNode(document.root, context);
+  const rootBounds = {
+    ...document.root.bounds,
+    x: options.x ?? document.root.bounds.x,
+    y: options.y ?? document.root.bounds.y
+  };
+  const root = await createRenderableNode(document.root, context, rootBounds);
 
   adapter.appendChild(
     (options.parent as RenderableNode | undefined) ?? adapter.currentPage,
@@ -49,24 +55,40 @@ export async function renderWithAdapter(
 
 async function createRenderableNode(
   source: Html2FigmaNode,
-  context: RenderContext
+  context: RenderContext,
+  bounds: AstBounds
 ): Promise<RenderableNode> {
   const node = await createAdapterNode(source, context);
   const styledSource = await withResolvedImageFills(source, context);
 
-  applyBaseProperties(node, styledSource);
+  applyBaseProperties(node, {
+    ...styledSource,
+    bounds
+  });
   context.nodes.push(node);
-  context.warnings.push(...source.warnings);
+  context.warnings.push.apply(context.warnings, source.warnings);
 
   if (source.type === "text") {
     await applyTextProperties(node, source, context);
   }
 
   for (const child of source.children) {
-    context.adapter.appendChild(node, await createRenderableNode(child, context));
+    context.adapter.appendChild(
+      node,
+      await createRenderableNode(child, context, relativeBounds(child.bounds, source.bounds))
+    );
   }
 
   return node;
+}
+
+function relativeBounds(bounds: AstBounds, parentBounds: AstBounds): AstBounds {
+  return {
+    x: bounds.x - parentBounds.x,
+    y: bounds.y - parentBounds.y,
+    width: bounds.width,
+    height: bounds.height
+  };
 }
 
 async function createAdapterNode(
@@ -120,17 +142,15 @@ async function withResolvedImageFills(
   if (source.type === "image" && !style.fills?.some((fill) => fill.type === "image")) {
     const imageHash = await createImageHash(source.resourceId, context);
     if (imageHash) {
+      const fills = (style.fills ?? []).concat({
+        type: "image",
+        resourceId: imageHash,
+        opacity: 1,
+        scaleMode: "fill"
+      });
       style = {
         ...style,
-        fills: [
-          ...(style.fills ?? []),
-          {
-            type: "image",
-            resourceId: imageHash,
-            opacity: 1,
-            scaleMode: "fill"
-          }
-        ]
+        fills
       };
     }
   }
@@ -211,11 +231,7 @@ async function applyTextProperties(
     target.fills = [
       {
         type: "SOLID",
-        color: {
-          r: textStyle.color.r / 255,
-          g: textStyle.color.g / 255,
-          b: textStyle.color.b / 255
-        },
+        color: toFigmaRgb(textStyle.color),
         opacity: 1
       }
     ];

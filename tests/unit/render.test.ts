@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { Html2FigmaDocument } from "../../src";
 import type { FigmaAdapter, RenderableNode } from "../../src/render/adapter";
+import { applyBaseProperties } from "../../src/render/apply-style";
 import { renderWithAdapter } from "../../src/render/create-node";
 
 class FakeAdapter implements FigmaAdapter {
@@ -55,6 +56,247 @@ class FakeAdapter implements FigmaAdapter {
 }
 
 describe("renderWithAdapter", () => {
+  it("resizes Figma-like nodes without assigning read-only width and height", () => {
+    const node = {
+      type: "FRAME",
+      children: [],
+      get width() {
+        return 0;
+      },
+      get height() {
+        return 0;
+      },
+      resize(width: number, height: number) {
+        this.resizedTo = {
+          width,
+          height
+        };
+      }
+    } as RenderableNode;
+
+    applyBaseProperties(node, {
+      id: "frame-1",
+      type: "frame",
+      name: "Frame",
+      bounds: {
+        x: 10,
+        y: 20,
+        width: 320,
+        height: 180
+      },
+      style: {},
+      source: {
+        tagName: "div",
+        path: "html > body > div"
+      },
+      warnings: [],
+      children: []
+    });
+
+    expect(node.x).toBe(10);
+    expect(node.y).toBe(20);
+    expect(node.resizedTo).toEqual({
+      width: 320,
+      height: 180
+    });
+  });
+
+  it("maps drop shadows to valid Figma effects", () => {
+    const node: RenderableNode = {
+      type: "FRAME",
+      children: []
+    };
+
+    applyBaseProperties(node, {
+      id: "frame-1",
+      type: "frame",
+      name: "Frame",
+      bounds: {
+        x: 0,
+        y: 0,
+        width: 100,
+        height: 100
+      },
+      style: {
+        effects: [
+          {
+            type: "drop-shadow",
+            color: {
+              r: 0,
+              g: 0,
+              b: 0
+            },
+            opacity: 0.2,
+            offsetX: 0,
+            offsetY: 8,
+            blur: 24,
+            spread: 0
+          }
+        ]
+      },
+      source: {
+        tagName: "div",
+        path: "html > body > div"
+      },
+      warnings: [],
+      children: []
+    });
+
+    expect(node.effects).toEqual([
+      {
+        type: "DROP_SHADOW",
+        color: {
+          r: 0,
+          g: 0,
+          b: 0,
+          a: 0.2
+        },
+        offset: {
+          x: 0,
+          y: 8
+        },
+        radius: 24,
+        spread: 0,
+        visible: true,
+        blendMode: "NORMAL"
+      }
+    ]);
+  });
+
+  it("preserves normalized RGB channels from converted CSS", () => {
+    const node: RenderableNode = {
+      type: "FRAME",
+      children: []
+    };
+
+    applyBaseProperties(node, {
+      id: "frame-1",
+      type: "frame",
+      name: "Frame",
+      bounds: {
+        x: 0,
+        y: 0,
+        width: 100,
+        height: 100
+      },
+      style: {
+        fills: [
+          {
+            type: "solid",
+            color: {
+              r: 22 / 255,
+              g: 32 / 255,
+              b: 78 / 255
+            },
+            opacity: 1
+          }
+        ]
+      },
+      source: {
+        tagName: "div",
+        path: "html > body > div"
+      },
+      warnings: [],
+      children: []
+    });
+
+    expect(node.fills).toEqual([
+      {
+        type: "SOLID",
+        color: {
+          r: 22 / 255,
+          g: 32 / 255,
+          b: 78 / 255
+        },
+        opacity: 1
+      }
+    ]);
+  });
+
+  it("clears default frame fills when the source has transparent background", () => {
+    const node: RenderableNode = {
+      type: "FRAME",
+      children: [],
+      fills: [
+        {
+          type: "SOLID",
+          color: {
+            r: 1,
+            g: 1,
+            b: 1
+          },
+          opacity: 1
+        }
+      ]
+    };
+
+    applyBaseProperties(node, {
+      id: "frame-1",
+      type: "frame",
+      name: "Frame",
+      bounds: {
+        x: 0,
+        y: 0,
+        width: 100,
+        height: 100
+      },
+      style: {},
+      source: {
+        tagName: "h1",
+        path: "html > body > h1"
+      },
+      warnings: [],
+      children: []
+    });
+
+    expect(node.fills).toEqual([]);
+  });
+
+  it("keeps flex frames fixed so space-between uses the source width", () => {
+    const node: RenderableNode = {
+      type: "FRAME",
+      children: []
+    };
+
+    applyBaseProperties(node, {
+      id: "frame-1",
+      type: "frame",
+      name: "Header",
+      bounds: {
+        x: 0,
+        y: 0,
+        width: 302,
+        height: 28
+      },
+      style: {
+        layout: {
+          mode: "horizontal",
+          gap: 16,
+          padding: {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0
+          },
+          primaryAxisAlignItems: "space-between",
+          counterAxisAlignItems: "center",
+          wraps: false
+        }
+      },
+      source: {
+        tagName: "div",
+        path: "section > div"
+      },
+      warnings: [],
+      children: []
+    });
+
+    expect(node.layoutMode).toBe("HORIZONTAL");
+    expect(node.primaryAxisAlignItems).toBe("SPACE_BETWEEN");
+    expect(node.primaryAxisSizingMode).toBe("FIXED");
+    expect(node.counterAxisSizingMode).toBe("FIXED");
+  });
+
   it("renders a frame root with a text child through an adapter", async () => {
     const document: Html2FigmaDocument = {
       version: 1,
@@ -127,6 +369,50 @@ describe("renderWithAdapter", () => {
     expect(root.children).toHaveLength(1);
     expect(adapter.currentPage.children).toEqual([root]);
     expect(result.warnings).toEqual([]);
+  });
+
+  it("renders child bounds relative to their parent frame", async () => {
+    const document = createDocument({
+      root: {
+        id: "root",
+        type: "frame",
+        name: "Root",
+        bounds: {
+          x: 100,
+          y: 200,
+          width: 320,
+          height: 180
+        },
+        style: {},
+        source: {
+          tagName: "section",
+          path: "section"
+        },
+        warnings: [],
+        children: [
+          createTextNode({
+            bounds: {
+              x: 140,
+              y: 260,
+              width: 120,
+              height: 32
+            }
+          })
+        ]
+      }
+    });
+    const adapter = new FakeAdapter();
+
+    const result = await renderWithAdapter(document, adapter);
+    const root = result.root as unknown as RenderableNode;
+    const child = root.children?.[0];
+
+    expect(root.x).toBe(100);
+    expect(root.y).toBe(200);
+    expect(child?.x).toBe(40);
+    expect(child?.y).toBe(60);
+    expect(child?.width).toBe(120);
+    expect(child?.height).toBe(32);
   });
 
   it("uses the fallback font when the requested font fails to load", async () => {
@@ -247,6 +533,41 @@ describe("renderWithAdapter", () => {
           r: 32 / 255,
           g: 32 / 255,
           b: 32 / 255
+        },
+        opacity: 1
+      }
+    ]);
+  });
+
+  it("preserves normalized text color channels from converted CSS", async () => {
+    const document = createDocument({
+      root: createTextNode({
+        style: {
+          text: {
+            fontFamily: "Inter",
+            fontSize: 16,
+            fontWeight: 400,
+            color: {
+              r: 203 / 255,
+              g: 213 / 255,
+              b: 225 / 255
+            }
+          }
+        }
+      })
+    });
+    const adapter = new FakeAdapter();
+
+    const result = await renderWithAdapter(document, adapter);
+    const root = result.root as unknown as RenderableNode;
+
+    expect(root.fills).toEqual([
+      {
+        type: "SOLID",
+        color: {
+          r: 203 / 255,
+          g: 213 / 255,
+          b: 225 / 255
         },
         opacity: 1
       }

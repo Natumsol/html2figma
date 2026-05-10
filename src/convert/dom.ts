@@ -120,7 +120,7 @@ function convertChildren(
 
       const text = collapseText(child.textContent ?? "");
       if (text) {
-        children.push(createTextNode(text, context, parentStyle, parentBounds, parentPath));
+        children.push(createTextNode(child, text, context, parentStyle, parentBounds, parentPath));
       }
       continue;
     }
@@ -137,6 +137,7 @@ function convertChildren(
 }
 
 function createTextNode(
+  textNode: ChildNode,
   text: string,
   context: ConvertContext,
   parentStyle: AstStyle,
@@ -150,7 +151,7 @@ function createTextNode(
     type: "text",
     name: "#text",
     text,
-    bounds: parentBounds,
+    bounds: readTextBounds(textNode, parentStyle, parentBounds),
     style: parentStyle,
     source: {
       tagName: "#text",
@@ -158,6 +159,89 @@ function createTextNode(
     },
     warnings: [],
     children: []
+  };
+}
+
+function readTextBounds(
+  textNode: ChildNode,
+  parentStyle: AstStyle,
+  fallbackBounds: AstBounds
+): AstBounds {
+  const document = textNode.ownerDocument;
+  if (!document) {
+    return fallbackBounds;
+  }
+
+  const range = document.createRange();
+  range.selectNodeContents(textNode);
+
+  const rects = Array.from(range.getClientRects()).filter(
+    (rect) => rect.width > 0 && rect.height > 0
+  );
+  const rect = rects.length > 0 ? unionRects(rects) : range.getBoundingClientRect();
+  range.detach();
+
+  if (rect.width === 0 || rect.height === 0) {
+    return fallbackBounds;
+  }
+
+  if (
+    parentStyle.text?.textAlign === "center" ||
+    parentStyle.text?.textAlign === "right" ||
+    parentStyle.text?.textAlign === "justified"
+  ) {
+    return {
+      x: fallbackBounds.x,
+      y: rect.y,
+      width: fallbackBounds.width,
+      height: rect.height
+    };
+  }
+
+  return {
+    x: rect.x,
+    y: rect.y,
+    width: hasElementSiblings(textNode)
+      ? expandInlineTextWidth(rect.width, parentStyle, fallbackBounds, rect.x)
+      : Math.max(rect.width, fallbackBounds.x + fallbackBounds.width - rect.x),
+    height: rect.height
+  };
+}
+
+function expandInlineTextWidth(
+  width: number,
+  parentStyle: AstStyle,
+  fallbackBounds: AstBounds,
+  x: number
+): number {
+  const fontSize = parentStyle.text?.fontSize ?? 16;
+  const tolerance = Math.min(24, Math.max(8, fontSize * 0.35));
+  return Math.min(width + tolerance, fallbackBounds.x + fallbackBounds.width - x);
+}
+
+function hasElementSiblings(textNode: ChildNode): boolean {
+  const parent = textNode.parentElement;
+  return Boolean(parent && parent.children.length > 0);
+}
+
+function unionRects(rects: DOMRect[]): AstBounds {
+  let left = rects[0]!.left;
+  let top = rects[0]!.top;
+  let right = rects[0]!.right;
+  let bottom = rects[0]!.bottom;
+
+  for (const rect of rects.slice(1)) {
+    left = Math.min(left, rect.left);
+    top = Math.min(top, rect.top);
+    right = Math.max(right, rect.right);
+    bottom = Math.max(bottom, rect.bottom);
+  }
+
+  return {
+    x: left,
+    y: top,
+    width: right - left,
+    height: bottom - top
   };
 }
 

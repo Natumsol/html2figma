@@ -14,6 +14,6 @@ export default defineConfig({
         codeSplitting: false
       }
     },
-    target: "es2022"
+    target: "es2017"
   }
 });
