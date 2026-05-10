@@ -1,0 +1,105 @@
+<section class="h2f-stats">
+  <style>
+    .h2f-stats {
+      box-sizing: border-box;
+      width: 640px;
+      padding: 28px;
+      border-radius: 28px;
+      background: rgb(248, 250, 252);
+      color: rgb(15, 23, 42);
+      font-family: Inter, Arial, sans-serif;
+      box-shadow: rgba(15, 23, 42, 0.12) 0px 18px 44px 0px;
+    }
+
+    .h2f-stats-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 22px;
+    }
+
+    .h2f-stats-title {
+      margin: 0;
+      font-size: 24px;
+      line-height: 32px;
+      font-weight: 800;
+    }
+
+    .h2f-stats-copy {
+      margin: 6px 0 0;
+      color: rgb(100, 116, 139);
+      font-size: 14px;
+      line-height: 22px;
+    }
+
+    .h2f-stats-pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgb(220, 252, 231);
+      color: rgb(22, 101, 52);
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .h2f-stats-grid {
+      display: flex;
+      gap: 16px;
+    }
+
+    .h2f-stats-card {
+      box-sizing: border-box;
+      width: 184px;
+      padding: 18px;
+      border: 1px solid rgb(226, 232, 240);
+      border-radius: 20px;
+      background: rgb(255, 255, 255);
+    }
+
+    .h2f-stats-label {
+      margin: 0 0 12px;
+      color: rgb(100, 116, 139);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .h2f-stats-value {
+      margin: 0;
+      font-size: 32px;
+      line-height: 38px;
+      font-weight: 700;
+    }
+
+    .h2f-stats-trend {
+      margin: 10px 0 0;
+      color: rgb(37, 99, 235);
+      font-size: 13px;
+      font-weight: 800;
+    }
+  </style>
+  <div class="h2f-stats-header">
+    <div>
+      <h2 class="h2f-stats-title">Conversion dashboard</h2>
+      <p class="h2f-stats-copy">Track how HTML blocks become editable Figma structures.</p>
+    </div>
+    <div class="h2f-stats-pill">Live demo</div>
+  </div>
+  <div class="h2f-stats-grid">
+    <div class="h2f-stats-card">
+      <p class="h2f-stats-label">Blocks rendered</p>
+      <p class="h2f-stats-value">128</p>
+      <p class="h2f-stats-trend">+24 today</p>
+    </div>
+    <div class="h2f-stats-card">
+      <p class="h2f-stats-label">Layer accuracy</p>
+      <p class="h2f-stats-value">94%</p>
+      <p class="h2f-stats-trend">+6% this week</p>
+    </div>
+    <div class="h2f-stats-card">
+      <p class="h2f-stats-label">Warnings</p>
+      <p class="h2f-stats-value">7</p>
+      <p class="h2f-stats-trend">Needs review</p>
+    </div>
+  </div>
+</section>
