@@ -68,6 +68,65 @@ describe("document helpers", () => {
 
     expect(isHtml2FigmaDocument(document)).toBe(false);
   });
+
+  it("rejects malformed style fill entries", () => {
+    const root = { ...createFrameNode() } as Record<string, unknown>;
+    root.style = {
+      fills: [1]
+    };
+    const document = {
+      ...createDocument(),
+      root
+    };
+
+    expect(isHtml2FigmaDocument(document)).toBe(false);
+  });
+
+  it("rejects malformed resource entries", () => {
+    const document = {
+      ...createDocument(),
+      resources: [
+        {
+          id: "resource-1",
+          type: "video",
+          source: "/media/example.mp4"
+        }
+      ]
+    };
+
+    expect(isHtml2FigmaDocument(document)).toBe(false);
+  });
+
+  it("rejects malformed warning entries", () => {
+    const document = {
+      ...createDocument(),
+      warnings: [
+        {
+          code: "unsupported-css",
+          message: "Unsupported CSS",
+          severity: "critical"
+        }
+      ]
+    };
+
+    expect(isHtml2FigmaDocument(document)).toBe(false);
+  });
+
+  it("rejects malformed optional metadata fields", () => {
+    const document = {
+      ...createDocument(),
+      metadata: {
+        viewport: {
+          width: 1280,
+          height: 720
+        },
+        createdAt: 123,
+        sourceUrl: 456
+      }
+    };
+
+    expect(isHtml2FigmaDocument(document)).toBe(false);
+  });
 });
 
 function createDocument(
