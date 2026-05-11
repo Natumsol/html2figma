@@ -14,13 +14,15 @@ describe("document helpers", () => {
   });
 
   it("rejects invalid JSON with a parse error message", () => {
-    expect(() => parseDocumentJson("{")).toThrow("JSON could not be parsed.");
+    expect(catchError(() => parseDocumentJson("{")).message).toBe(
+      "JSON could not be parsed."
+    );
   });
 
   it("rejects invalid document shape with a validation error message", () => {
-    expect(() =>
-      parseDocumentJson(JSON.stringify({ version: 1 }))
-    ).toThrow("JSON is not a valid html2figma document.");
+    expect(
+      catchError(() => parseDocumentJson(JSON.stringify({ version: 1 }))).message
+    ).toBe("JSON is not a valid html2figma document.");
   });
 
   it("summarizes a document with child node counts and viewport size", () => {
@@ -85,6 +87,18 @@ function createDocument(
     },
     ...overrides
   };
+}
+
+function catchError(callback: () => unknown): Error {
+  try {
+    callback();
+  } catch (error) {
+    if (error instanceof Error) {
+      return error;
+    }
+  }
+
+  throw new Error("Expected callback to throw an Error.");
 }
 
 function createFrameNode(

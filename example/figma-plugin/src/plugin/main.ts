@@ -13,6 +13,10 @@ figma.ui.onmessage = async (message: unknown) => {
     return;
   }
 
+  if (message.type !== "render-block") {
+    return;
+  }
+
   try {
     const result = await render(message.document, {
       parent: figma.currentPage,

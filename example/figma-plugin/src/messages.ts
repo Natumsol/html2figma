@@ -11,7 +11,6 @@ export interface RenderJsonMessage {
   type: "render-json";
   source: "paste" | "file";
   document: Html2FigmaDocument;
-  blockId?: never;
 }
 
 export type UiToPluginMessage = RenderBlockMessage | RenderJsonMessage;
