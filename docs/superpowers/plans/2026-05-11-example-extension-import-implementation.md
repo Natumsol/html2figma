@@ -52,14 +52,12 @@ Replace `example/package.json` with:
   "version": "0.1.0",
   "type": "module",
   "workspaces": [
-    "figma-plugin",
-    "chrome-extension"
+    "figma-plugin"
   ],
   "scripts": {
-    "build": "npm run build -w figma-plugin && npm run build -w chrome-extension",
-    "typecheck": "npm run typecheck -w figma-plugin && npm run typecheck -w chrome-extension",
-    "dev:figma": "npm run dev -w figma-plugin",
-    "dev:chrome": "npm run dev -w chrome-extension"
+    "build": "npm run build -w figma-plugin",
+    "typecheck": "npm run typecheck -w figma-plugin",
+    "dev:figma": "npm run dev -w figma-plugin"
   }
 }
 ```
@@ -622,6 +620,7 @@ git commit -m "feat(example): add Figma JSON import tab"
 ### Task 4: Chrome Extension Scaffold
 
 **Files:**
+- Modify: `example/package.json`
 - Create: `example/chrome-extension/package.json`
 - Create: `example/chrome-extension/tsconfig.json`
 - Create: `example/chrome-extension/vite.config.ts`
@@ -638,7 +637,30 @@ git commit -m "feat(example): add Figma JSON import tab"
 - Create: `example/chrome-extension/src/viewer/main.ts`
 - Create: `example/chrome-extension/src/viewer/styles.css`
 
-- [ ] **Step 1: Add Chrome extension package**
+- [ ] **Step 1: Register Chrome extension workspace**
+
+Update `example/package.json` to include both workspaces and root-level scripts for both examples:
+
+```json
+{
+  "name": "html2figma-example",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "workspaces": [
+    "figma-plugin",
+    "chrome-extension"
+  ],
+  "scripts": {
+    "build": "npm run build -w figma-plugin && npm run build -w chrome-extension",
+    "typecheck": "npm run typecheck -w figma-plugin && npm run typecheck -w chrome-extension",
+    "dev:figma": "npm run dev -w figma-plugin",
+    "dev:chrome": "npm run dev -w chrome-extension"
+  }
+}
+```
+
+- [ ] **Step 2: Add Chrome extension package**
 
 Create `example/chrome-extension/package.json`:
 
@@ -698,7 +720,7 @@ export default defineConfig({
 });
 ```
 
-- [ ] **Step 2: Add Vite multi-entry build**
+- [ ] **Step 3: Add Vite multi-entry build**
 
 Create `example/chrome-extension/vite.config.ts`:
 
@@ -727,7 +749,7 @@ export default defineConfig({
 });
 ```
 
-- [ ] **Step 3: Add Manifest V3**
+- [ ] **Step 4: Add Manifest V3**
 
 Create `example/chrome-extension/manifest.json`:
 
@@ -756,7 +778,7 @@ Create `example/chrome-extension/manifest.json`:
 }
 ```
 
-- [ ] **Step 4: Add shared message and document helpers**
+- [ ] **Step 5: Add shared message and document helpers**
 
 Create `example/chrome-extension/src/shared/messages.ts`:
 
@@ -830,7 +852,7 @@ function countNodes(node: Html2FigmaNode): number {
 }
 ```
 
-- [ ] **Step 5: Add shared helper tests**
+- [ ] **Step 6: Add shared helper tests**
 
 Create `example/chrome-extension/src/shared/document.test.ts`:
 
@@ -877,7 +899,7 @@ describe("extension document helpers", () => {
 });
 ```
 
-- [ ] **Step 6: Add empty UI shells**
+- [ ] **Step 7: Add empty UI shells**
 
 Create popup and viewer HTML/CSS/TS files with minimal valid modules:
 
@@ -892,7 +914,7 @@ For `main.ts`, start with:
 document.querySelector("#app")!.textContent = "html2figma Capture";
 ```
 
-- [ ] **Step 7: Verify extension scaffold**
+- [ ] **Step 8: Verify extension scaffold**
 
 Run:
 
@@ -906,7 +928,7 @@ npm run build -w chrome-extension
 
 Expected: PASS.
 
-- [ ] **Step 8: Commit extension scaffold**
+- [ ] **Step 9: Commit extension scaffold**
 
 ```bash
 git add example/package.json example/package-lock.json example/chrome-extension
