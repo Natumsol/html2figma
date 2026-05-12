@@ -1,0 +1,7 @@
+body {
+  min-width: 320px;
+  margin: 0;
+  padding: 16px;
+  color: rgb(15, 23, 42);
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}

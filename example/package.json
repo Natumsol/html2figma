@@ -4,11 +4,13 @@
   "version": "0.1.0",
   "type": "module",
   "workspaces": [
-    "figma-plugin"
+    "figma-plugin",
+    "chrome-extension"
   ],
   "scripts": {
-    "build": "npm run build -w figma-plugin",
-    "typecheck": "npm run typecheck -w figma-plugin",
-    "dev:figma": "npm run dev -w figma-plugin"
+    "build": "npm run build -w figma-plugin && npm run build -w chrome-extension",
+    "typecheck": "npm run typecheck -w figma-plugin && npm run typecheck -w chrome-extension",
+    "dev:figma": "npm run dev -w figma-plugin",
+    "dev:chrome": "npm run dev -w chrome-extension"
   }
 }
