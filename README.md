@@ -35,6 +35,31 @@ console.log(result.root, result.warnings);
 
 `render` takes the serialized document returned by `convert` and creates Figma scene nodes under the provided parent. The result includes the root Figma node, all created nodes, and any render warnings.
 
+## Examples
+
+The `example/` workspace contains two demos:
+
+- `example/figma-plugin/`: Figma plugin demo with built-in HTML blocks and an Import JSON tab.
+- `example/chrome-extension/`: Chrome extension demo for converting the current page or a selected element into html2figma JSON.
+
+Run the Figma plugin demo:
+
+```bash
+cd example
+npm install
+npm run dev:figma
+```
+
+Build the Chrome extension demo:
+
+```bash
+cd example
+npm install
+npm run build -w chrome-extension
+```
+
+Load `example/chrome-extension/dist` through Chrome's Load unpacked flow.
+
 ## First-Version CSS Support
 
 This first version targets common page structure and visual styling:
