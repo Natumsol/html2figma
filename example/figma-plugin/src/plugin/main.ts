@@ -13,9 +13,10 @@ figma.ui.onmessage = async (message: unknown) => {
     return;
   }
 
-  if (message.type !== "render-block") {
-    return;
-  }
+  const label =
+    message.type === "render-block"
+      ? message.blockId
+      : `imported ${message.source} JSON`;
 
   try {
     const result = await render(message.document, {
@@ -31,9 +32,9 @@ figma.ui.onmessage = async (message: unknown) => {
         ? ""
         : ` with ${result.warnings.length} warning${result.warnings.length === 1 ? "" : "s"}`;
 
-    figma.notify(`Rendered ${message.blockId}${warningText}`);
+    figma.notify(`Rendered ${label}${warningText}`);
   } catch (error) {
-    console.error("Failed to render html2figma block", error);
-    figma.notify(`Failed to render ${message.blockId}`);
+    console.error("Failed to render html2figma document", error);
+    figma.notify(`Failed to render ${label}`);
   }
 };

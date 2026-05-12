@@ -1,8 +1,12 @@
+import type { Html2FigmaDocument } from "html2figma";
 import { convert } from "html2figma/convert";
+import { parseDocumentJson, summarizeDocument } from "../shared/document";
 import { blocks, type ExampleBlock } from "./blocks";
 import "./styles.css";
 
 const app = document.querySelector<HTMLElement>("#app");
+let importedDocument: Html2FigmaDocument | undefined;
+let importedSource: "paste" | "file" = "paste";
 
 if (!app) {
   throw new Error("Missing #app mount element");
@@ -15,19 +19,116 @@ app.innerHTML = `
         <p class="eyebrow">html2figma example</p>
         <h1>Render HTML blocks into Figma</h1>
         <p class="subtitle">
-          Preview real browser-rendered HTML fragments, convert their DOM into an
-          html2figma document, and send it to the plugin runtime.
+          Convert bundled HTML previews or import JSON exported from the Chrome
+          extension.
         </p>
       </div>
     </header>
-    <section class="gallery">
-      ${blocks.map(renderBlockCard).join("")}
+    <nav class="tabs" aria-label="Example modes">
+      <button type="button" class="tab active" data-tab="blocks">Blocks</button>
+      <button type="button" class="tab" data-tab="import">Import JSON</button>
+    </nav>
+    <section class="tab-panel active" data-panel="blocks">
+      <div class="gallery">
+        ${blocks.map(renderBlockCard).join("")}
+      </div>
+    </section>
+    <section class="tab-panel" data-panel="import">
+      <div class="import-panel">
+        <textarea class="json-input" data-json-input spellcheck="false" placeholder="Paste Html2FigmaDocument JSON"></textarea>
+        <div class="import-actions">
+          <input type="file" accept="application/json,.json" data-json-file>
+          <button type="button" data-validate-json>Validate</button>
+          <button type="button" data-render-json disabled>Render to Figma</button>
+        </div>
+        <pre class="json-summary" data-json-summary>No document loaded.</pre>
+      </div>
     </section>
   </div>
 `;
 
+hydrateTabs();
+hydrateJsonImport();
+
 for (const block of blocks) {
   void hydrateBlock(block);
+}
+
+function hydrateTabs(): void {
+  const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-tab]"));
+  const panels = Array.from(document.querySelectorAll<HTMLElement>("[data-panel]"));
+
+  for (const tab of tabs) {
+    tab.addEventListener("click", () => {
+      const target = tab.dataset.tab;
+      tabs.forEach((item) => item.classList.toggle("active", item === tab));
+      panels.forEach((panel) => {
+        panel.classList.toggle("active", panel.dataset.panel === target);
+      });
+    });
+  }
+}
+
+function hydrateJsonImport(): void {
+  const input = document.querySelector<HTMLTextAreaElement>("[data-json-input]");
+  const file = document.querySelector<HTMLInputElement>("[data-json-file]");
+  const validate = document.querySelector<HTMLButtonElement>("[data-validate-json]");
+  const renderButton = document.querySelector<HTMLButtonElement>("[data-render-json]");
+  const summary = document.querySelector<HTMLElement>("[data-json-summary]");
+
+  if (!input || !file || !validate || !renderButton || !summary) {
+    return;
+  }
+
+  validate.addEventListener("click", () => {
+    loadJson(input.value, "paste", summary, renderButton);
+  });
+
+  file.addEventListener("change", async () => {
+    const selected = file.files?.[0];
+    if (!selected) {
+      return;
+    }
+
+    const value = await selected.text();
+    input.value = value;
+    loadJson(value, "file", summary, renderButton);
+  });
+
+  renderButton.addEventListener("click", () => {
+    if (!importedDocument) {
+      return;
+    }
+
+    window.parent.postMessage(
+      {
+        pluginMessage: {
+          type: "render-json",
+          source: importedSource,
+          document: importedDocument
+        }
+      },
+      "*"
+    );
+  });
+}
+
+function loadJson(
+  value: string,
+  source: "paste" | "file",
+  summary: HTMLElement,
+  renderButton: HTMLButtonElement
+): void {
+  try {
+    importedDocument = parseDocumentJson(value);
+    importedSource = source;
+    summary.textContent = JSON.stringify(summarizeDocument(importedDocument), null, 2);
+    renderButton.disabled = false;
+  } catch (error) {
+    importedDocument = undefined;
+    renderButton.disabled = true;
+    summary.textContent = error instanceof Error ? error.message : "Invalid JSON document.";
+  }
 }
 
 function renderBlockCard(block: ExampleBlock): string {

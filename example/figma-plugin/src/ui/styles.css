@@ -54,6 +54,37 @@ h1 {
   line-height: 22px;
 }
 
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin: 0 0 18px;
+}
+
+.tab {
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 12px;
+  padding: 9px 12px;
+  background: rgba(15, 23, 42, 0.72);
+  color: rgb(226, 232, 240);
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.tab.active {
+  background: rgb(56, 189, 248);
+  color: rgb(8, 47, 73);
+}
+
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
 .gallery {
   columns: 300px;
   column-gap: 18px;
@@ -111,7 +142,8 @@ h1 {
   gap: 10px;
 }
 
-.actions button {
+.actions button,
+.import-actions button {
   border: 0;
   border-radius: 12px;
   padding: 10px 12px;
@@ -123,7 +155,8 @@ h1 {
   font-weight: 800;
 }
 
-.actions button:disabled {
+.actions button:disabled,
+.import-actions button:disabled {
   cursor: wait;
   opacity: 0.62;
 }
@@ -137,4 +170,48 @@ h1 {
 
 .status.error {
   color: rgb(248, 113, 113);
+}
+
+.import-panel {
+  display: grid;
+  gap: 12px;
+  max-width: 920px;
+}
+
+.json-input {
+  min-height: 260px;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 14px;
+  padding: 14px;
+  background: rgb(2, 6, 23);
+  color: rgb(226, 232, 240);
+  font: 12px/18px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  resize: vertical;
+}
+
+.import-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.import-actions input {
+  max-width: 100%;
+  color: rgb(203, 213, 225);
+  font: inherit;
+  font-size: 13px;
+}
+
+.json-summary {
+  min-height: 120px;
+  margin: 0;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 14px;
+  padding: 14px;
+  overflow: auto;
+  background: rgba(15, 23, 42, 0.72);
+  color: rgb(203, 213, 225);
+  font: 12px/18px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  white-space: pre-wrap;
 }
