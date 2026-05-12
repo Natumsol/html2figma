@@ -1,7 +1,59 @@
 body {
   min-width: 320px;
   margin: 0;
-  padding: 16px;
   color: rgb(15, 23, 42);
   font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.popup {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.status {
+  min-height: 18px;
+  margin: 0;
+  color: rgb(71, 85, 105);
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.actions {
+  display: grid;
+  gap: 8px;
+}
+
+button {
+  border: 0;
+  border-radius: 8px;
+  padding: 9px 11px;
+  background: rgb(14, 165, 233);
+  color: white;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+button:hover {
+  background: rgb(2, 132, 199);
+}
+
+.summary {
+  max-height: 180px;
+  margin: 0;
+  overflow: auto;
+  border-radius: 8px;
+  padding: 10px;
+  background: rgb(241, 245, 249);
+  color: rgb(15, 23, 42);
+  font: 12px/18px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  white-space: pre-wrap;
 }
