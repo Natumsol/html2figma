@@ -3,23 +3,14 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
+  "workspaces": [
+    "figma-plugin",
+    "chrome-extension"
+  ],
   "scripts": {
-    "dev": "concurrently \"npm run dev:ui\" \"npm run dev:plugin\"",
-    "dev:ui": "vite --config vite.ui.config.ts --host localhost --port 5173",
-    "dev:plugin": "npm run sync-manifest && vite build --config vite.plugin.config.ts --watch",
-    "build": "npm run sync-manifest && vite build --config vite.ui.config.ts && vite build --config vite.plugin.config.ts",
-    "sync-manifest": "tsx scripts/sync-manifest.ts",
-    "typecheck": "tsc --noEmit"
-  },
-  "dependencies": {
-    "html2figma": "file:.."
-  },
-  "devDependencies": {
-    "@figma/plugin-typings": "^1.125.0",
-    "@types/node": "^25.6.2",
-    "concurrently": "^9.2.1",
-    "tsx": "^4.21.0",
-    "typescript": "^6.0.3",
-    "vite": "^8.0.11"
+    "build": "npm run build -w figma-plugin && npm run build -w chrome-extension",
+    "typecheck": "npm run typecheck -w figma-plugin && npm run typecheck -w chrome-extension",
+    "dev:figma": "npm run dev -w figma-plugin",
+    "dev:chrome": "npm run dev -w chrome-extension"
   }
 }

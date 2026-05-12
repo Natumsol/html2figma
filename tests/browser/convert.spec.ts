@@ -201,7 +201,7 @@ test("converts example blocks with inline svg and image resources", async ({ pag
   ];
 
   for (const example of cases) {
-    await page.goto(new URL(`../../example/blocks/${example.fixture}`, import.meta.url).href);
+    await page.goto(new URL(`../../example/figma-plugin/blocks/${example.fixture}`, import.meta.url).href);
 
     const result = await page.evaluate(async ({ baseUrl, selector }) => {
       const { convert } = await import(`${baseUrl}/src/convert.ts`);
