@@ -132,7 +132,7 @@ export function convertElement(
       id: resourceId,
       type: "svg",
       source: cssPath(element),
-      data: serializeSvg(element, context, id),
+      data: serializeSvg(element, context, id, baseNode.warnings),
       mimeType: "image/svg+xml"
     });
 
@@ -156,7 +156,12 @@ export function convertElement(
   };
 }
 
-function serializeSvg(element: SVGElement, context: ConvertContext, nodeId: string): string {
+function serializeSvg(
+  element: SVGElement,
+  context: ConvertContext,
+  nodeId: string,
+  nodeWarnings: ConvertWarning[]
+): string {
   const clone = element.cloneNode(true) as SVGElement;
 
   for (const use of Array.from(clone.querySelectorAll("use"))) {
@@ -165,9 +170,9 @@ function serializeSvg(element: SVGElement, context: ConvertContext, nodeId: stri
       continue;
     }
 
-    const symbol = element.ownerDocument.querySelector(href);
+    const symbol = element.ownerDocument.getElementById(href.slice(1));
     if (!symbol) {
-      context.warnings.push(createWarning(
+      const warning = createWarning(
         "svg-use-unresolved",
         "SVG use reference could not be resolved",
         "warning",
@@ -175,7 +180,9 @@ function serializeSvg(element: SVGElement, context: ConvertContext, nodeId: stri
           nodeId,
           source: href
         }
-      ));
+      );
+      context.warnings.push(warning);
+      nodeWarnings.push(warning);
       continue;
     }
 
