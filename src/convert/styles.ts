@@ -122,6 +122,7 @@ function readTextStyle(style: CSSStyleDeclaration): AstTextStyle {
 
   textStyle.textAlign = mapTextAlign(style.textAlign);
   textStyle.textDecoration = mapTextDecoration(style.textDecorationLine);
+  textStyle.textCase = mapTextTransform(style.textTransform);
 
   if (color) {
     textStyle.color = color.color;
@@ -152,4 +153,17 @@ function mapTextDecoration(value: string): AstTextStyle["textDecoration"] {
   }
 
   return "none";
+}
+
+function mapTextTransform(value: string): AstTextStyle["textCase"] | undefined {
+  switch (value) {
+    case "uppercase":
+      return "upper";
+    case "lowercase":
+      return "lower";
+    case "capitalize":
+      return "title";
+    default:
+      return undefined;
+  }
 }

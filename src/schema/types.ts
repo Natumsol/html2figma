@@ -54,6 +54,7 @@ export interface AstTextStyle {
   letterSpacing?: number;
   textAlign?: "left" | "center" | "right" | "justified";
   textDecoration?: "none" | "underline" | "strikethrough";
+  textCase?: "upper" | "lower" | "title";
   color?: Rgb;
 }
 

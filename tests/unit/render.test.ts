@@ -525,6 +525,27 @@ describe("renderWithAdapter", () => {
     });
   });
 
+  it("maps AST text case to Figma text case", async () => {
+    const document = createDocument({
+      root: createTextNode({
+        style: {
+          text: {
+            fontFamily: "Inter",
+            fontSize: 16,
+            fontWeight: 400,
+            textCase: "upper"
+          }
+        }
+      })
+    });
+    const adapter = new FakeAdapter();
+
+    const result = await renderWithAdapter(document, adapter);
+    const textNode = result.root as unknown as RenderableNode;
+
+    expect(textNode.textCase).toBe("UPPER");
+  });
+
   it("does not apply box and layout styles to text nodes", async () => {
     const document = createDocument({
       root: createTextNode({

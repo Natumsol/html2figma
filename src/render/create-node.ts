@@ -265,6 +265,10 @@ async function applyTextProperties(
     target.textDecoration = textStyle.textDecoration.toUpperCase();
   }
 
+  if (textStyle?.textCase) {
+    target.textCase = mapTextCase(textStyle.textCase);
+  }
+
   if (textStyle?.color) {
     target.fills = [
       {
@@ -326,6 +330,17 @@ function mapTextAlign(value: NonNullable<AstTextStyle["textAlign"]>): string {
       return "JUSTIFIED";
     default:
       return "LEFT";
+  }
+}
+
+function mapTextCase(value: NonNullable<AstTextStyle["textCase"]>): string {
+  switch (value) {
+    case "upper":
+      return "UPPER";
+    case "lower":
+      return "LOWER";
+    case "title":
+      return "TITLE";
   }
 }
 

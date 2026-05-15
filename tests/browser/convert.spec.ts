@@ -139,6 +139,24 @@ test("uses inline text bounds instead of the parent element box", async ({ page 
   expect(text?.bounds.width).toBeLessThan(result.root.bounds.width);
 });
 
+test("captures CSS text-transform as AST text case", async ({ page }) => {
+  await page.setContent(`
+    <div id="target" style="font: 16px/20px Arial; text-transform: uppercase;">
+      transformed label
+    </div>
+  `);
+
+  const result = await page.evaluate(async (baseUrl) => {
+    const { convert } = await import(`${baseUrl}/src/convert.ts`);
+    return convert(document.querySelector("#target")!);
+  }, serverUrl) as Html2FigmaDocument;
+
+  const text = result.root.children[0];
+
+  expect(text?.type).toBe("text");
+  expect(text?.style.text?.textCase).toBe("upper");
+});
+
 test("uses the parent box for centered text bounds", async ({ page }) => {
   await page.setContent(`
     <div id="target" style="box-sizing: border-box; width: 240px; padding: 12px 24px; text-align: center; font: 16px/20px Arial;">
