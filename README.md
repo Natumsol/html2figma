@@ -66,13 +66,16 @@ This first version targets common page structure and visual styling:
 
 - Common box model sizing and positioning
 - Solid backgrounds
-- Borders
+- CSS background images using a single `url(...)`
+- Borders, including asymmetric solid borders via generated rectangle layers
 - Corner radii
-- Text styles
+- Text styles, including CSS text transform
 - Opacity
 - Box shadows
-- Images
-- SVG
+- Images, including responsive image selection via `img.currentSrc`
+- Video poster images
+- SVG, including local `<use>` expansion
+- Open shadow root traversal
 - Simple flex layout
 
 Unsupported CSS is recorded in warnings so callers can inspect missing fidelity and decide how strict their workflow should be.
@@ -85,8 +88,9 @@ These CSS features are not first-version targets:
 - Blend modes
 - Pseudo elements
 - Animations
-- Complex gradients
+- Gradients and multiple background layers
 - Clipping
 - Masks
 - Table layout
 - Native form control appearance
+- Responsive Figma constraints

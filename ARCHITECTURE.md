@@ -30,6 +30,8 @@ The conversion side lives under `src/convert/`.
 
 The converter prioritizes reliable visual geometry from the browser. It also preserves simple flex metadata so render can create editable Figma Auto Layout where possible.
 
+Resource-like CSS features are resolved during conversion. Single URL background images become image fill resources, video posters become image nodes, and SVG resources are cloned before local `<use>` expansion. Unsupported resource forms emit warnings and continue.
+
 ## Shared AST
 
 `Html2FigmaDocument` is the top-level serialized payload:
@@ -55,6 +57,8 @@ The render side lives under `src/render/`.
 7. SVG resources are created through `createNodeFromSvg()` when data is available.
 
 The adapter abstraction keeps render behavior unit-testable without a live Figma runtime.
+
+Generated helper rectangles, including asymmetric border layers, render through the normal rectangle path. Text case metadata maps directly to Figma text case.
 
 ## Utilities
 
