@@ -15,8 +15,9 @@ interface FigmaManifest {
   documentAccess: "dynamic-page";
   editorType: ["figma"];
   networkAccess: {
-    allowedDomains: ["none"];
-    devAllowedDomains: string[];
+    allowedDomains: readonly string[];
+    reasoning: string;
+    devAllowedDomains: readonly string[];
   };
 }
 
@@ -29,7 +30,8 @@ async function main(): Promise<void> {
     documentAccess: "dynamic-page",
     editorType: ["figma"],
     networkAccess: {
-      allowedDomains: ["none"],
+      allowedDomains: exampleConfig.networkAllowedDomains,
+      reasoning: exampleConfig.networkAccessReasoning,
       devAllowedDomains: [new URL(exampleConfig.uiDevUrl).origin]
     }
   };

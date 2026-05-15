@@ -9,8 +9,9 @@
   ],
   "networkAccess": {
     "allowedDomains": [
-      "none"
+      "*"
     ],
+    "reasoning": "The local example plugin renders imported html2figma JSON and may need to fetch image resources from the captured page.",
     "devAllowedDomains": [
       "http://localhost:5173"
     ]
