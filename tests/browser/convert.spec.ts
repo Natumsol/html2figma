@@ -245,6 +245,49 @@ test("converts example blocks with inline svg and image resources", async ({ pag
   }
 });
 
+test("expands local SVG use references before storing resources", async ({ page }) => {
+  await page.setContent(`
+    <svg style="display: none;">
+      <symbol id="check-icon" viewBox="0 0 10 10">
+        <path d="M1 5l2 2 6-6"></path>
+      </symbol>
+    </svg>
+    <svg id="target" width="10" height="10">
+      <use href="#check-icon"></use>
+    </svg>
+  `);
+
+  const result = await page.evaluate(async (baseUrl) => {
+    const { convert } = await import(`${baseUrl}/src/convert.ts`);
+    return convert(document.querySelector("#target")!);
+  }, serverUrl) as Html2FigmaDocument;
+
+  const svgResource = result.resources.find((resource) => resource.type === "svg");
+  expect(svgResource?.data).toContain("<path");
+  expect(svgResource?.data).not.toContain("<use");
+});
+
+test("warns and preserves unresolved local SVG use references", async ({ page }) => {
+  await page.setContent(`
+    <svg id="target" width="10" height="10">
+      <use href="#missing-icon"></use>
+    </svg>
+  `);
+
+  const result = await page.evaluate(async (baseUrl) => {
+    const { convert } = await import(`${baseUrl}/src/convert.ts`);
+    return convert(document.querySelector("#target")!);
+  }, serverUrl) as Html2FigmaDocument;
+
+  const svgResource = result.resources.find((resource) => resource.type === "svg");
+  expect(svgResource?.data).toContain("<use");
+  expect(result.warnings).toContainEqual(expect.objectContaining({
+    code: "svg-use-unresolved",
+    nodeId: result.root.id,
+    source: "#missing-icon"
+  }));
+});
+
 test("skips picture and source wrappers while preserving img currentSrc", async ({ page }) => {
   await page.setContent(`
     <picture id="target">

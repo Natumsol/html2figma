@@ -132,7 +132,7 @@ export function convertElement(
       id: resourceId,
       type: "svg",
       source: cssPath(element),
-      data: element.outerHTML,
+      data: serializeSvg(element, context, id),
       mimeType: "image/svg+xml"
     });
 
@@ -154,6 +154,35 @@ export function convertElement(
     ...baseNode,
     type: "frame"
   };
+}
+
+function serializeSvg(element: SVGElement, context: ConvertContext, nodeId: string): string {
+  const clone = element.cloneNode(true) as SVGElement;
+
+  for (const use of Array.from(clone.querySelectorAll("use"))) {
+    const href = use.getAttribute("href") || use.getAttribute("xlink:href");
+    if (!href?.startsWith("#")) {
+      continue;
+    }
+
+    const symbol = element.ownerDocument.querySelector(href);
+    if (!symbol) {
+      context.warnings.push(createWarning(
+        "svg-use-unresolved",
+        "SVG use reference could not be resolved",
+        "warning",
+        {
+          nodeId,
+          source: href
+        }
+      ));
+      continue;
+    }
+
+    use.replaceWith(...Array.from(symbol.childNodes).map((child) => child.cloneNode(true)));
+  }
+
+  return clone.outerHTML;
 }
 
 function convertChildren(
