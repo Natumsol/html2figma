@@ -1,0 +1,19 @@
+docs/superpowers/specs/2026-05-15-builderio-parity-design.md
+  s_68e7508e8811c4::t_c0f387d4b88782 1-86
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "9a039f5457ddd9685ea97637f0b0b9e548bc756a",
+  "prompts": {},
+  "sessions": {
+    "s_68e7508e8811c4": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e0f5a-6fcc-7700-aeac-2ff4edc779a3",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Natumsol <natumsol@gmail.com>"
+    }
+  }
+}
