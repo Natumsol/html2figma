@@ -12,6 +12,7 @@ import type {
 } from "../schema/types";
 import { imageMimeType } from "../utils/background";
 import { createWarning } from "../utils/warnings";
+import { createBorderRectangleNode } from "./borders";
 import { readBounds } from "./layout";
 import { readStyle } from "./styles";
 
@@ -47,7 +48,7 @@ export function convertElement(
   const id = nextNodeId(context);
   const bounds = readBounds(element);
   const source = readSource(element, shadowRootPath);
-  const { style, warnings } = readStyle(element, id, context.resources);
+  const { style, warnings, borderSides } = readStyle(element, id, context.resources);
   context.warnings.push(...warnings);
 
   if (element instanceof HTMLVideoElement && element.poster) {
@@ -143,17 +144,25 @@ export function convertElement(
     } satisfies SvgAstNode;
   }
 
-  if (children.length === 0 && hasVisualBox(style)) {
+  if (children.length === 0 && hasVisualBox(style) && borderSides.length === 0) {
     return {
       ...baseNode,
       type: "rectangle"
     };
   }
 
-  return {
+  const node: Html2FigmaNode = {
     ...baseNode,
     type: "frame"
   };
+
+  node.children.push(
+    ...borderSides.map((paint) =>
+      createBorderRectangleNode(node, paint.side, paint, nextNodeId(context))
+    )
+  );
+
+  return node;
 }
 
 function serializeSvg(

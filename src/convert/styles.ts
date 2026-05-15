@@ -12,13 +12,14 @@ import { firstFontFamily, normalizeFontWeight } from "../utils/font";
 import { parseOptionalPx } from "../utils/length";
 import { parseBoxShadow } from "../utils/shadow";
 import { createWarning } from "../utils/warnings";
+import type { BorderPaint, BorderSide } from "./borders";
 import { readFlexLayout } from "./layout";
 
 export function readStyle(
   element: Element,
   nodeId: NodeId,
   resources: ResourceRef[]
-): { style: AstStyle; warnings: ConvertWarning[] } {
+): { style: AstStyle; warnings: ConvertWarning[]; borderSides: BorderPaint[] } {
   const computedStyle = window.getComputedStyle(element);
   const style: AstStyle = {};
   const warnings: ConvertWarning[] = [];
@@ -67,9 +68,12 @@ export function readStyle(
     );
   }
 
-  const stroke = readTopBorder(computedStyle);
-  if (stroke) {
-    style.strokes = [stroke];
+  const borderSides = readBorderSides(computedStyle, nodeId, warnings);
+  const uniformStroke = readUniformBorderStroke(borderSides);
+  if (uniformStroke) {
+    style.strokes = [uniformStroke];
+  } else if (borderSides.length === 1 && borderSides[0]?.side === "top") {
+    style.strokes = [borderPaintToStroke(borderSides[0])];
   }
 
   style.cornerRadius = {
@@ -116,26 +120,106 @@ export function readStyle(
     );
   }
 
-  return { style, warnings };
+  return {
+    style,
+    warnings,
+    borderSides: style.strokes ? [] : borderSides
+  };
 }
 
-function readTopBorder(style: CSSStyleDeclaration): AstStroke | undefined {
-  if (style.borderTopStyle !== "solid") {
+function readBorderSides(
+  style: CSSStyleDeclaration,
+  nodeId: NodeId,
+  warnings: ConvertWarning[]
+): BorderPaint[] {
+  return BORDER_SIDES
+    .map((side) => readBorderSide(style, side, nodeId, warnings))
+    .filter((side): side is BorderPaint => Boolean(side));
+}
+
+function readBorderSide(
+  style: CSSStyleDeclaration,
+  side: BorderSide,
+  nodeId: NodeId,
+  warnings: ConvertWarning[]
+): BorderPaint | undefined {
+  const weight = parseOptionalPx(readBorderSideProperty(style, side, "Width"), 0);
+  const borderStyle = readBorderSideProperty(style, side, "Style");
+  if (weight <= 0 || borderStyle === "none" || borderStyle === "hidden") {
     return undefined;
   }
 
-  const color = parseCssColor(style.borderTopColor);
-  const weight = parseOptionalPx(style.borderTopWidth, 0);
-  if (!color || weight <= 0) {
+  if (borderStyle !== "solid") {
+    warnings.push(
+      createWarning(
+        "unsupported-border-style",
+        "Only solid CSS border styles are supported",
+        "warning",
+        {
+          nodeId,
+          cssProperty: `border-${side}-style`,
+          source: borderStyle
+        }
+      )
+    );
+    return undefined;
+  }
+
+  const color = parseCssColor(readBorderSideProperty(style, side, "Color"));
+  if (!color) {
     return undefined;
   }
 
   return {
+    side,
     color: color.color,
     opacity: color.opacity,
-    weight,
+    weight
+  };
+}
+
+function readBorderSideProperty(
+  style: CSSStyleDeclaration,
+  side: BorderSide,
+  property: "Width" | "Style" | "Color"
+): string {
+  return style[`border${capitalize(side)}${property}` as keyof CSSStyleDeclaration] as string;
+}
+
+function readUniformBorderStroke(borderSides: BorderPaint[]): AstStroke | undefined {
+  if (borderSides.length !== BORDER_SIDES.length) {
+    return undefined;
+  }
+
+  const [first, ...rest] = borderSides;
+  if (!first || !rest.every((side) => equalBorderPaint(side, first))) {
+    return undefined;
+  }
+
+  return borderPaintToStroke(first);
+}
+
+function equalBorderPaint(a: BorderPaint, b: BorderPaint): boolean {
+  return (
+    a.weight === b.weight &&
+    a.opacity === b.opacity &&
+    a.color.r === b.color.r &&
+    a.color.g === b.color.g &&
+    a.color.b === b.color.b
+  );
+}
+
+function borderPaintToStroke(border: BorderPaint): AstStroke {
+  return {
+    color: border.color,
+    opacity: border.opacity,
+    weight: border.weight,
     align: "inside"
   };
+}
+
+function capitalize(value: string): string {
+  return `${value.charAt(0).toUpperCase()}${value.slice(1)}`;
 }
 
 function readTextStyle(style: CSSStyleDeclaration): AstTextStyle {
@@ -172,6 +256,8 @@ function readTextStyle(style: CSSStyleDeclaration): AstTextStyle {
 
   return textStyle;
 }
+
+const BORDER_SIDES: BorderSide[] = ["top", "right", "bottom", "left"];
 
 function mapTextAlign(value: string): AstTextStyle["textAlign"] {
   switch (value) {
