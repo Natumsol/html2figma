@@ -1,0 +1,27 @@
+src/render/create-node.ts
+  s_58013af8788b85::t_f06fd94b265582 268-271,336-343
+tests/browser/convert.spec.ts
+  s_58013af8788b85::t_a98e01a54bde0b 142-159
+tests/unit/render.test.ts
+  s_58013af8788b85::t_a98e01a54bde0b 528-548
+src/schema/types.ts
+  s_58013af8788b85::t_f06fd94b265582 57
+src/convert/styles.ts
+  s_58013af8788b85::t_f06fd94b265582 125,157-168
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "c57152c765d28af9e15b2a1ceab077a9e36696c2",
+  "prompts": {},
+  "sessions": {
+    "s_58013af8788b85": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e2ac6-e53b-7e53-b920-73e08e096320",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Natumsol <natumsol@gmail.com>"
+    }
+  }
+}
