@@ -1,0 +1,21 @@
+example/figma-plugin/package.json
+  s_68e7508e8811c4::t_6b5e8841fa7e16 7,9,11,13,16,18
+example/chrome-extension/package.json
+  s_68e7508e8811c4::t_6b5e8841fa7e16 7,9,11,13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "89ce7cd2cc634b39d6596f9f95e6a23b1c34cb2e",
+  "prompts": {},
+  "sessions": {
+    "s_68e7508e8811c4": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e0f5a-6fcc-7700-aeac-2ff4edc779a3",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Natumsol <natumsol@gmail.com>"
+    }
+  }
+}
