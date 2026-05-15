@@ -11,6 +11,7 @@ import type {
   TextAstNode
 } from "../schema/types";
 import { imageMimeType } from "../utils/background";
+import { createWarning } from "../utils/warnings";
 import { readBounds } from "./layout";
 import { readStyle } from "./styles";
 
@@ -26,6 +27,10 @@ export function convertElement(
   context: ConvertContext,
   depth = 0
 ): Html2FigmaNode | undefined {
+  if (element instanceof HTMLSourceElement) {
+    return undefined;
+  }
+
   if (context.options.maxDepth !== undefined && depth > context.options.maxDepth) {
     return undefined;
   }
@@ -54,6 +59,36 @@ export function convertElement(
     warnings,
     children
   };
+
+  if (element instanceof HTMLVideoElement) {
+    if (element.poster) {
+      const resourceId = `resource-${context.resources.length + 1}`;
+      context.resources.push({
+        id: resourceId,
+        type: "image",
+        source: element.poster,
+        mimeType: imageMimeType(element.poster)
+      });
+
+      return {
+        ...baseNode,
+        type: "image",
+        resourceId
+      } satisfies ImageAstNode;
+    }
+
+    const warning = createWarning(
+      "video-poster-missing",
+      "Video poster is missing; rendering video as a frame",
+      "warning",
+      {
+        nodeId: id,
+        source: source.path
+      }
+    );
+    context.warnings.push(warning);
+    baseNode.warnings.push(warning);
+  }
 
   if (element instanceof HTMLImageElement) {
     const resourceId = `resource-${context.resources.length + 1}`;

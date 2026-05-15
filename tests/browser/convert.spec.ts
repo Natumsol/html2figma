@@ -245,6 +245,61 @@ test("converts example blocks with inline svg and image resources", async ({ pag
   }
 });
 
+test("skips picture and source wrappers while preserving img currentSrc", async ({ page }) => {
+  await page.setContent(`
+    <picture id="target">
+      <source srcset="wide.png" media="(min-width: 800px)">
+      <img src="fallback.png" style="width: 120px; height: 80px;" alt="Fallback">
+    </picture>
+  `);
+
+  const result = await page.evaluate(async (baseUrl) => {
+    const { convert } = await import(`${baseUrl}/src/convert.ts`);
+    return convert(document.querySelector("#target")!);
+  }, serverUrl) as Html2FigmaDocument;
+
+  const nodeTypes = flattenNodeTypes(result.root);
+  expect(nodeTypes).not.toContain("source");
+  expect(result.resources).toContainEqual(expect.objectContaining({
+    type: "image",
+    source: expect.stringContaining("fallback.png")
+  }));
+});
+
+test("converts video poster images into image nodes", async ({ page }) => {
+  await page.setContent(`
+    <video id="target" poster="poster.jpg" style="width: 200px; height: 120px;"></video>
+  `);
+
+  const result = await page.evaluate(async (baseUrl) => {
+    const { convert } = await import(`${baseUrl}/src/convert.ts`);
+    return convert(document.querySelector("#target")!);
+  }, serverUrl) as Html2FigmaDocument;
+
+  expect(result.root.type).toBe("image");
+  expect(result.root.source.tagName).toBe("video");
+  expect(result.resources).toContainEqual(expect.objectContaining({
+    type: "image",
+    source: expect.stringContaining("poster.jpg")
+  }));
+});
+
+test("warns when video has no poster image", async ({ page }) => {
+  await page.setContent(`
+    <video id="target" style="width: 200px; height: 120px;"></video>
+  `);
+
+  const result = await page.evaluate(async (baseUrl) => {
+    const { convert } = await import(`${baseUrl}/src/convert.ts`);
+    return convert(document.querySelector("#target")!);
+  }, serverUrl) as Html2FigmaDocument;
+
+  expect(result.root.type).not.toBe("image");
+  expect(result.warnings).toContainEqual(expect.objectContaining({
+    code: "video-poster-missing"
+  }));
+});
+
 test("converts single CSS background image URLs into image fills", async ({ page }) => {
   await page.setContent(`
     <div id="target" style="
