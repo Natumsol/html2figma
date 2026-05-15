@@ -163,7 +163,7 @@ async function withResolvedImageFills(
     };
   }
 
-  if (source.type === "image" && !style.fills?.some((fill) => fill.type === "image")) {
+  if (source.type === "image" && !hasOwnImageFill(source)) {
     const imageHash = await createImageHash(source.resourceId, context);
     if (imageHash) {
       const fills = (style.fills ?? []).concat({
@@ -183,6 +183,14 @@ async function withResolvedImageFills(
     ...source,
     style
   } as Html2FigmaNode;
+}
+
+function hasOwnImageFill(source: Extract<Html2FigmaNode, { type: "image" }>): boolean {
+  return Boolean(
+    source.style.fills?.some(
+      (fill) => fill.type === "image" && fill.resourceId === source.resourceId
+    )
+  );
 }
 
 async function resolveImageFill(

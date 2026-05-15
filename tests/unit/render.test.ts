@@ -13,6 +13,7 @@ class FakeAdapter implements FigmaAdapter {
   createdTypes: string[] = [];
   rejectFontFamily?: string;
   rejectImages = false;
+  imageSources: string[] = [];
 
   createFrame(): RenderableNode {
     return this.createNode("FRAME");
@@ -43,12 +44,13 @@ class FakeAdapter implements FigmaAdapter {
     return;
   }
 
-  async createImageAsync(): Promise<string> {
+  async createImageAsync(source: string): Promise<string> {
     if (this.rejectImages) {
       throw new Error("Image type is unsupported");
     }
 
-    return "image-hash";
+    this.imageSources.push(source);
+    return `image-hash:${source}`;
   }
 
   private createNode(type: string): RenderableNode {
@@ -753,6 +755,68 @@ describe("renderWithAdapter", () => {
       expect.objectContaining({
         code: "image-load-failed",
         source: "https://example.com/image.webp"
+      })
+    );
+  });
+
+  it("keeps an image node src fill when CSS background image fills are present", async () => {
+    const document = createDocument({
+      root: {
+        id: "image-1",
+        type: "image",
+        name: "Photo",
+        resourceId: "resource-1",
+        bounds: {
+          x: 0,
+          y: 0,
+          width: 240,
+          height: 160
+        },
+        style: {
+          fills: [
+            {
+              type: "image",
+              resourceId: "resource-2",
+              opacity: 1,
+              scaleMode: "fill"
+            }
+          ]
+        },
+        source: {
+          tagName: "img",
+          path: "html > body > img"
+        },
+        warnings: [],
+        children: []
+      },
+      resources: [
+        {
+          id: "resource-1",
+          type: "image",
+          source: "https://example.com/photo.png",
+          mimeType: "image/png"
+        },
+        {
+          id: "resource-2",
+          type: "image",
+          source: "https://example.com/background.png",
+          mimeType: "image/png"
+        }
+      ]
+    });
+    const adapter = new FakeAdapter();
+
+    const result = await renderWithAdapter(document, adapter);
+    const root = result.root as unknown as RenderableNode;
+
+    expect(adapter.imageSources).toEqual([
+      "https://example.com/background.png",
+      "https://example.com/photo.png"
+    ]);
+    expect(root.fills).toContainEqual(
+      expect.objectContaining({
+        type: "IMAGE",
+        imageHash: "image-hash:https://example.com/photo.png"
       })
     );
   });

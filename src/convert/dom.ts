@@ -10,6 +10,7 @@ import type {
   SvgAstNode,
   TextAstNode
 } from "../schema/types";
+import { imageMimeType } from "../utils/background";
 import { readBounds } from "./layout";
 import { readStyle } from "./styles";
 
@@ -40,7 +41,7 @@ export function convertElement(
   const id = nextNodeId(context);
   const bounds = readBounds(element);
   const source = readSource(element);
-  const { style, warnings } = readStyle(element, id);
+  const { style, warnings } = readStyle(element, id, context.resources);
   context.warnings.push(...warnings);
 
   const children = convertChildren(element, context, depth, style, bounds, source.path);
@@ -305,25 +306,4 @@ function cssPath(element: Element): string {
   }
 
   return parts.join(" > ");
-}
-
-function imageMimeType(source: string): string | undefined {
-  const path = source.split("?")[0]?.toLowerCase() ?? "";
-  if (path.endsWith(".png")) {
-    return "image/png";
-  }
-  if (path.endsWith(".jpg") || path.endsWith(".jpeg")) {
-    return "image/jpeg";
-  }
-  if (path.endsWith(".gif")) {
-    return "image/gif";
-  }
-  if (path.endsWith(".webp")) {
-    return "image/webp";
-  }
-  if (path.endsWith(".svg")) {
-    return "image/svg+xml";
-  }
-
-  return undefined;
 }

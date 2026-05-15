@@ -245,6 +245,66 @@ test("converts example blocks with inline svg and image resources", async ({ pag
   }
 });
 
+test("converts single CSS background image URLs into image fills", async ({ page }) => {
+  await page.setContent(`
+    <div id="target" style="
+      width: 160px;
+      height: 90px;
+      background-image: url('https://example.com/card.png');
+      background-size: contain;
+    "></div>
+  `);
+
+  const result = await page.evaluate(async (baseUrl) => {
+    const { convert } = await import(`${baseUrl}/src/convert.ts`);
+    return convert(document.querySelector("#target")!);
+  }, serverUrl) as Html2FigmaDocument;
+
+  const fill = result.root.style.fills?.find((item) => item.type === "image");
+  expect(fill).toMatchObject({
+    type: "image",
+    scaleMode: "fit"
+  });
+  expect(result.resources).toContainEqual(expect.objectContaining({
+    type: "image",
+    source: "https://example.com/card.png"
+  }));
+});
+
+test("keeps CSS background color behind background image fills", async ({ page }) => {
+  await page.setContent(`
+    <div id="target" style="
+      width: 160px;
+      height: 90px;
+      background-color: rgb(12, 24, 48);
+      background-image: url('https://example.com/card.png');
+    "></div>
+  `);
+
+  const result = await page.evaluate(async (baseUrl) => {
+    const { convert } = await import(`${baseUrl}/src/convert.ts`);
+    return convert(document.querySelector("#target")!);
+  }, serverUrl) as Html2FigmaDocument;
+
+  expect(result.root.style.fills?.map((fill) => fill.type)).toEqual(["solid", "image"]);
+});
+
+test("warns for unsupported CSS background images", async ({ page }) => {
+  await page.setContent(`
+    <div id="target" style="width: 100px; height: 50px; background-image: linear-gradient(red, blue);"></div>
+  `);
+
+  const result = await page.evaluate(async (baseUrl) => {
+    const { convert } = await import(`${baseUrl}/src/convert.ts`);
+    return convert(document.querySelector("#target")!);
+  }, serverUrl) as Html2FigmaDocument;
+
+  expect(result.warnings).toContainEqual(expect.objectContaining({
+    code: "unsupported-background-image",
+    cssProperty: "background-image"
+  }));
+});
+
 test("warns when converting an element with unsupported transform CSS", async ({ page }) => {
   await page.setContent(
     `<div id="target" style="transform: rotate(8deg); width: 100px; height: 50px;">Box</div>`

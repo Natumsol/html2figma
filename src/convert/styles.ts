@@ -1,4 +1,12 @@
-import type { AstStroke, AstStyle, AstTextStyle, ConvertWarning, NodeId } from "../schema/types";
+import type {
+  AstStroke,
+  AstStyle,
+  AstTextStyle,
+  ConvertWarning,
+  NodeId,
+  ResourceRef
+} from "../schema/types";
+import { imageMimeType, parseBackgroundImage } from "../utils/background";
 import { parseCssColor } from "../utils/color";
 import { firstFontFamily, normalizeFontWeight } from "../utils/font";
 import { parseOptionalPx } from "../utils/length";
@@ -8,7 +16,8 @@ import { readFlexLayout } from "./layout";
 
 export function readStyle(
   element: Element,
-  nodeId: NodeId
+  nodeId: NodeId,
+  resources: ResourceRef[]
 ): { style: AstStyle; warnings: ConvertWarning[] } {
   const computedStyle = window.getComputedStyle(element);
   const style: AstStyle = {};
@@ -23,6 +32,39 @@ export function readStyle(
         opacity: background.opacity
       }
     ];
+  }
+
+  const backgroundImage = parseBackgroundImage(computedStyle.backgroundImage);
+  if (backgroundImage.kind === "url") {
+    const resourceId = `resource-${resources.length + 1}`;
+    resources.push({
+      id: resourceId,
+      type: "image",
+      source: backgroundImage.url,
+      mimeType: imageMimeType(backgroundImage.url)
+    });
+    style.fills = [
+      ...(style.fills ?? []),
+      {
+        type: "image",
+        resourceId,
+        opacity: 1,
+        scaleMode: computedStyle.backgroundSize === "contain" ? "fit" : "fill"
+      }
+    ];
+  } else if (backgroundImage.kind === "unsupported") {
+    warnings.push(
+      createWarning(
+        "unsupported-background-image",
+        "CSS background image is not supported",
+        "warning",
+        {
+          nodeId,
+          cssProperty: "background-image",
+          source: computedStyle.backgroundImage
+        }
+      )
+    );
   }
 
   const stroke = readTopBorder(computedStyle);
