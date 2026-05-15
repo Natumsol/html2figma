@@ -25,7 +25,8 @@ export interface ConvertContext {
 export function convertElement(
   element: Element,
   context: ConvertContext,
-  depth = 0
+  depth = 0,
+  shadowRootPath?: string
 ): Html2FigmaNode | undefined {
   if (element instanceof HTMLSourceElement) {
     return undefined;
@@ -45,7 +46,7 @@ export function convertElement(
 
   const id = nextNodeId(context);
   const bounds = readBounds(element);
-  const source = readSource(element);
+  const source = readSource(element, shadowRootPath);
   const { style, warnings } = readStyle(element, id, context.resources);
   context.warnings.push(...warnings);
 
@@ -71,7 +72,15 @@ export function convertElement(
     } satisfies ImageAstNode;
   }
 
-  const children = convertChildren(element, context, depth, style, bounds, source.path);
+  const children = convertChildren(
+    element,
+    context,
+    depth,
+    style,
+    bounds,
+    source.path,
+    shadowRootPath
+  );
   if (element instanceof HTMLPictureElement && children.length === 0) {
     return undefined;
   }
@@ -153,7 +162,8 @@ function convertChildren(
   depth: number,
   parentStyle: AstStyle,
   parentBounds: AstBounds,
-  parentPath: string
+  parentPath: string,
+  shadowRootPath?: string
 ): Html2FigmaNode[] {
   const children: Html2FigmaNode[] = [];
 
@@ -172,9 +182,35 @@ function convertChildren(
     }
 
     if (child instanceof Element) {
-      const childNode = convertElement(child, context, childDepth);
+      const childNode = convertElement(child, context, childDepth, shadowRootPath);
       if (childNode) {
         children.push(childNode);
+      }
+    }
+  }
+
+  if (element.shadowRoot) {
+    const rootPath = `${parentPath}::shadow`;
+
+    for (const child of Array.from(element.shadowRoot.childNodes)) {
+      const childDepth = depth + 1;
+      if (child.nodeType === Node.TEXT_NODE) {
+        if (context.options.maxDepth !== undefined && childDepth > context.options.maxDepth) {
+          continue;
+        }
+
+        const text = collapseText(child.textContent ?? "");
+        if (text) {
+          children.push(createTextNode(child, text, context, parentStyle, parentBounds, rootPath));
+        }
+        continue;
+      }
+
+      if (child instanceof Element) {
+        const childNode = convertElement(child, context, childDepth, rootPath);
+        if (childNode) {
+          children.push(childNode);
+        }
       }
     }
   }
@@ -321,11 +357,23 @@ function readableName(element: Element): string {
   return `${tagName}${id}${className}`;
 }
 
-function readSource(element: Element): AstSource {
+function readSource(element: Element, shadowRootPath?: string): AstSource {
   return {
     tagName: element.tagName.toLowerCase(),
-    path: cssPath(element)
+    path: shadowRootPath ? shadowCssPath(element, shadowRootPath) : cssPath(element)
   };
+}
+
+function shadowCssPath(element: Element, rootPath: string): string {
+  const parts: string[] = [];
+  let current: Element | null = element;
+
+  while (current) {
+    parts.unshift(readableName(current));
+    current = current.parentElement;
+  }
+
+  return `${rootPath} > ${parts.join(" > ")}`;
 }
 
 function cssPath(element: Element): string {

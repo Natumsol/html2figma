@@ -426,6 +426,37 @@ test("warns when converting an element with unsupported transform CSS", async ({
   }
 });
 
+test("traverses open shadow roots with source path markers", async ({ page }) => {
+  await page.setContent(`<custom-card id="target"></custom-card>`);
+  await page.evaluate(() => {
+    const host = document.querySelector("#target")!;
+    const shadow = host.attachShadow({ mode: "open" });
+    shadow.innerHTML = `
+      <div class="shadow-title" style="font: 16px/20px Arial;">Shadow title</div>
+    `;
+  });
+
+  const result = await page.evaluate(async (baseUrl) => {
+    const { convert } = await import(`${baseUrl}/src/convert.ts`);
+    return convert(document.querySelector("#target")!);
+  }, serverUrl) as Html2FigmaDocument;
+
+  const allPaths = collectSourcePaths(result.root);
+  expect(allPaths.some((path) => path.includes("::shadow"))).toBe(true);
+  expect(flattenTexts(result.root)).toContain("Shadow title");
+});
+
 function flattenNodeTypes(node: Html2FigmaDocument["root"]): string[] {
   return [node.type, ...node.children.flatMap(flattenNodeTypes)];
+}
+
+function collectSourcePaths(node: Html2FigmaDocument["root"]): string[] {
+  return [node.source.path, ...node.children.flatMap(collectSourcePaths)];
+}
+
+function flattenTexts(node: Html2FigmaDocument["root"]): string[] {
+  return [
+    ...(node.type === "text" ? [node.text] : []),
+    ...node.children.flatMap(flattenTexts)
+  ];
 }
