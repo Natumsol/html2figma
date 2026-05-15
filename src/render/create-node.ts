@@ -154,11 +154,12 @@ async function withResolvedImageFills(
   let style = source.style;
 
   if (style.fills) {
+    const fills = await Promise.all(
+      style.fills.map((fill) => resolveImageFill(fill, context))
+    );
     style = {
       ...style,
-      fills: await Promise.all(
-        style.fills.map((fill) => resolveImageFill(fill, context))
-      )
+      fills: fills.filter((fill): fill is AstFill => Boolean(fill))
     };
   }
 
@@ -187,13 +188,13 @@ async function withResolvedImageFills(
 async function resolveImageFill(
   fill: AstFill,
   context: RenderContext
-): Promise<AstFill> {
+): Promise<AstFill | undefined> {
   if (fill.type !== "image") {
     return fill;
   }
 
   const imageHash = await createImageHash(fill.resourceId, context);
-  return imageHash ? { ...fill, resourceId: imageHash } : fill;
+  return imageHash ? { ...fill, resourceId: imageHash } : undefined;
 }
 
 async function createImageHash(
@@ -202,10 +203,24 @@ async function createImageHash(
 ): Promise<string | undefined> {
   const resource = findResource(context.document, resourceId);
   if (!resource) {
+    context.warnings.push(
+      createWarning("missing-image-resource", "Image resource is missing", "warning", {
+        source: resourceId
+      })
+    );
     return undefined;
   }
 
-  return context.adapter.createImageAsync(resource.source);
+  try {
+    return await context.adapter.createImageAsync(resource.source);
+  } catch (error) {
+    context.warnings.push(
+      createWarning("image-load-failed", "Image resource failed to load", "warning", {
+        source: resource.source
+      })
+    );
+    return undefined;
+  }
 }
 
 async function applyTextProperties(

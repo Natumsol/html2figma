@@ -12,6 +12,7 @@ class FakeAdapter implements FigmaAdapter {
 
   createdTypes: string[] = [];
   rejectFontFamily?: string;
+  rejectImages = false;
 
   createFrame(): RenderableNode {
     return this.createNode("FRAME");
@@ -43,6 +44,10 @@ class FakeAdapter implements FigmaAdapter {
   }
 
   async createImageAsync(): Promise<string> {
+    if (this.rejectImages) {
+      throw new Error("Image type is unsupported");
+    }
+
     return "image-hash";
   }
 
@@ -683,6 +688,102 @@ describe("renderWithAdapter", () => {
       expect.objectContaining({
         code: "missing-svg-resource",
         nodeId: "svg-1"
+      })
+    );
+  });
+
+  it("warns and keeps rendering when an image resource cannot be created", async () => {
+    const document = createDocument({
+      root: {
+        id: "image-1",
+        type: "image",
+        name: "Unsupported Image",
+        resourceId: "resource-1",
+        bounds: {
+          x: 0,
+          y: 0,
+          width: 240,
+          height: 160
+        },
+        style: {},
+        source: {
+          tagName: "img",
+          path: "html > body > img"
+        },
+        warnings: [],
+        children: []
+      },
+      resources: [
+        {
+          id: "resource-1",
+          type: "image",
+          source: "https://example.com/image.webp",
+          mimeType: "image/webp"
+        }
+      ]
+    });
+    const adapter = new FakeAdapter();
+    adapter.rejectImages = true;
+
+    const result = await renderWithAdapter(document, adapter);
+
+    expect(result.root.type).toBe("RECTANGLE");
+    expect(result.warnings).toContainEqual(
+      expect.objectContaining({
+        code: "image-load-failed",
+        source: "https://example.com/image.webp"
+      })
+    );
+  });
+
+  it("removes failed image fills instead of passing resource IDs as image hashes", async () => {
+    const document = createDocument({
+      root: {
+        id: "frame-1",
+        type: "frame",
+        name: "Card",
+        bounds: {
+          x: 0,
+          y: 0,
+          width: 240,
+          height: 160
+        },
+        style: {
+          fills: [
+            {
+              type: "image",
+              resourceId: "resource-1",
+              opacity: 1,
+              scaleMode: "fill"
+            }
+          ]
+        },
+        source: {
+          tagName: "div",
+          path: "html > body > div"
+        },
+        warnings: [],
+        children: []
+      },
+      resources: [
+        {
+          id: "resource-1",
+          type: "image",
+          source: "https://example.com/image.webp",
+          mimeType: "image/webp"
+        }
+      ]
+    });
+    const adapter = new FakeAdapter();
+    adapter.rejectImages = true;
+
+    const result = await renderWithAdapter(document, adapter);
+    const root = result.root as unknown as RenderableNode;
+
+    expect(root.fills).toEqual([]);
+    expect(result.warnings).toContainEqual(
+      expect.objectContaining({
+        code: "image-load-failed"
       })
     );
   });
