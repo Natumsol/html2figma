@@ -1,0 +1,24 @@
+example/figma-plugin/scripts/sync-manifest.ts
+  s_68e7508e8811c4::t_9baf3d5b581bc3 18,20
+  s_68e7508e8811c4::t_337c34b24c5be8 19,33-34
+example/figma-plugin/example.config.ts
+  s_68e7508e8811c4::t_337c34b24c5be8 5-7
+example/figma-plugin/manifest.json
+  s_68e7508e8811c4::t_76281461ad9357 12,14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "9a318832628b733482db5b4810f0b20e634f45f0",
+  "prompts": {},
+  "sessions": {
+    "s_68e7508e8811c4": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e0f5a-6fcc-7700-aeac-2ff4edc779a3",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Natumsol <natumsol@gmail.com>"
+    }
+  }
+}
