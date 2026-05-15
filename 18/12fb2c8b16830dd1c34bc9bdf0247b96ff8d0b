@@ -1,0 +1,21 @@
+ARCHITECTURE.md
+  s_68e7508e8811c4::t_4db971566b01fc 33-34,61
+README.md
+  s_68e7508e8811c4::t_c0484d34f57367 69-70,72,75-78,91,96
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "1812fb2c8b16830dd1c34bc9bdf0247b96ff8d0b",
+  "prompts": {},
+  "sessions": {
+    "s_68e7508e8811c4": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e0f5a-6fcc-7700-aeac-2ff4edc779a3",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Natumsol <natumsol@gmail.com>"
+    }
+  }
+}
