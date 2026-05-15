@@ -248,22 +248,43 @@ test("converts example blocks with inline svg and image resources", async ({ pag
 test("skips picture and source wrappers while preserving img currentSrc", async ({ page }) => {
   await page.setContent(`
     <picture id="target">
-      <source srcset="wide.png" media="(min-width: 800px)">
-      <img src="fallback.png" style="width: 120px; height: 80px;" alt="Fallback">
+      <source srcset="https://example.com/wide.png" media="(min-width: 800px)">
+      <img src="https://example.com/fallback.png" style="width: 120px; height: 80px;" alt="Fallback">
     </picture>
   `);
 
-  const result = await page.evaluate(async (baseUrl) => {
+  const { currentSrc, result } = await page.evaluate(async (baseUrl) => {
     const { convert } = await import(`${baseUrl}/src/convert.ts`);
-    return convert(document.querySelector("#target")!);
-  }, serverUrl) as Html2FigmaDocument;
+    const image = document.querySelector("img")!;
+    return {
+      currentSrc: image.currentSrc,
+      result: convert(document.querySelector("#target")!)
+    };
+  }, serverUrl) as { currentSrc: string; result: Html2FigmaDocument };
 
   const nodeTypes = flattenNodeTypes(result.root);
   expect(nodeTypes).not.toContain("source");
+  expect(currentSrc).not.toBe("");
   expect(result.resources).toContainEqual(expect.objectContaining({
     type: "image",
-    source: expect.stringContaining("fallback.png")
+    source: currentSrc
   }));
+});
+
+test("throws for an empty picture root instead of producing an empty frame", async ({ page }) => {
+  await page.setContent(`<picture id="target"></picture>`);
+
+  const message = await page.evaluate(async (baseUrl) => {
+    const { convert } = await import(`${baseUrl}/src/convert.ts`);
+    try {
+      convert(document.querySelector("#target")!);
+      return undefined;
+    } catch (error) {
+      return error instanceof Error ? error.message : String(error);
+    }
+  }, serverUrl);
+
+  expect(message).toBe("Unable to convert root element");
 });
 
 test("converts video poster images into image nodes", async ({ page }) => {
@@ -282,6 +303,22 @@ test("converts video poster images into image nodes", async ({ page }) => {
     type: "image",
     source: expect.stringContaining("poster.jpg")
   }));
+});
+
+test("drops fallback children from video poster image nodes", async ({ page }) => {
+  await page.setContent(`
+    <video id="target" poster="poster.jpg" style="width: 200px; height: 120px;">
+      Fallback text
+    </video>
+  `);
+
+  const result = await page.evaluate(async (baseUrl) => {
+    const { convert } = await import(`${baseUrl}/src/convert.ts`);
+    return convert(document.querySelector("#target")!);
+  }, serverUrl) as Html2FigmaDocument;
+
+  expect(result.root.type).toBe("image");
+  expect(result.root.children).toEqual([]);
 });
 
 test("warns when video has no poster image", async ({ page }) => {

@@ -49,7 +49,33 @@ export function convertElement(
   const { style, warnings } = readStyle(element, id, context.resources);
   context.warnings.push(...warnings);
 
+  if (element instanceof HTMLVideoElement && element.poster) {
+    const resourceId = `resource-${context.resources.length + 1}`;
+    context.resources.push({
+      id: resourceId,
+      type: "image",
+      source: element.poster,
+      mimeType: imageMimeType(element.poster)
+    });
+
+    return {
+      id,
+      name: readableName(element),
+      bounds,
+      style,
+      source,
+      warnings,
+      children: [],
+      type: "image",
+      resourceId
+    } satisfies ImageAstNode;
+  }
+
   const children = convertChildren(element, context, depth, style, bounds, source.path);
+  if (element instanceof HTMLPictureElement && children.length === 0) {
+    return undefined;
+  }
+
   const baseNode = {
     id,
     name: readableName(element),
@@ -61,22 +87,6 @@ export function convertElement(
   };
 
   if (element instanceof HTMLVideoElement) {
-    if (element.poster) {
-      const resourceId = `resource-${context.resources.length + 1}`;
-      context.resources.push({
-        id: resourceId,
-        type: "image",
-        source: element.poster,
-        mimeType: imageMimeType(element.poster)
-      });
-
-      return {
-        ...baseNode,
-        type: "image",
-        resourceId
-      } satisfies ImageAstNode;
-    }
-
     const warning = createWarning(
       "video-poster-missing",
       "Video poster is missing; rendering video as a frame",
