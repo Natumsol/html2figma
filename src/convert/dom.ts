@@ -52,6 +52,8 @@ export function convertElement(
   context.warnings.push(...warnings);
 
   if (element instanceof HTMLVideoElement && element.poster) {
+    warnUnsupportedBorderChildren(context, warnings, id, borderSides, "video poster");
+
     const resourceId = `resource-${context.resources.length + 1}`;
     context.resources.push({
       id: resourceId,
@@ -111,6 +113,8 @@ export function convertElement(
   }
 
   if (element instanceof HTMLImageElement) {
+    warnUnsupportedBorderChildren(context, baseNode.warnings, id, borderSides, "image");
+
     const resourceId = `resource-${context.resources.length + 1}`;
     context.resources.push({
       id: resourceId,
@@ -128,6 +132,8 @@ export function convertElement(
   }
 
   if (element instanceof SVGElement && element.ownerSVGElement === null) {
+    warnUnsupportedBorderChildren(context, baseNode.warnings, id, borderSides, "svg");
+
     const resourceId = `resource-${context.resources.length + 1}`;
     context.resources.push({
       id: resourceId,
@@ -163,6 +169,31 @@ export function convertElement(
   );
 
   return node;
+}
+
+function warnUnsupportedBorderChildren(
+  context: ConvertContext,
+  nodeWarnings: ConvertWarning[],
+  nodeId: string,
+  borderSides: unknown[],
+  nodeType: string
+): void {
+  if (borderSides.length === 0) {
+    return;
+  }
+
+  const warning = createWarning(
+    "unsupported-border-style",
+    `Asymmetric border helpers cannot be attached to ${nodeType} nodes`,
+    "warning",
+    {
+      nodeId,
+      cssProperty: "border",
+      source: nodeType
+    }
+  );
+  context.warnings.push(warning);
+  nodeWarnings.push(warning);
 }
 
 function serializeSvg(

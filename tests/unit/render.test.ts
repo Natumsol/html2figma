@@ -382,6 +382,104 @@ describe("renderWithAdapter", () => {
     expect(badge?.layoutSizingVertical).toBe("FIXED");
   });
 
+  it("renders border helper children of flex frames as absolute positioned rectangles", async () => {
+    const document = createDocument({
+      root: {
+        id: "root",
+        type: "frame",
+        name: "Flex Row",
+        bounds: {
+          x: 100,
+          y: 200,
+          width: 320,
+          height: 48
+        },
+        style: {
+          layout: {
+            mode: "horizontal",
+            gap: 16,
+            padding: {
+              top: 0,
+              right: 0,
+              bottom: 0,
+              left: 0
+            },
+            primaryAxisAlignItems: "space-between",
+            counterAxisAlignItems: "center",
+            wraps: false
+          }
+        },
+        source: {
+          tagName: "div",
+          path: "section > div"
+        },
+        warnings: [],
+        children: [
+          {
+            id: "border-top",
+            type: "rectangle",
+            name: "#border-top",
+            bounds: {
+              x: 100,
+              y: 200,
+              width: 320,
+              height: 2
+            },
+            style: {},
+            source: {
+              tagName: "#border",
+              path: "section > div > #border-top"
+            },
+            warnings: [],
+            children: []
+          },
+          {
+            id: "border-right",
+            type: "rectangle",
+            name: "#border-right",
+            bounds: {
+              x: 416,
+              y: 200,
+              width: 4,
+              height: 48
+            },
+            style: {},
+            source: {
+              tagName: "#border",
+              path: "section > div > #border-right"
+            },
+            warnings: [],
+            children: []
+          }
+        ]
+      }
+    });
+    const adapter = new FakeAdapter();
+
+    const result = await renderWithAdapter(document, adapter);
+    const root = result.root as unknown as RenderableNode;
+    const [topBorder, rightBorder] = root.children ?? [];
+
+    expect(topBorder).toMatchObject({
+      layoutPositioning: "ABSOLUTE",
+      layoutSizingHorizontal: "FIXED",
+      layoutSizingVertical: "FIXED",
+      x: 0,
+      y: 0,
+      width: 320,
+      height: 2
+    });
+    expect(rightBorder).toMatchObject({
+      layoutPositioning: "ABSOLUTE",
+      layoutSizingHorizontal: "FIXED",
+      layoutSizingVertical: "FIXED",
+      x: 316,
+      y: 0,
+      width: 4,
+      height: 48
+    });
+  });
+
   it("renders a frame root with a text child through an adapter", async () => {
     const document: Html2FigmaDocument = {
       version: 1,

@@ -468,6 +468,137 @@ test("represents asymmetric solid borders as rectangle children", async ({ page 
   expect(result.root.children.map((child) => child.name)).toEqual(
     expect.arrayContaining(["#border-top", "#border-right"])
   );
+  expect(result.root.style.strokes).toBeUndefined();
+
+  const topBorder = result.root.children.find((child) => child.name === "#border-top");
+  const rightBorder = result.root.children.find((child) => child.name === "#border-right");
+
+  expect(topBorder).toMatchObject({
+    type: "rectangle",
+    bounds: {
+      x: result.root.bounds.x,
+      y: result.root.bounds.y,
+      width: result.root.bounds.width,
+      height: 2
+    },
+    style: {
+      fills: [
+        {
+          type: "solid",
+          color: {
+            r: 1,
+            g: 0,
+            b: 0
+          },
+          opacity: 1
+        }
+      ]
+    }
+  });
+  expect(rightBorder).toMatchObject({
+    type: "rectangle",
+    bounds: {
+      x: result.root.bounds.x + result.root.bounds.width - 4,
+      y: result.root.bounds.y,
+      width: 4,
+      height: result.root.bounds.height
+    },
+    style: {
+      fills: [
+        {
+          type: "solid",
+          color: {
+            r: 0,
+            g: 1,
+            b: 0
+          },
+          opacity: 1
+        }
+      ]
+    }
+  });
+});
+
+test("represents top-only solid borders as rectangle children", async ({ page }) => {
+  await page.setContent(`
+    <div id="target" style="
+      width: 100px;
+      height: 50px;
+      border-top: 2px solid rgb(255, 0, 0);
+    "></div>
+  `);
+
+  const result = await page.evaluate(async (baseUrl) => {
+    const { convert } = await import(`${baseUrl}/src/convert.ts`);
+    return convert(document.querySelector("#target")!);
+  }, serverUrl) as Html2FigmaDocument;
+
+  expect(result.root.style.strokes).toBeUndefined();
+  expect(result.root.children.map((child) => child.name)).toContain("#border-top");
+});
+
+test("warns for unsupported visible border styles", async ({ page }) => {
+  await page.setContent(`
+    <div id="target" style="
+      width: 100px;
+      height: 50px;
+      border-top: 2px dashed rgb(255, 0, 0);
+    "></div>
+  `);
+
+  const result = await page.evaluate(async (baseUrl) => {
+    const { convert } = await import(`${baseUrl}/src/convert.ts`);
+    return convert(document.querySelector("#target")!);
+  }, serverUrl) as Html2FigmaDocument;
+
+  expect(result.warnings).toContainEqual(expect.objectContaining({
+    code: "unsupported-border-style",
+    cssProperty: "border-top-style",
+    nodeId: result.root.id,
+    source: "dashed"
+  }));
+});
+
+test("does not warn for transparent non-solid borders", async ({ page }) => {
+  await page.setContent(`
+    <div id="target" style="
+      width: 100px;
+      height: 50px;
+      border-top: 2px dashed transparent;
+    "></div>
+  `);
+
+  const result = await page.evaluate(async (baseUrl) => {
+    const { convert } = await import(`${baseUrl}/src/convert.ts`);
+    return convert(document.querySelector("#target")!);
+  }, serverUrl) as Html2FigmaDocument;
+
+  expect(result.warnings).not.toContainEqual(expect.objectContaining({
+    code: "unsupported-border-style"
+  }));
+});
+
+test("warns when asymmetric borders cannot attach to image nodes", async ({ page }) => {
+  await page.setContent(`
+    <img
+      id="target"
+      src="https://example.com/photo.png"
+      style="width: 100px; height: 50px; border-top: 2px solid rgb(255, 0, 0);"
+    >
+  `);
+
+  const result = await page.evaluate(async (baseUrl) => {
+    const { convert } = await import(`${baseUrl}/src/convert.ts`);
+    return convert(document.querySelector("#target")!);
+  }, serverUrl) as Html2FigmaDocument;
+
+  expect(result.root.type).toBe("image");
+  expect(result.root.children).toEqual([]);
+  expect(result.warnings).toContainEqual(expect.objectContaining({
+    code: "unsupported-border-style",
+    cssProperty: "border",
+    nodeId: result.root.id
+  }));
 });
 
 test("warns when converting an element with unsupported transform CSS", async ({ page }) => {

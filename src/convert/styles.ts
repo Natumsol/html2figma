@@ -72,8 +72,6 @@ export function readStyle(
   const uniformStroke = readUniformBorderStroke(borderSides);
   if (uniformStroke) {
     style.strokes = [uniformStroke];
-  } else if (borderSides.length === 1 && borderSides[0]?.side === "top") {
-    style.strokes = [borderPaintToStroke(borderSides[0])];
   }
 
   style.cornerRadius = {
@@ -149,6 +147,11 @@ function readBorderSide(
     return undefined;
   }
 
+  const color = parseCssColor(readBorderSideProperty(style, side, "Color"));
+  if (!color) {
+    return undefined;
+  }
+
   if (borderStyle !== "solid") {
     warnings.push(
       createWarning(
@@ -162,11 +165,6 @@ function readBorderSide(
         }
       )
     );
-    return undefined;
-  }
-
-  const color = parseCssColor(readBorderSideProperty(style, side, "Color"));
-  if (!color) {
     return undefined;
   }
 

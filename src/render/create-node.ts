@@ -73,12 +73,14 @@ async function createRenderableNode(
     await applyTextProperties(node, source, context);
   }
 
-  if (parentUsesAutoLayout) {
+  if (parentUsesAutoLayout && isBorderHelperNode(source)) {
+    applyAbsoluteLayoutItemProperties(node);
+  } else if (parentUsesAutoLayout) {
     applyAutoLayoutItemProperties(node);
   }
 
   for (const child of source.children) {
-    const childBounds = source.style.layout
+    const childBounds = source.style.layout && !isBorderHelperNode(child)
       ? autoLayoutChildBounds(child.bounds)
       : relativeBounds(child.bounds, source.bounds);
     context.adapter.appendChild(
@@ -94,6 +96,16 @@ function applyAutoLayoutItemProperties(node: RenderableNode): void {
   node.layoutPositioning = "AUTO";
   node.layoutSizingHorizontal = "FIXED";
   node.layoutSizingVertical = "FIXED";
+}
+
+function applyAbsoluteLayoutItemProperties(node: RenderableNode): void {
+  node.layoutPositioning = "ABSOLUTE";
+  node.layoutSizingHorizontal = "FIXED";
+  node.layoutSizingVertical = "FIXED";
+}
+
+function isBorderHelperNode(node: Html2FigmaNode): boolean {
+  return node.source.tagName === "#border" || node.name.startsWith("#border-");
 }
 
 function autoLayoutChildBounds(bounds: AstBounds): AstBounds {

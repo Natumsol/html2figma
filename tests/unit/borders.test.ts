@@ -22,4 +22,22 @@ describe("createBorderRectangleBounds", () => {
       height: 50
     });
   });
+
+  test("creates bottom border bounds", () => {
+    expect(createBorderRectangleBounds("bottom", bounds, 4)).toEqual({
+      x: 10,
+      y: 66,
+      width: 100,
+      height: 4
+    });
+  });
+
+  test("creates left border bounds", () => {
+    expect(createBorderRectangleBounds("left", bounds, 5)).toEqual({
+      x: 10,
+      y: 20,
+      width: 5,
+      height: 50
+    });
+  });
 });
