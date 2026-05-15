@@ -4,12 +4,18 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "predev": "npm --prefix ../.. run build",
     "dev": "concurrently \"npm run dev:ui\" \"npm run dev:plugin\"",
+    "predev:ui": "npm --prefix ../.. run build",
     "dev:ui": "vite --config vite.ui.config.ts --host localhost --port 5173",
+    "predev:plugin": "npm --prefix ../.. run build",
     "dev:plugin": "npm run sync-manifest && vite build --config vite.plugin.config.ts --watch",
+    "prebuild": "npm --prefix ../.. run build",
     "build": "npm run sync-manifest && vite build --config vite.ui.config.ts && vite build --config vite.plugin.config.ts",
     "sync-manifest": "tsx scripts/sync-manifest.ts",
+    "pretypecheck": "npm --prefix ../.. run build",
     "typecheck": "tsc --noEmit",
+    "pretest": "npm --prefix ../.. run build",
     "test": "vitest run"
   },
   "dependencies": {
