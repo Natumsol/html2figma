@@ -43,3 +43,20 @@ Pull requests should include a short summary, test results, and any known limita
 ## Agent-Specific Instructions
 
 Do not commit generated `dist/`, `node_modules/`, or `test-results/`. Preserve the package entrypoint separation in `package.json`: root schema exports, `./convert`, and `./render`.
+
+## Agent skills
+
+### Issue tracker
+
+Issues and PRDs are tracked in GitHub Issues for `Natumsol/html2figma`.
+See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Use the five default triage labels.
+See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Use a single-context layout: root `CONTEXT.md` and `docs/adr/`.
+See `docs/agents/domain.md`.
