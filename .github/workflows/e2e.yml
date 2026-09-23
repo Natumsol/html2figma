@@ -25,10 +25,7 @@ jobs:
       - run: npm ci
       - run: npm ci --prefix example
       - run: npx playwright install --with-deps chromium
-      - run: npm run verify
-      - run: npm run e2e:typecheck
-      - run: npm run test:browser
-      - run: npm run test:e2e
+      - run: npm run verify:all
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:

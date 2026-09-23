@@ -2,6 +2,30 @@
 
 日期：2026-09-23。团队：SK。
 
+## 架构修复后的复验状态（2026-09-23）
+
+当前代码的真实画布复验尚未完成，下面的三项通过记录属于修复前的历史基线。
+本轮将用例扩展为六项：geometry、flex-border、typography、flex-reverse、
+flex-absolute、media。反向 Flex 与绝对定位子元素要求恰好一条
+`flex-layout-fallback` 警告，其余用例要求零警告。
+
+复验中发现内嵌 PNG 依赖 `fetch`，而 MCP 执行环境未提供该全局函数。
+已改为使用 `figma.base64Decode()` 解码 Base64 图片，再交给 `figma.createImage()`。
+本地新增导入回归通过；修复后再次调用 Figma 时，服务返回：
+`You've reached the Figma MCP tool call limit on the Starter plan.`
+因此不能把历史截图或旧结果作为当前版本通过的依据。
+
+本轮尝试新增的节点为 `11:2`（geometry）和 `11:8`（失败的 media）。
+它们不是最终验收结果，额度恢复后复验并清理。本轮未改动原有三个基线节点。
+
+本地验证：`npm run verify:all` 通过（44 个核心单测、12 个示例单测、
+33 个浏览器测试、14 个流程 E2E，以及类型、消费者编译和构建检查）；
+随后补充的第 15 个流程 E2E（内嵌 PNG 导入）也单独通过。
+开发者可按 [E2E 工程说明](../README.md) 重新准备并执行六个真实 Figma 脚本。
+比较器校验 AST、converter 和 renderer 的哈希，旧结果不会被误判为本次通过。
+
+## 历史基线（架构修复前）
+
 [验收文件](https://www.figma.com/design/3bfxbSZ7K2URZ3Aak50Wwd) 中的节点由本仓库
 `dist/render.cjs` 创建，输入来自 Chromium 中运行的 `convert()`。
 截图为节点通过 Figma `exportAsync()` 导出的 1× sRGB PNG。

@@ -81,8 +81,24 @@ class FakeAdapter implements FigmaAdapter {
 }
 
 describe("renderWithAdapter", () => {
+  it("reports each conversion warning once after JSON transport and preserves new render warnings", async () => {
+    const warning = { code: "unsupported-transform", message: "Unsupported transform", severity: "warning" as const, nodeId: "text-1" };
+    const document = createDocument({
+      root: createTextNode({ warnings: [warning] }),
+      warnings: [warning, { ...warning, nodeId: "other" }]
+    });
+    const adapter = new FakeAdapter();
+    // Use a missing requested font while keeping the fallback available.
+    document.root.style.text!.fontFamily = "Missing";
+    adapter.rejectFontFamily = "Missing";
+    const result = await renderWithAdapter(JSON.parse(JSON.stringify(document)), adapter);
+    expect(result.warnings.filter(item => item.code === "unsupported-transform")).toEqual(document.warnings);
+    expect(result.warnings.filter(item => item.code === "font-load-failed")).toHaveLength(1);
+  });
+
   it("resizes Figma-like nodes without assigning read-only width and height", () => {
-    const node = {
+    let resizedTo: { width: number; height: number } | undefined;
+    const node: RenderableNode = {
       type: "FRAME",
       children: [],
       get width() {
@@ -92,12 +108,12 @@ describe("renderWithAdapter", () => {
         return 0;
       },
       resize(width: number, height: number) {
-        this.resizedTo = {
+        resizedTo = {
           width,
           height
         };
       }
-    } as RenderableNode;
+    };
 
     applyBaseProperties(node, {
       id: "frame-1",
@@ -120,7 +136,7 @@ describe("renderWithAdapter", () => {
 
     expect(node.x).toBe(10);
     expect(node.y).toBe(20);
-    expect(node.resizedTo).toEqual({
+    expect(resizedTo).toEqual({
       width: 320,
       height: 180
     });

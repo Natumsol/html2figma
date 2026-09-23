@@ -13,9 +13,18 @@ export function createFigmaAdapter(pluginApi: PluginAPI = figma): FigmaAdapter {
     },
     loadFontAsync: (fontName: FontName) => pluginApi.loadFontAsync(fontName),
     createImageAsync: async (source: string) => {
-      const response = await fetch(source);
-      const bytes = new Uint8Array(await response.arrayBuffer());
+      const embedded = /^data:[^,]*;base64,([\s\S]*)$/i.exec(source);
+      // Embedded assets are already portable bytes and need no network API.
+      const bytes = embedded
+        ? pluginApi.base64Decode(decodeURIComponent(embedded[1]!))
+        : await fetchImageBytes(source);
       return pluginApi.createImage(bytes).hash;
     }
   };
+}
+
+async function fetchImageBytes(source: string): Promise<Uint8Array> {
+  const response = await fetch(source);
+  if (!response.ok) throw new Error(`Image request failed: ${response.status}`);
+  return new Uint8Array(await response.arrayBuffer());
 }

@@ -4,13 +4,10 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "prebuild": "npm --prefix ../.. run build",
     "build": "vite build",
     "predev": "npm --prefix ../.. run build",
     "dev": "vite build --watch",
-    "pretypecheck": "npm --prefix ../.. run build",
     "typecheck": "tsc --noEmit",
-    "pretest": "npm --prefix ../.. run build",
     "test": "vitest run"
   },
   "dependencies": {

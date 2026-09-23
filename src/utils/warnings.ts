@@ -13,3 +13,17 @@ export function createWarning(
     ...extra
   };
 }
+
+/** Documents aggregate node warnings; JSON transport does not preserve identity. */
+export function uniqueWarnings(warnings: ConvertWarning[]): ConvertWarning[] {
+  const seen = new Set<string>();
+  return warnings.filter(warning => {
+    const key = JSON.stringify([
+      warning.code, warning.message, warning.severity,
+      warning.nodeId, warning.cssProperty, warning.source
+    ]);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}

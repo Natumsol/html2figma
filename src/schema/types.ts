@@ -159,6 +159,7 @@ export interface Html2FigmaDocument {
   version: 1;
   root: Html2FigmaNode;
   resources: ResourceRef[];
+  /** Aggregate of node diagnostics; node.warnings retains the local view. */
   warnings: ConvertWarning[];
   metadata: {
     sourceUrl?: string;
@@ -177,15 +178,16 @@ export interface ConvertOptions {
   maxDepth?: number;
 }
 
-export interface RenderOptions {
-  parent?: BaseNode & ChildrenMixin;
+/** Platform-neutral options; use html2figma/render for Figma-specialized types. */
+export interface RenderOptions<Parent = unknown> {
+  parent?: Parent;
   x?: number;
   y?: number;
   loadFonts?: boolean;
 }
 
-export interface RenderResult {
-  root: SceneNode;
-  nodes: SceneNode[];
+export interface RenderResult<Node = unknown> {
+  root: Node;
+  nodes: Node[];
   warnings: RenderWarning[];
 }

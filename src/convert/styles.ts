@@ -6,7 +6,7 @@ import type {
   NodeId,
   ResourceRef
 } from "../schema/types";
-import { imageMimeType, parseBackgroundImage } from "../utils/background";
+import { parseBackgroundImage } from "../utils/background";
 import { parseCssColor } from "../utils/color";
 import { firstFontFamily, normalizeFontWeight } from "../utils/font";
 import { parseOptionalPx } from "../utils/length";
@@ -14,6 +14,7 @@ import { parseBoxShadow } from "../utils/shadow";
 import { createWarning } from "../utils/warnings";
 import type { BorderPaint, BorderSide } from "./borders";
 import { readFlexLayout } from "./layout";
+import { addImageResource } from "./resources";
 
 export function readStyle(
   element: Element,
@@ -37,13 +38,7 @@ export function readStyle(
 
   const backgroundImage = parseBackgroundImage(computedStyle.backgroundImage);
   if (backgroundImage.kind === "url") {
-    const resourceId = `resource-${resources.length + 1}`;
-    resources.push({
-      id: resourceId,
-      type: "image",
-      source: backgroundImage.url,
-      mimeType: imageMimeType(backgroundImage.url)
-    });
+    const resourceId = addImageResource(backgroundImage.url, resources);
     style.fills = [
       ...(style.fills ?? []),
       {
@@ -93,9 +88,14 @@ export function readStyle(
 
   style.text = readTextStyle(computedStyle);
 
-  const layout = readFlexLayout(computedStyle);
+  const layout = readFlexLayout(element, computedStyle);
   if (layout) {
     style.layout = layout;
+  } else if (computedStyle.display === "flex" || computedStyle.display === "inline-flex") {
+    warnings.push(createWarning(
+      "flex-layout-fallback", "Flex layout uses measured absolute positions", "warning",
+      { nodeId, cssProperty: "display", source: computedStyle.flexDirection }
+    ));
   }
 
   if (computedStyle.display === "grid" || computedStyle.display === "inline-grid") {
