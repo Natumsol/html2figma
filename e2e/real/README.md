@@ -3,6 +3,7 @@
 [2026-09-23 实机验收记录](ACCEPTANCE.md)保存了已通过的一轮结果与证据边界。
 [2026-09-23 六场景实机验收记录](SIX_CASES_ACCEPTANCE.md)保存了本入口的六项结果。
 [2026-09-23 扩展下载到真实画布验收记录](EXTENSION_ACCEPTANCE.md)保存了八项同轮结果。
+[2026-09-23 安全清理与失败留痕验收记录](SAFE_CLEANUP_ACCEPTANCE.md)保存了正常清理和受控失败结果。
 
 本入口在 [#2](https://github.com/Natumsol/html2figma/issues/2) 单样例切片上实现 [#3](https://github.com/Natumsol/html2figma/issues/3) 与 [#4](https://github.com/Natumsol/html2figma/issues/4)：
 同一轮对 geometry、flex-border、typography、flex-reverse、flex-absolute、media
