@@ -28,6 +28,24 @@ function send(type: string, data: Record<string, unknown> = {}): void {
   figma.ui.postMessage({ bridge: "html2figma-real", ...config.identity, pluginSession, type, ...data });
 }
 
+async function inspectImagePaints(root: FrameNode): Promise<Array<Record<string, unknown>>> {
+  const nodes = [root, ...root.findAll()];
+  const paints: Array<Record<string, unknown>> = [];
+  for (const node of nodes) {
+    if (!("fills" in node) || !Array.isArray(node.fills)) continue;
+    for (const fill of node.fills) {
+      if (fill.type !== "IMAGE") continue;
+      const image = figma.getImageByHash(fill.imageHash);
+      if (!image) throw new Error(`Image paint has no Figma resource on node ${node.id}`);
+      const bytes = await image.getBytesAsync();
+      if (!bytes.length) throw new Error(`Image paint has empty Figma resource on node ${node.id}`);
+      paints.push({ nodeId: node.id, imageHash: fill.imageHash, byteLength: bytes.length,
+        x: node.x, y: node.y, width: node.width, height: node.height, visible: node.visible });
+    }
+  }
+  return paints;
+}
+
 figma.showUI(createTransport(config), { visible: false });
 figma.ui.onmessage = async (value: unknown) => {
   try {
@@ -62,6 +80,9 @@ figma.ui.onmessage = async (value: unknown) => {
     }
     const result = await render(document, { parent: area, x: (caseIndex % 3) * 360,
       y: Math.floor(caseIndex / 3) * 220, loadFonts: true });
+    if (result.root.type !== "FRAME") throw new Error("Visual case root is not a frame");
+    const imagePaints = await inspectImagePaints(result.root);
+    if (expected.name === "media" && imagePaints.length === 0) throw new Error("Media image paint missing");
     const png = await result.root.exportAsync({ format: "PNG", constraint: { type: "SCALE", value: 1 },
       colorProfile: "SRGB", useAbsoluteBounds: true });
     assertTarget();
@@ -69,7 +90,7 @@ figma.ui.onmessage = async (value: unknown) => {
     if (!sameCanvasState(before, after)) throw new Error("Canvas state changed during render; retained nodes");
     send("result", { taskId: task.taskId, caseId: task.caseId, documentJson: JSON.stringify(document),
       areaId: area.id, rootNodeId: result.root.id, createdNodeIds: [area.id, ...area.findAll().map(node => node.id)],
-      width: result.root.width, height: result.root.height, warnings: result.warnings,
+      width: result.root.width, height: result.root.height, warnings: result.warnings, imagePaints,
       before, after, pngBase64: figma.base64Encode(png) });
     caseIndex++;
     busy = false;
