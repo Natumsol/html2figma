@@ -5,6 +5,7 @@ export interface Identity {
   documentSha256: string;
   converterSha256: string;
   rendererSha256: string;
+  extensionSha256?: string;
   fileKey: string;
   pageId: string;
   binding: string;
@@ -33,6 +34,8 @@ export interface VisualCase {
   height: number;
   maxDiffPixelRatio: number;
   expectedWarningCodes: string[];
+  capture?: { mode: "page" | "selection"; sourceUrl: string; extensionSha256: string;
+    downloadFilename: string; downloadedJsonSha256: string };
 }
 
 export interface PluginConfig {

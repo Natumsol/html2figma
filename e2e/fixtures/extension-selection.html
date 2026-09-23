@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Selection extension acceptance</title>
+  <style>
+    @font-face {
+      font-family: Inter;
+      font-style: normal;
+      font-weight: 400;
+      src: url('/__e2e/inter-latin-400-normal.woff2') format('woff2');
+    }
+    body { margin: 24px; background: white; font-family: Inter, sans-serif; }
+    #capture-card { position: relative; box-sizing: border-box; width: 320px; height: 180px;
+      background: white; color: rgb(15, 23, 42); }
+    h1 { position: absolute; left: 16px; top: 16px; margin: 0; font-size: 24px; line-height: 32px; font-weight: 400; }
+    p { position: absolute; left: 16px; top: 60px; margin: 0; font-size: 16px; line-height: 24px; }
+    .tile { position: absolute; left: 16px; top: 108px; width: 128px; height: 48px;
+      background: rgb(20, 160, 100); border-radius: 8px; }
+    #outside { position: static; margin-top: 24px; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <section id="capture-card">
+    <h1>Selected card</h1>
+    <p>Captured by the extension</p>
+    <div class="tile"></div>
+  </section>
+  <p id="outside">Outside selection</p>
+</body>
+</html>

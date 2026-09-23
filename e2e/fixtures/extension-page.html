@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Full page extension acceptance</title>
+  <style>
+    @font-face {
+      font-family: Inter;
+      font-style: normal;
+      font-weight: 400;
+      src: url('/__e2e/inter-latin-400-normal.woff2') format('woff2');
+    }
+    body { position: relative; box-sizing: border-box; width: 320px; height: 180px; margin: 24px;
+      background: white; color: rgb(15, 23, 42); font-family: Inter, sans-serif; }
+    h1 { position: absolute; left: 16px; top: 16px; margin: 0; font-size: 24px; line-height: 32px; font-weight: 400; }
+    p { position: absolute; left: 16px; top: 60px; margin: 0; font-size: 16px; line-height: 24px; }
+    .bar { position: absolute; left: 16px; top: 108px; width: 288px; height: 48px;
+      background: rgb(20, 80, 220); border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h1>Full page capture</h1>
+  <p>Exported by the extension</p>
+  <div class="bar"></div>
+</body>
+</html>

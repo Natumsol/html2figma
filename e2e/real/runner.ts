@@ -6,7 +6,8 @@ import { chromium } from "@playwright/test";
 import { record, type Identity } from "./protocol";
 import { acquireLock, startReferenceServer, runBuild, lockPath, type Assets } from "./host";
 import { prepareCases } from "./prepare";
-import { buildPlugin, assertNormalBuildIsolated } from "./build";
+import { prepareExtensionCases } from "./extension";
+import { buildPlugin, assertNormalBuildIsolated, sha256 } from "./build";
 import { createReceiver } from "./receiver";
 import { writeReport } from "./report";
 
@@ -98,22 +99,28 @@ async function main() {
     }
     const runId = randomUUID();
     output = join(directory, runId); await mkdir(output);
-    summary = { ...summary, runId, target, coverage: "six serial visual cases; real plugin API; nodes retained" };
+    summary = { ...summary, runId, target, coverage: "six visual and two extension cases; real plugin API; nodes retained" };
     const files: Assets = new Map();
     closeReference = await startReferenceServer(files);
     await runBuild(root, abort.signal);
     await assertNormalBuildIsolated(root);
     const prepared = await prepareCases(root, output, files);
+    const extensionPrepared = await prepareExtensionCases(root, output, files);
+    const cases = [...prepared.cases, ...extensionPrepared.cases];
+    const references = new Map([...prepared.references, ...extensionPrepared.references]);
     if (abort.signal.aborted) throw new Error("Interrupted during preparation");
     const identity: Identity = { protocol: 1, runId, buildId: "", ...target, areaTag: `html2figma:${runId}`,
-      documentSha256: prepared.documentSha256, converterSha256: prepared.converterSha256, rendererSha256: prepared.rendererSha256 };
+      documentSha256: sha256(JSON.stringify(cases.map(entry => [entry.name, entry.documentSha256]))),
+      converterSha256: prepared.converterSha256, rendererSha256: prepared.rendererSha256,
+      extensionSha256: extensionPrepared.extensionSha256 };
     const token = randomUUID();
-    const artifact = await buildPlugin(root, output, { identity, token, cases: prepared.cases, bind });
+    const artifact = await buildPlugin(root, output, { identity, token, cases, bind });
     summary = { ...summary, identity, pluginSha256: artifact.pluginSha256, browserVersion: prepared.browserVersion,
-      cases: prepared.cases.map(({ documentJson, ...entry }) => entry) };
+      extensionBrowserVersion: extensionPrepared.browserVersion,
+      cases: cases.map(({ documentJson, ...entry }) => entry) };
     await writeFile(join(output, "manifest.json"), JSON.stringify(summary, null, 2));
     await closeReference(); closeReference = undefined;
-    receiver = await createReceiver({ output, token, identity, cases: prepared.cases, references: prepared.references, port: 5173 });
+    receiver = await createReceiver({ output, token, identity, cases, references, port: 5173 });
     const activeReceiver = receiver;
     const expire = (reason: string) => { void activeReceiver.expire(reason).catch(error => console.error("Evidence write failed", String(error))); };
     abort.signal.addEventListener("abort", () => expire("Interrupted; no retry"), { once: true });
@@ -124,7 +131,7 @@ async function main() {
     const state = await receiver.finished;
     summary = { ...summary, ...state };
     if (state.status !== "complete") throw new Error(state.error ?? "No real result");
-    if (state.results.length !== prepared.cases.length || state.unexecuted.length) throw new Error("Incomplete six-case run");
+    if (state.results.length !== cases.length || state.unexecuted.length) throw new Error("Incomplete eight-case run");
     summary = { ...summary, status: "passed", threshold: 0.2 };
   } catch (error) {
     process.exitCode = 1;
