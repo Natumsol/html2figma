@@ -1,0 +1,93 @@
+e2e/real/plugin.ts
+  e8ba3651a08cecc4 11-12,44-45,47-50,55-64,70,74-75
+e2e/real/prepare.ts
+  e8ba3651a08cecc4 6,9-15,31-51,53-58
+e2e/real/report.ts
+  e8ba3651a08cecc4 8-10,12-20,22-24
+e2e/real/receiver.test.ts
+  e8ba3651a08cecc4 16-17,21-24,51,57,59,62-97,110,117-118,121,134
+e2e/real/README.md
+  e8ba3651a08cecc4 1,5-7,9-10,36,55,65-68
+e2e/real/images.ts
+  e8ba3651a08cecc4 26-27
+e2e/real/runner.ts
+  e8ba3651a08cecc4 8,101,106,111-113,116,122,127-128
+e2e/real/receiver.ts
+  e8ba3651a08cecc4 5-6,12-13,19-21,30,37-40,43,49-50,56,58,60-62,71,105-107,109-110,114,117,120-121,126-129,140-142,144-163
+e2e/real/transport.ts
+  e8ba3651a08cecc4 10-13,27,30-34
+e2e/real/protocol.ts
+  e8ba3651a08cecc4 22,24,28-37,41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8-ntes.9",
+  "base_commit_sha": "5be3ae156e6e63d1c432a835f0bc91fe37dfbc69",
+  "prompts": {
+    "e8ba3651a08cecc4": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0cd04-24b6-7832-a5c6-f6b6ce3b42aa",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Natumsol",
+      "messages": [],
+      "total_additions": 245,
+      "total_deletions": 119,
+      "accepted_lines": 228,
+      "overriden_lines": 0,
+      "per_file_stats": {
+        "e2e/real/plugin.ts": {
+          "additions": 21,
+          "deletions": 13,
+          "accepted_lines": 21
+        },
+        "e2e/real/receiver.ts": {
+          "additions": 62,
+          "deletions": 34,
+          "accepted_lines": 58
+        },
+        "e2e/real/images.ts": {
+          "additions": 2,
+          "deletions": 2,
+          "accepted_lines": 2
+        },
+        "e2e/real/protocol.ts": {
+          "additions": 13,
+          "deletions": 2,
+          "accepted_lines": 13
+        },
+        "e2e/real/prepare.ts": {
+          "additions": 37,
+          "deletions": 19,
+          "accepted_lines": 35
+        },
+        "e2e/real/runner.ts": {
+          "additions": 10,
+          "deletions": 13,
+          "accepted_lines": 10
+        },
+        "e2e/real/receiver.test.ts": {
+          "additions": 58,
+          "deletions": 13,
+          "accepted_lines": 52
+        },
+        "e2e/real/transport.ts": {
+          "additions": 10,
+          "deletions": 3,
+          "accepted_lines": 10
+        },
+        "e2e/real/README.md": {
+          "additions": 12,
+          "deletions": 7,
+          "accepted_lines": 12
+        },
+        "e2e/real/report.ts": {
+          "additions": 20,
+          "deletions": 13,
+          "accepted_lines": 15
+        }
+      }
+    }
+  }
+}
