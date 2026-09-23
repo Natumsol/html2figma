@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Capture fixture</title>
+    <style>
+      body { margin: 24px; font-family: Arial, sans-serif; }
+      #capture-card {
+        box-sizing: border-box; width: 360px; padding: 20px;
+        display: flex; flex-direction: column; gap: 12px;
+        background: rgb(15, 23, 42); color: white; border-radius: 16px;
+        border-top: 4px solid rgb(56, 189, 248);
+      }
+      h1, p { margin: 0; }
+      h1 { font-size: 24px; line-height: 30px; }
+      img { width: 64px; height: 64px; }
+      #unsupported { transform: rotate(2deg); }
+    </style>
+  </head>
+  <body>
+    <section id="capture-card">
+      <h1>Captured product</h1>
+      <p>Browser to Figma</p>
+      <img src="/media/product-preview.png" alt="Local product">
+      <svg width="24" height="24" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" fill="#38bdf8" />
+      </svg>
+    </section>
+    <p id="outside">Outside selection</p>
+    <div id="unsupported">Keep conversion warnings</div>
+  </body>
+</html>

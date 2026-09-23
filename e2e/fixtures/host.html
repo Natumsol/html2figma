@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Figma host test harness</title>
+    <style>
+      html, body, iframe { width: 100%; height: 100%; margin: 0; border: 0; }
+    </style>
+  </head>
+  <body>
+    <iframe id="plugin-shell" title="Figma plugin shell"></iframe>
+    <script>
+      window.addEventListener("message", (event) => {
+        if (event.source === document.querySelector("iframe").contentWindow &&
+            event.data?.pluginMessage) {
+          window.deliverPluginMessage(event.data.pluginMessage);
+        }
+      });
+    </script>
+  </body>
+</html>

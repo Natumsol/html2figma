@@ -60,6 +60,23 @@ npm run build -w chrome-extension
 
 Load `example/chrome-extension/dist` through Chrome's Load unpacked flow.
 
+## End-to-end Tests
+
+The [E2E test project](e2e/README.md) exercises the built Chrome extension,
+JSON export/import, and Figma plugin UI and rendering pipeline.
+
+```sh
+npm ci
+npm ci --prefix example
+npx playwright install chromium
+npm run test:e2e
+```
+
+Run `npm run e2e:visual:prepare` to prepare browser reference screenshots and
+scripts that execute this library in a real Figma file. After collecting the
+Figma results, `npm run test:e2e:visual` compares the actual canvas pixels.
+See the E2E guide for authentication, artifacts, and comparison thresholds.
+
 ## First-Version CSS Support
 
 This first version targets common page structure and visual styling:

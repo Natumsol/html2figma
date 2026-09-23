@@ -61,6 +61,7 @@ export interface AstTextStyle {
 export interface AstFlexLayout {
   mode: "horizontal" | "vertical";
   gap: number;
+  /** Content insets from the frame edge, including CSS border widths. */
   padding: {
     top: number;
     right: number;

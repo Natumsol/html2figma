@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { fileURLToPath } from "node:url";
 import { createServer, type ViteDevServer } from "vite";
 
 import type { Html2FigmaDocument } from "../../src/schema/types";
@@ -7,11 +8,6 @@ let server: ViteDevServer;
 let serverUrl: string;
 
 test.beforeAll(async () => {
-  // @ts-expect-error The project tsconfig does not include Node types.
-  const { fileURLToPath } = await import("node:url") as {
-    fileURLToPath: (url: URL) => string;
-  };
-
   server = await createServer({
     root: fileURLToPath(new URL("../..", import.meta.url)),
     server: {
@@ -535,6 +531,33 @@ test("represents top-only solid borders as rectangle children", async ({ page })
 
   expect(result.root.style.strokes).toBeUndefined();
   expect(result.root.children.map((child) => child.name)).toContain("#border-top");
+});
+
+test("includes CSS border space in flex content insets", async ({ page }) => {
+  await page.setContent(`
+    <div id="target" style="display:flex; padding:16px; border-top:4px solid blue;
+      border-right:3px solid transparent; border-bottom:2px dashed red; border-left:1px solid green">
+      <div style="width:20px;height:20px"></div>
+    </div>
+  `);
+  const result = await page.evaluate(async (baseUrl) => {
+    const { convert } = await import(`${baseUrl}/src/convert.ts`);
+    return convert(document.querySelector("#target")!);
+  }, serverUrl) as Html2FigmaDocument;
+  expect(result.root.style.layout?.padding).toEqual({ top: 20, right: 19, bottom: 18, left: 17 });
+});
+
+test("uses line boxes for standalone block text with explicit line-height", async ({ page }) => {
+  await page.setContent(`
+    <div id="target" style="font:16px/32px Arial;padding:10px;border:2px solid red;width:200px">Line box</div>
+  `);
+  const result = await page.evaluate(async (baseUrl) => {
+    const { convert } = await import(`${baseUrl}/src/convert.ts`);
+    return convert(document.querySelector("#target")!);
+  }, serverUrl) as Html2FigmaDocument;
+  const text = result.root.children.find((child) => child.type === "text");
+  expect(text?.bounds.y).toBe(result.root.bounds.y + 12);
+  expect(text?.bounds.height).toBe(32);
 });
 
 test("warns for unsupported visible border styles", async ({ page }) => {

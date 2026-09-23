@@ -11,6 +11,7 @@ import type {
   TextAstNode
 } from "../schema/types";
 import { imageMimeType } from "../utils/background";
+import { parseOptionalPx } from "../utils/length";
 import { createWarning } from "../utils/warnings";
 import { createBorderRectangleNode } from "./borders";
 import { readBounds } from "./layout";
@@ -343,6 +344,24 @@ function readTextBounds(
     return fallbackBounds;
   }
 
+  let y = rect.y;
+  let height = rect.height;
+  const parent = textNode.parentElement;
+  const lineHeight = parentStyle.text?.lineHeight;
+  if (parent && parent.children.length === 0 && lineHeight !== undefined) {
+    const computed = window.getComputedStyle(parent);
+    const textNodes = Array.from(parent.childNodes).filter(
+      (node) => node.nodeType === Node.TEXT_NODE && node.textContent?.trim()
+    );
+    if (computed.display === "block" && textNodes.length === 1) {
+      // Range rectangles cover font metrics, not CSS line boxes. Figma adds
+      // line-height leading itself, so using the Range y would add it twice.
+      y = fallbackBounds.y + parseOptionalPx(computed.paddingTop, 0)
+        + parseOptionalPx(computed.borderTopWidth, 0);
+      height = lineHeight * Math.max(1, new Set(rects.map((line) => line.y)).size);
+    }
+  }
+
   if (
     parentStyle.text?.textAlign === "center" ||
     parentStyle.text?.textAlign === "right" ||
@@ -350,19 +369,19 @@ function readTextBounds(
   ) {
     return {
       x: fallbackBounds.x,
-      y: rect.y,
+      y,
       width: fallbackBounds.width,
-      height: rect.height
+      height
     };
   }
 
   return {
     x: rect.x,
-    y: rect.y,
+    y,
     width: hasElementSiblings(textNode)
       ? expandInlineTextWidth(rect.width, parentStyle, fallbackBounds, rect.x)
       : Math.max(rect.width, fallbackBounds.x + fallbackBounds.width - rect.x),
-    height: rect.height
+    height
   };
 }
 

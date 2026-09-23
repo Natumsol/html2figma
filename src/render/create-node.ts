@@ -39,7 +39,7 @@ export async function renderWithAdapter(
     x: options.x ?? document.root.bounds.x,
     y: options.y ?? document.root.bounds.y
   };
-  const root = await createRenderableNode(document.root, context, rootBounds, false);
+  const root = await createRenderableNode(document.root, context, rootBounds);
 
   adapter.appendChild(
     (options.parent as RenderableNode | undefined) ?? adapter.currentPage,
@@ -56,8 +56,7 @@ export async function renderWithAdapter(
 async function createRenderableNode(
   source: Html2FigmaNode,
   context: RenderContext,
-  bounds: AstBounds,
-  parentUsesAutoLayout: boolean
+  bounds: AstBounds
 ): Promise<RenderableNode> {
   const node = await createAdapterNode(source, context);
   const styledSource = await withResolvedImageFills(source, context);
@@ -73,20 +72,21 @@ async function createRenderableNode(
     await applyTextProperties(node, source, context);
   }
 
-  if (parentUsesAutoLayout && isBorderHelperNode(source)) {
-    applyAbsoluteLayoutItemProperties(node);
-  } else if (parentUsesAutoLayout) {
-    applyAutoLayoutItemProperties(node);
-  }
-
   for (const child of source.children) {
     const childBounds = source.style.layout && !isBorderHelperNode(child)
       ? autoLayoutChildBounds(child.bounds)
       : relativeBounds(child.bounds, source.bounds);
-    context.adapter.appendChild(
-      node,
-      await createRenderableNode(child, context, childBounds, Boolean(source.style.layout))
-    );
+    const childNode = await createRenderableNode(child, context, childBounds);
+    context.adapter.appendChild(node, childNode);
+    // Figma requires an Auto Layout parent before child positioning can be set.
+    if (source.style.layout && isBorderHelperNode(child)) {
+      applyAbsoluteLayoutItemProperties(childNode);
+      // Appending initially places the helper in the layout flow.
+      childNode.x = childBounds.x;
+      childNode.y = childBounds.y;
+    } else if (source.style.layout) {
+      applyAutoLayoutItemProperties(childNode);
+    }
   }
 
   return node;

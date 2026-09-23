@@ -50,10 +50,12 @@ export function readFlexLayout(style: CSSStyleDeclaration): AstFlexLayout | unde
     mode: style.flexDirection.startsWith("row") ? "horizontal" : "vertical",
     gap: parseOptionalPx(style.gap, 0),
     padding: {
-      top: parseOptionalPx(style.paddingTop, 0),
-      right: parseOptionalPx(style.paddingRight, 0),
-      bottom: parseOptionalPx(style.paddingBottom, 0),
-      left: parseOptionalPx(style.paddingLeft, 0)
+      // Figma padding is measured from the frame edge; CSS content starts
+      // inside both padding and border, including transparent borders.
+      top: parseOptionalPx(style.paddingTop, 0) + parseOptionalPx(style.borderTopWidth, 0),
+      right: parseOptionalPx(style.paddingRight, 0) + parseOptionalPx(style.borderRightWidth, 0),
+      bottom: parseOptionalPx(style.paddingBottom, 0) + parseOptionalPx(style.borderBottomWidth, 0),
+      left: parseOptionalPx(style.paddingLeft, 0) + parseOptionalPx(style.borderLeftWidth, 0)
     },
     primaryAxisAlignItems: mapJustifyContent(style.justifyContent),
     counterAxisAlignItems: mapAlignItems(style.alignItems),

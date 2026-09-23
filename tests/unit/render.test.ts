@@ -14,6 +14,7 @@ class FakeAdapter implements FigmaAdapter {
   rejectFontFamily?: string;
   rejectImages = false;
   imageSources: string[] = [];
+  private parents = new WeakMap<RenderableNode, RenderableNode>();
 
   createFrame(): RenderableNode {
     return this.createNode("FRAME");
@@ -34,6 +35,12 @@ class FakeAdapter implements FigmaAdapter {
   appendChild(parent: RenderableNode, child: RenderableNode): void {
     parent.children ??= [];
     parent.children.push(child);
+    this.parents.set(child, parent);
+    if (parent.layoutMode && child.layoutPositioning !== "ABSOLUTE") {
+      // Figma initially places an appended child in the Auto Layout flow.
+      child.x = 16;
+      child.y = 16;
+    }
   }
 
   async loadFontAsync(fontName: FontName): Promise<void> {
@@ -55,10 +62,21 @@ class FakeAdapter implements FigmaAdapter {
 
   private createNode(type: string): RenderableNode {
     this.createdTypes.push(type);
-    return {
+    const node: RenderableNode = {
       type,
       children: []
     };
+    let positioning = "AUTO";
+    Object.defineProperty(node, "layoutPositioning", {
+      get: () => positioning,
+      set: (value: string) => {
+        if (value === "ABSOLUTE" && !this.parents.get(node)?.layoutMode) {
+          throw new Error("Absolute positioning requires an Auto Layout parent");
+        }
+        positioning = value;
+      }
+    });
+    return node;
   }
 }
 

@@ -29,6 +29,8 @@ The conversion side lives under `src/convert/`.
 6. Unsupported or lossy mappings are recorded as structured warnings.
 
 The converter prioritizes reliable visual geometry from the browser. It also preserves simple flex metadata so render can create editable Figma Auto Layout where possible.
+Flex content insets include CSS border widths. Standalone block text with an
+explicit line-height uses line-box vertical bounds to avoid adding leading twice.
 
 Resource-like CSS features are resolved during conversion. Single URL background images become image fill resources, video posters become image nodes, and SVG resources are cloned before local `<use>` expansion. Unsupported resource forms emit warnings and continue.
 
@@ -59,6 +61,8 @@ The render side lives under `src/render/`.
 The adapter abstraction keeps render behavior unit-testable without a live Figma runtime.
 
 Generated helper rectangles, including asymmetric border layers, render through the normal rectangle path. Text case metadata maps directly to Figma text case.
+Auto Layout child positioning is assigned after parenting. Absolute border
+helpers then restore their relative coordinates because insertion can move them.
 
 ## Utilities
 
@@ -77,8 +81,12 @@ These utilities are intentionally narrow and covered by unit tests.
 - `tests/unit/`: Vitest tests for schema, utilities, warning creation, and render adapter behavior.
 - `tests/browser/`: Playwright tests for browser-only conversion behavior that depends on computed CSS and layout.
 - `tests/fixtures/`: HTML fixtures used by Playwright tests.
+- `e2e/`: built extension and plugin UI workflows, with a Figma host API test
+  double for the plugin main runtime and a separate real-canvas visual comparison.
 
 Use `npm run verify` for typecheck, unit tests, and build. Use `npm run test:browser` for browser-backed conversion tests.
+Use `npm run test:e2e` for complete capture/export/import/render workflows.
+The [E2E guide](e2e/README.md) documents real Figma screenshot acceptance.
 
 ## Extension Points
 

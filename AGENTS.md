@@ -9,6 +9,7 @@
 - `tests/unit/`: Vitest unit tests for schema, utilities, and render adapter behavior.
 - `tests/browser/`: Playwright tests for browser-backed conversion behavior.
 - `tests/fixtures/`: HTML/CSS fixtures used by browser tests.
+- `e2e/`: built extension/plugin workflows and real Figma canvas screenshot acceptance.
 - `docs/superpowers/`: design and implementation planning notes.
 
 ## Build, Test, and Development Commands
@@ -19,6 +20,10 @@
 - `npm run test:browser`: run Playwright browser conversion tests.
 - `npm run build`: build ESM, CJS, and declaration outputs with `tsup`.
 - `npm run verify`: run typecheck, unit tests, and build.
+- `npm run e2e:typecheck`: typecheck the independent E2E test project.
+- `npm run test:e2e`: build both examples and run end-to-end UI workflows.
+- `npm run e2e:visual:prepare`: generate browser screenshots and real Figma render scripts.
+- `npm run test:e2e:visual`: compare collected real Figma exports against browser screenshots.
 
 Browser tests start a local Vite server through Playwright. In restricted environments, they may need permission to bind `127.0.0.1`.
 
