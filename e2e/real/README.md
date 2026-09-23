@@ -1,5 +1,7 @@
 # 真实 Figma 后台验收：geometry
 
+[2026-09-23 实机验收记录](ACCEPTANCE.md)保存了已通过的一轮结果与证据边界。
+
 本入口实现 [#2](https://github.com/Natumsol/html2figma/issues/2) 的单样例切片：
 当前浏览器 convert → 共享 JSON 校验 → 真实 Figma render → PNG → 视觉比较。
 全程不激活桌面窗口、不模拟点击/键盘、不使用剪贴板，不修改选区或视口。
