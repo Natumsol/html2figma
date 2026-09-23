@@ -1,0 +1,87 @@
+e2e/real/report.ts
+  e8ba3651a08cecc4 8-9,20-21,24-26
+e2e/fixtures/extension-page.html
+  e8ba3651a08cecc4 1-26
+e2e/fixtures/extension-selection.html
+  e8ba3651a08cecc4 1-31
+e2e/real/extension.ts
+  e8ba3651a08cecc4 1-117
+e2e/real/plugin.ts
+  e8ba3651a08cecc4 78,81-82,91-92
+e2e/real/runner.ts
+  e8ba3651a08cecc4 9-10,102,108-110,113-115,117,119-120,123,134
+e2e/real/protocol.ts
+  e8ba3651a08cecc4 8,37-38
+e2e/real/receiver.test.ts
+  e8ba3651a08cecc4 17,21,100-110,128-129
+e2e/real/README.md
+  e8ba3651a08cecc4 1,6,9-13,39,58-59,73-75
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8-ntes.9",
+  "base_commit_sha": "b81794745ea551b7c15430c1079403ef0bd209c3",
+  "prompts": {
+    "e8ba3651a08cecc4": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0cd04-24b6-7832-a5c6-f6b6ce3b42aa",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Natumsol",
+      "messages": [],
+      "total_additions": 235,
+      "total_deletions": 33,
+      "accepted_lines": 232,
+      "overriden_lines": 0,
+      "per_file_stats": {
+        "e2e/fixtures/extension-page.html": {
+          "additions": 26,
+          "accepted_lines": 26
+        },
+        "e2e/real/runner.ts": {
+          "additions": 14,
+          "deletions": 7,
+          "accepted_lines": 14
+        },
+        "e2e/real/protocol.ts": {
+          "additions": 3,
+          "accepted_lines": 3
+        },
+        "e2e/real/plugin.ts": {
+          "additions": 6,
+          "deletions": 5,
+          "accepted_lines": 5
+        },
+        "e2e/fixtures/extension-selection.html": {
+          "additions": 32,
+          "deletions": 1,
+          "accepted_lines": 31
+        },
+        "e2e/real/receiver.test.ts": {
+          "additions": 15,
+          "deletions": 4,
+          "accepted_lines": 15
+        },
+        "e2e/real/extension.ts": {
+          "additions": 119,
+          "deletions": 2,
+          "accepted_lines": 117
+        },
+        "e2e/real/README.md": {
+          "additions": 13,
+          "deletions": 9,
+          "accepted_lines": 13
+        },
+        "e2e/real/report.ts": {
+          "additions": 7,
+          "deletions": 5,
+          "accepted_lines": 7
+        },
+        "e2e/real/transport.ts": {
+          "accepted_lines": 1
+        }
+      }
+    }
+  }
+}
