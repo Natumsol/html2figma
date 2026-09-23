@@ -10,8 +10,10 @@
 随后在无头 Chromium 中运行真实构建后的扩展，分别完成整页抓取与选区抓取，
 下载两份 JSON，再经隐藏插件的共享 JSON 校验路径渲染并比较。
 Figma 阶段不激活桌面窗口、不模拟点击/键盘、不使用剪贴板，不修改选区或视口。
-八个场景各自保存输入、浏览器图、Figma 图和必要时的差异图；保留所有新增图层。
-成功后的自动清理由后续任务实现。
+八个场景各自保存输入、浏览器图、Figma 图和必要时的差异图。全部渲染通过后，
+运行器先保存 `report.before-cleanup.json/html`，再发送一次有限清理任务。插件核对
+本轮区域、全部通过节点及 SVG 内部节点的所有权和清单后，删除本轮区域；最终保存
+清理回执与 `report.json/html`。故障时不发送清理任务，保留失败、未知和此前通过的节点。
 
 ## 准备与运行
 
@@ -37,7 +39,8 @@ npm run test:e2e:real -- --bind --file-key YOUR_FILE_KEY --page-id 0:1 --timeout
 `test-results/real-figma/plugin/manifest.json`，运行「html2figma Real E2E」。
 已有原型插件是另外一个插件；不能把原型注册视为正式 E2E 插件已注册。
 
-启动插件后 UI 隐藏，命令自动串行执行本轮八个样例，保存报告并退出；你可以切回其他工作。
+启动插件后 UI 隐藏，命令自动串行执行本轮八个样例，保存初版报告、清理通过节点、
+保存最终报告并退出；你可以切回其他工作。
 目标文件/page 必须保持可用；观察到 page、选区或视口变化会使运行失败并保留现场，
 不会自动恢复用户状态。插件成功回传或报告失败并收到确认后关闭自身。
 
@@ -59,7 +62,9 @@ npm run test:e2e:real
 - 八份当前输入、两份真实扩展下载 JSON、冻结的扩展和 converter/renderer/schema、
   实际插件 bundle 和构建身份。
 - 独立编号的事件、结果、浏览器 PNG、Figma PNG、必要时的差异图。
-- `report.json` 和 `report.html`：状态、节点链接、尺寸、警告、身份及环境版本。
+- `report.before-cleanup.json/html`：清理前完整结果与节点链接；`report.json/html`：
+  最终状态、清理结果、尺寸、警告、身份及环境版本。成功时还有 `cleanup.result.json`，
+  失败时保留 `*.failure.json` 或 `cleanup.failure.json`。
 
 ```sh
 npm run e2e:real:report -- /absolute/path/to/run-directory
@@ -71,6 +76,9 @@ npm run e2e:real:report -- /absolute/path/to/run-directory
 0.02，其余五项 0.001；flex-reverse 与 flex-absolute 各需一条
 `flex-layout-fallback` 警告，其余零警告。任何场景失败便停止派发后续场景，
 报告列出未执行项；晚到结果不能把失败改成通过。
+如需验证失败现场，可用 `--inject-failure-case flex-border` 运行一次专用 E2E 构建：
+插件在该用例实际创建节点后报告受控失败，命令应非零退出，保留本轮所有节点。
+这个参数只用于故障验收，报告会标明注入目标；日常运行不要传入。
 两条扩展集成各要求 320×180、零警告、颜色阈值 0.2 和最大差异像素比例 0.02。
 普通插件构建不包含 Bridge，现有 UI 测试继续覆盖文件/粘贴控件；本报告不冒充
 真实 Figma 文件选择、粘贴或按钮控件的验收。
