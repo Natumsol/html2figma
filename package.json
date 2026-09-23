@@ -47,7 +47,8 @@
     "verify:all": "npm run verify && npm --prefix example run check:apps && npm run e2e:typecheck && npm run test:browser && npm run test:e2e:built",
     "typecheck:boundaries": "tsc --noEmit -p tsconfig.browser.json && tsc --noEmit -p tsconfig.figma.json",
     "prototype:figma:probe": "node e2e/prototype-desktop/probe.mjs",
-    "prototype:figma:sample": "node e2e/prototype-desktop/prepare-sample.mjs"
+    "prototype:figma:sample": "node e2e/prototype-desktop/prepare-sample.mjs",
+    "prototype:figma:serve": "node e2e/prototype-desktop/serve.mjs"
   },
   "devDependencies": {
     "@figma/plugin-typings": "^1.108.0",

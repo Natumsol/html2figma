@@ -1,4 +1,43 @@
-# Feasibility verdict: BLOCKED
+# Feasibility verdict: PARTIAL — awaiting first plugin import
+
+## Resumed run, 2026-09-23 07:42 UTC
+
+The user asked to continue. System Events now reports UI accessibility enabled
+(`true`); the prior consent gate is resolved. Opening the exact acceptance file
+via `open -a Figma figma://file/3bfxbSZ7K2URZ3Aak50Wwd` exposed the real
+`html2figma E2E 画布验收` editor. Native AX inspection read its Page 1 and five
+historical top-level layer names (media, geometry, typography, flex-border,
+geometry). A label-driven click opened Main menu and revealed Plugins.
+
+Window enumeration initially returned zero and later the correct editor. Some
+ad hoc inspection failures (`-10000`) were caused by using AppleScript's `rows`
+term as a variable; the saved helper uses `outputRows`. Do not misclassify those
+script errors as a Figma access restriction. Native traversal also exceeded a
+30-second bound; a subsequent compact inspection succeeded with a 45-second
+bound, but a label-driven Plugins click also timed out at 45 seconds. A timed-out
+click is not proof that a menu was opened. Repeatability
+remains unproven.
+
+Prepared a separate `html2figma Desktop Prototype` build and local result
+receiver; see README for the concrete manual import path and run command.
+The unchanged product UI and product plugin handler are bundled with the actual
+renderer; additions only guard/isolate/observe/export. The build succeeded and
+`node --check` passed for the generated plugin. The receiver has no ready/result
+events yet. These are prepared artifacts, not exercised Figma functionality.
+
+Issue #1 explicitly assigns first plugin import to the user. The concrete
+manifest is ready and the user has been asked to import it. Continue by observing
+the registered plugin, launching that exact name, checking its read-only ready
+event/file key, and driving both actual import paths. No user response to the
+import request had arrived when this checkpoint was written.
+
+`npm run verify:all` passed again: 44 core, 12 example, 33 browser and 15 built UI
+E2E tests. No real import, render, PNG export, localhost receipt, or node creation
+has occurred. The full feasibility gate is still open; this checkpoint proves
+only native app/file opening and partial AX menu access. All baseline nodes were
+left untouched. No Figma MCP was used.
+
+## Initial run (historical BLOCKED result)
 
 Observed 2026-09-23 on baseline `85c23ff`. Canonical specification:
 https://github.com/Natumsol/html2figma/issues/1
