@@ -1,0 +1,125 @@
+e2e/real/images.ts
+  e8ba3651a08cecc4 1-28
+e2e/real/host.ts
+  e8ba3651a08cecc4 1-55
+e2e/real/protocol.ts
+  e8ba3651a08cecc4 1-55
+e2e/real/plugin.ts
+  e8ba3651a08cecc4 1-73
+e2e/real/receiver.test.ts
+  e8ba3651a08cecc4 1-103
+e2e/real/prepare.ts
+  e8ba3651a08cecc4 1-42
+e2e/real/receiver.ts
+  e8ba3651a08cecc4 1-160
+e2e/real/build.ts
+  e8ba3651a08cecc4 1-39
+e2e/real/vitest.config.ts
+  e8ba3651a08cecc4 1-2
+e2e/real/report.ts
+  e8ba3651a08cecc4 1-19
+package.json
+  e8ba3651a08cecc4 47-52,60
+e2e/real/README.md
+  e8ba3651a08cecc4 1-83
+e2e/real/transport.ts
+  e8ba3651a08cecc4 1-36
+e2e/README.md
+  e8ba3651a08cecc4 49-59
+e2e/real/cli.mjs
+  e8ba3651a08cecc4 1-10
+e2e/real/runner.ts
+  e8ba3651a08cecc4 1-148
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8-ntes.9",
+  "base_commit_sha": "4dbf691a554e83829af24f619f0774ad46dc0c7b",
+  "prompts": {
+    "e8ba3651a08cecc4": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0cd04-24b6-7832-a5c6-f6b6ce3b42aa",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Natumsol",
+      "messages": [],
+      "total_additions": 899,
+      "total_deletions": 30,
+      "accepted_lines": 871,
+      "overriden_lines": 0,
+      "per_file_stats": {
+        "e2e/real/prepare.ts": {
+          "additions": 44,
+          "deletions": 2,
+          "accepted_lines": 42
+        },
+        "e2e/real/report.ts": {
+          "additions": 19,
+          "accepted_lines": 19
+        },
+        "e2e/real/images.ts": {
+          "additions": 28,
+          "accepted_lines": 28
+        },
+        "package.json": {
+          "additions": 7,
+          "deletions": 2,
+          "accepted_lines": 7
+        },
+        "e2e/real/protocol.ts": {
+          "additions": 55,
+          "accepted_lines": 55
+        },
+        "e2e/real/host.ts": {
+          "additions": 56,
+          "deletions": 1,
+          "accepted_lines": 55
+        },
+        "e2e/real/runner.ts": {
+          "additions": 148,
+          "accepted_lines": 148
+        },
+        "e2e/README.md": {
+          "additions": 11,
+          "accepted_lines": 11
+        },
+        "e2e/real/plugin.ts": {
+          "additions": 73,
+          "accepted_lines": 73
+        },
+        "e2e/real/receiver.test.ts": {
+          "additions": 110,
+          "deletions": 7,
+          "accepted_lines": 103
+        },
+        "e2e/real/build.ts": {
+          "additions": 46,
+          "deletions": 7,
+          "accepted_lines": 39
+        },
+        "e2e/real/README.md": {
+          "additions": 83,
+          "accepted_lines": 83
+        },
+        "e2e/real/transport.ts": {
+          "additions": 36,
+          "accepted_lines": 36
+        },
+        "e2e/real/receiver.ts": {
+          "additions": 171,
+          "deletions": 11,
+          "accepted_lines": 160
+        },
+        "e2e/real/vitest.config.ts": {
+          "additions": 2,
+          "accepted_lines": 2
+        },
+        "e2e/real/cli.mjs": {
+          "additions": 10,
+          "accepted_lines": 10
+        }
+      }
+    }
+  }
+}
