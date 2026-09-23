@@ -1,0 +1,35 @@
+e2e/real/build.ts
+  e8ba3651a08cecc4 36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8-ntes.9",
+  "base_commit_sha": "51f13c9c447bbd57620a535707732fb53356c839",
+  "prompts": {
+    "e8ba3651a08cecc4": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0cd04-24b6-7832-a5c6-f6b6ce3b42aa",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Natumsol",
+      "messages": [],
+      "total_additions": 7,
+      "total_deletions": 7,
+      "accepted_lines": 2,
+      "overriden_lines": 0,
+      "per_file_stats": {
+        "e2e/real/transport.ts": {
+          "additions": 6,
+          "deletions": 6,
+          "accepted_lines": 1
+        },
+        "e2e/real/build.ts": {
+          "additions": 1,
+          "deletions": 1,
+          "accepted_lines": 1
+        }
+      }
+    }
+  }
+}
