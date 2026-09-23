@@ -1,5 +1,47 @@
 # THROWAWAY: real Figma desktop feasibility probe
 
+**Current user preference:** continue with the hidden-UI API mode below. Do not
+run the foreground desktop driver unless the user explicitly asks to return to
+UI automation. Both real import paths have already been exercised once; that
+evidence remains separate from API-only rendering.
+
+## Hidden-UI API mode
+
+```sh
+npm run prototype:figma:api -- /absolute/path/to/geometry.document.json
+```
+
+The existing imported manifest path/name is reused. The user launches the plugin
+once in the acceptance file after this build; then they can switch to other
+work. The plugin UI is hidden (`visible: false`). The Figma desktop engine and
+the target document must remain available: this is headless plugin execution,
+not a standalone replacement for Figma's rendering engine.
+
+The run's ignored `control.json` contains the local command URL. POST exactly
+`{"type":"render-geometry"}` to queue the one permitted task. The hidden plugin
+claims it after a verified handshake, invokes the actual renderer directly and
+exports PNG through the existing observer. It does not select nodes or change
+the viewport. Before/after selection and viewport are reported as evidence.
+There is no keyboard, menu, pointer or file-dialog automation in this mode.
+
+Use the fixed-command helper with the output directory printed at startup:
+
+```sh
+npm run prototype:figma:command -- /absolute/path/to/run-output-directory
+```
+
+The helper queues the sample without printing the session credential. See
+[FINDINGS.md](./FINDINGS.md) for observed results and the remaining limits.
+
+The random command URL is a local session credential: do not publish it. The
+fixed command does not accept JS, an arbitrary document or a general action.
+A claimed task is never automatically retried/requeued; a new session requires
+an explicit restart after observing the prior outcome. This bounded prototype
+supports one sample command per session, not a production task queue.
+
+API execution is explicitly **not** evidence for file input, paste or validation
+controls. Preserve the separately captured real UI result when reporting scope.
+
 Question: can an observed macOS desktop sequence open the designated acceptance
 file, launch a specifically named development plugin, operate the actual file
 input and paste/validate/render controls, and receive a freshly exported PNG at
@@ -37,6 +79,31 @@ create a Figma PNG or prove any desktop stage. The existing local server uses
 port 5173 and fails on conflict; it never kills an existing port owner.
 
 ## Native UI observation and prototype plugin
+
+After the one-time plugin import, run the entire one-sample desktop experiment:
+
+```sh
+npm run prototype:figma:run -- /absolute/path/to/geometry.document.json
+```
+
+Prerequisites: current root/example builds, Figma running with the acceptance
+file accessible, first-time Automation/Accessibility grants, and the prototype
+manifest already imported. Close a completed prior prototype plugin before a
+new run. Never reopen or retry an uncertain render. This command compiles the
+tiny Swift AX helper, starts its own receiver, opens the exact file, launches the
+exact named plugin through Development, and drives the actual file picker and
+clipboard paste UI paths. It waits for observed state and PNG receipt after each
+render, then stops only its own receiver. Layers and the plugin stay visible.
+
+`ax.swift` uses public macOS Accessibility APIs to avoid slow AppleEvent property
+loops. Every action checks the observed path, role and label. Paste uses a real
+clipboard plus Command-A/Command-V events addressed to Figma, verifies the field,
+and restores clipboard data. AppleScript drives only the guarded native picker
+shortcuts. There are no coordinates, browser DOM injection or Figma MCP calls.
+The source restriction for replies is the observed `https://www.figma.com`
+origin plus run identity; a strict `event.source === parent` check does not work
+in the observed Developer VM nesting. The temporary driver uses Chinese file
+picker labels, so it is not yet portable across UI languages.
 
 `node e2e/prototype-desktop/ax.mjs inspect` records the real Figma accessibility
 tree in OS temp. `node e2e/prototype-desktop/ax.mjs click AXMenuItem Plugins`
@@ -77,4 +144,4 @@ canvas nodes. A local build or empty receiver log is not real Figma evidence.
 
 This is a feasibility artifact, not the production Bridge or complete runner.
 It does not implement full protocol checks, run locks, eight cases, cleanup,
-reports or a completely automated desktop sequence.
+reports or the eight-case acceptance sequence.

@@ -1,102 +1,86 @@
-# Feasibility verdict: PARTIAL — awaiting first plugin import
+# Feasibility verdict: bounded API PASS; desktop repeatability PARTIAL
 
-## Resumed run, 2026-09-23 07:42 UTC
-
-The user asked to continue. System Events now reports UI accessibility enabled
-(`true`); the prior consent gate is resolved. Opening the exact acceptance file
-via `open -a Figma figma://file/3bfxbSZ7K2URZ3Aak50Wwd` exposed the real
-`html2figma E2E 画布验收` editor. Native AX inspection read its Page 1 and five
-historical top-level layer names (media, geometry, typography, flex-border,
-geometry). A label-driven click opened Main menu and revealed Plugins.
-
-Window enumeration initially returned zero and later the correct editor. Some
-ad hoc inspection failures (`-10000`) were caused by using AppleScript's `rows`
-term as a variable; the saved helper uses `outputRows`. Do not misclassify those
-script errors as a Figma access restriction. Native traversal also exceeded a
-30-second bound; a subsequent compact inspection succeeded with a 45-second
-bound, but a label-driven Plugins click also timed out at 45 seconds. A timed-out
-click is not proof that a menu was opened. Repeatability
-remains unproven.
-
-Prepared a separate `html2figma Desktop Prototype` build and local result
-receiver; see README for the concrete manual import path and run command.
-The unchanged product UI and product plugin handler are bundled with the actual
-renderer; additions only guard/isolate/observe/export. The build succeeded and
-`node --check` passed for the generated plugin. The receiver has no ready/result
-events yet. These are prepared artifacts, not exercised Figma functionality.
-
-Issue #1 explicitly assigns first plugin import to the user. The concrete
-manifest is ready and the user has been asked to import it. Continue by observing
-the registered plugin, launching that exact name, checking its read-only ready
-event/file key, and driving both actual import paths. No user response to the
-import request had arrived when this checkpoint was written.
-
-`npm run verify:all` passed again: 44 core, 12 example, 33 browser and 15 built UI
-E2E tests. No real import, render, PNG export, localhost receipt, or node creation
-has occurred. The full feasibility gate is still open; this checkpoint proves
-only native app/file opening and partial AX menu access. All baseline nodes were
-left untouched. No Figma MCP was used.
-
-## Initial run (historical BLOCKED result)
-
-Observed 2026-09-23 on baseline `85c23ff`. Canonical specification:
+Observed 2026-09-23 on macOS 26.6.2 and Figma 126.8.18. Canonical specification:
 https://github.com/Natumsol/html2figma/issues/1
 
-The end-to-end desktop question remains unanswered. A native macOS consent
-dialog visibly requested that **ChatGPT** control **System Events**. Consent was
-not automated. Do not interpret this as evidence that AppleScript cannot operate
-Figma, or as successful validation of the proposed desktop architecture.
+The user explicitly changed the desired interaction to hidden-UI plugin commands
+because foreground automation interfered with their work. All subsequent real
+execution used a local API command, with no simulated clicks or keyboard input.
+This change does not make an API run evidence for UI controls.
 
-## Observations
+## What passed
 
-- macOS 26.6.2 (25G83); installed/running Figma 126.8.18.
-- `osascript -e 'tell application "System Events" to get UI elements enabled'`
-  timed out with AppleEvent error `-1712`. A bounded diagnostic invocation also
-  timed out after 15 seconds and recorded `ETIMEDOUT` / `SIGTERM`.
-- A desktop screenshot succeeded and confirmed the pending consent dialog.
-  It contains unrelated desktop content and remains local, outside Git.
-- Live Figma window accessibility, login, development-plugin registration,
-  target file identity/edit permission, and actual iframe accessibility remain
-  unknown. No target file was opened or changed by this run.
-- Neither real import path, actual Figma render, PNG export nor localhost
-  receipt was exercised. Created node IDs: `[]`. Real Figma PNG: none.
-- The acceptance file URL was identified from the existing acceptance record;
-  historical nodes and screenshots were not used as fresh verification.
+The user completed the first development-plugin import. A real desktop run then
+launched the named plugin through its Development menu and exercised both the
+actual file input and clipboard → Validate → Render paths. Both invoked the
+current public renderer and exported fresh 320 × 180 PNGs with zero warnings.
+Their roots are `13:3` (file) and `13:9` (paste), inside owned area `13:2`.
 
-## Local-only verification
+After the user's direction change, the user launched the imported plugin.
+A fixed `render-geometry` command queued at localhost was claimed by its hidden
+UI transport, rendered using the same public renderer, and returned another
+real 320 × 180 PNG with zero warnings. Root `13:16` and descendants through
+`13:21` are inside owned area `13:15`. The returned API observation confirms
+`hiddenUI: true` and identical before/after selection, viewport center and zoom.
+There was exactly one API render result. A later ready handshake did not replay
+the consumed task; it is not a second independent successful run.
 
-- `npm ci --no-audit --no-fund` and equivalent `--prefix example`: exit 0.
-- `npm run verify:all`: exit 0; 44 core tests, 12 example tests, 33 browser tests,
-  15 built UI E2E tests; typechecks, boundary/consumer checks and builds passed.
-  The existing E2E Figma test double does not prove real desktop execution.
-- `npm run prototype:figma:probe`: exit 2 (BLOCKED, expected).
-- `npm run prototype:figma:sample`: exit 0. Current browser `147.0.7727.15`
-  converted the existing geometry fixture and saved JSON, browser PNG and
-  converter/renderer/input SHA-256 values. No Figma result was synthesized.
-- Port 5173 was free before preparation and after shutdown. Only owned local
-  services and probe processes were stopped; Figma was left running.
-- No new tests, production Bridge, plugin modifications or implementation
-  tickets were added. Prototype scripts and these findings live only on the
-  throwaway branch; no product branch was merged.
+All three PNGs pass the repository's Playwright comparator with threshold 0.2
+and maxDiffPixelRatio 0.001; thresholded differing pixels are zero. The earlier
+UI PNG raw RGBA comparison found 169 unequal pixels, so this is not a claim of
+byte-for-byte or unthresholded pixel equality with the browser reference.
 
-## Resume gate and specification implications
+## Limits and observed failures
 
-The user must click **Allow** on the observed **ChatGPT → System Events** dialog.
-If it was dismissed/denied, inspect System Settings → Privacy & Security →
-Automation → ChatGPT → System Events. Accessibility may also need authorization,
-but its current state is unknown; do not claim it is denied without observing it.
+- A second independent native run stopped at the Go to Folder field timeout,
+  before rendering. Repeatable desktop automation and full eight-case acceptance
+  remain unproven. Do not run the foreground driver again without an explicit
+  user request.
+- This is hidden-UI execution inside a running Figma plugin. Figma and the target
+  document must remain available; it is not a standalone headless Figma engine.
+- The command is one fixed sample per receiver session. There is no arbitrary
+  JS execution, general task queue, reconnect/retry policy or production Bridge.
+- The observed Developer VM message origin is `https://www.figma.com`, but its
+  source is not `parent`. The bridge checks that origin and current run identity.
+- Concurrent result/observation delivery in the successful API run overwrote
+  some individual event journal filenames (10 files for 12 state events). The
+  final state contains both result metadata and viewport observation; the PNG
+  was saved and compared. Source now serializes bridge delivery. That follow-up
+  change passed packaging/syntax checks and a fresh read-only ready handshake
+  (`4a49f9b2-6e8d-43bd-b710-e1483721f36f`); no command was queued and no new
+  render was attempted. It is not a durable multi-client journal implementation.
+- Earlier UI result metadata omitted SVG-internal vector IDs. A subsequent
+  read-only handshake recovered complete owned area descendants `13:3` through
+  `13:14`. Source now enumerates all descendants.
+- Initial macOS consent and first import gates were resolved by the user.
+  Historical node `6:2` disappeared between snapshots; the user explicitly
+  confirmed manually deleting/moving it. The prototype did not delete nodes.
 
-After the user acts, explicitly rerun the probe. Then verify the actual target
-file and named development plugin before any canvas writes. Only then prepare
-the isolated plugin observation/export additions and exercise file import and
-paste/validate/render through the real controls. Retain created IDs and require
-fresh PNG receipt before calling either path successful.
+## Local evidence
 
-Keep issue #1's startup-feasibility gate open. The actual responsible host in
-the consent UI is ChatGPT, even though this task runs in Codex; setup guidance
-must use the name macOS actually displays. Neither repeatability nor the full
-first-stage feasibility acceptance has passed. Do not relax the UI boundary or
-substitute direct AST injection to close this gate.
+Paths below are relative to the worktree unless absolute. Generated files,
+credentials and raw desktop screenshots are intentionally excluded from Git.
 
-Machine-readable observations, screenshots and sample artifacts are referenced
-by the OS-temporary return handoff. They are intentionally not public artifacts.
+| Evidence | Location |
+| --- | --- |
+| Actual file/paste results, PNGs, comparison | `test-results/desktop-prototype/5a4ee817-67e0-4484-b946-0b5439db901e/` |
+| Failed independent native repeat, descendant audit | `test-results/desktop-prototype/a28afc5b-6b6f-41cc-8a86-8164ec9e7613/` |
+| Actual API result, PNG, viewport observation, comparison | `test-results/desktop-prototype/83a8f90d-9f64-4c9f-af47-7db3e057e9a9/` |
+| Browser sample and reference PNG | `/var/folders/66/3836bqd96t361t9r1zjz143c0000gn/T/html2figma-desktop-sample-IfYVkW/` |
+| Full local verification log | `/tmp/html2figma-desktop-prototype-final-verify.log` |
+
+The renderer SHA-256 in all three result receipts is
+`ad8dba50d31b59526a8806a3c4f1c6f828fa05ac8af58417a95050882db71a61`.
+The receiver checks the exact prepared document, run identity, renderer hash,
+task identity in API mode, PNG signature and reported dimensions. The plugin
+checks the exact acceptance file key before any write. Evidence includes the
+actual exported bytes, not reconstructed or mock Figma output.
+
+`npm run verify:all` passed: 44 core, 12 example, 33 browser and 15 built UI E2E
+tests, with typechecks, boundary checks, isolated consumers and builds. Those
+checks are separate from live Figma observations. Swift helper compilation and
+JavaScript syntax checks passed. No Figma MCP was used.
+
+Only owned local receivers were stopped after evidence capture. All prototype
+canvas areas remain for inspection. No product code, full runner, implementation
+tickets or merge to the product branch are part of this throwaway experiment.

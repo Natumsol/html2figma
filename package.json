@@ -48,7 +48,10 @@
     "typecheck:boundaries": "tsc --noEmit -p tsconfig.browser.json && tsc --noEmit -p tsconfig.figma.json",
     "prototype:figma:probe": "node e2e/prototype-desktop/probe.mjs",
     "prototype:figma:sample": "node e2e/prototype-desktop/prepare-sample.mjs",
-    "prototype:figma:serve": "node e2e/prototype-desktop/serve.mjs"
+    "prototype:figma:serve": "node e2e/prototype-desktop/serve.mjs",
+    "prototype:figma:run": "node e2e/prototype-desktop/run.mjs",
+    "prototype:figma:api": "node e2e/prototype-desktop/serve.mjs --api",
+    "prototype:figma:command": "node e2e/prototype-desktop/command.mjs"
   },
   "devDependencies": {
     "@figma/plugin-typings": "^1.108.0",
