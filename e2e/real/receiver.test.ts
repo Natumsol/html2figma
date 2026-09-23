@@ -14,11 +14,11 @@ const identity = {
 };
 const state = { pageId: "0:1", selection: [], center: { x: 0, y: 0 }, zoom: 1 };
 const png = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVR4nGP4DwQACfsD/fteaysAAAAASUVORK5CYII=";
-async function setup(names = ["geometry"]) {
+async function setup(names = ["geometry"], documentJson = "{}") {
   const output = await mkdtemp(join(tmpdir(), "real-figma-test-"));
   cleanup.push(() => rm(output, { recursive: true, force: true }));
   const receiver = await createReceiver({ output, token: "secret", identity,
-    cases: names.map(name => ({ name, documentJson: "{}", documentSha256: `hash-${name}`,
+    cases: names.map(name => ({ name, documentJson, documentSha256: `hash-${name}`,
       width: 1, height: 1, maxDiffPixelRatio: 0.001,
       expectedWarningCodes: name === "flex-reverse" ? ["flex-layout-fallback"] : [] })),
     references: new Map(names.map(name => [name, Buffer.from(png, "base64")])), port: 0 });
@@ -97,6 +97,17 @@ test("accepts exactly the expected fallback warning for a fallback case", async 
   expect((await receiver.finished).status).toBe("complete");
 });
 
+test("preserves downloaded JSON bytes through extension task and result", async () => {
+  const downloadedJson = '{\n  "version": 1\n}';
+  const { post, message, receiver, output } = await setup(["extension-page"], downloadedJson);
+  await post("ready", { ...message, state });
+  expect((await (await post("claim", message)).json()).documentJson).toBe(downloadedJson);
+  await post("area", { ...message, taskId: "run-1:extension-page", caseId: "extension-page", areaId: "1:1" });
+  expect((await post("result", resultMessage(message, "extension-page", downloadedJson))).status).toBe(200);
+  expect((await receiver.finished).status).toBe("complete");
+  expect(JSON.parse(await readFile(join(output, "extension-page.result.json"), "utf8")).documentJson).toBe(downloadedJson);
+});
+
 test.each(["protocol", "runId", "fileKey", "pageId", "binding", "documentSha256", "rendererSha256"])("rejects a mismatched %s before rendering", async field => {
   const { post, message } = await setup();
   expect((await post("ready", { ...message, [field]: "wrong", state })).status).toBe(409);
@@ -114,8 +125,8 @@ test("does not requeue a timed-out task or accept its late result", async () => 
   expect((await post("result", message)).status).toBe(409);
 });
 
-function resultMessage(message: Record<string, unknown>, caseId = "geometry") {
-  return { ...message, taskId: `run-1:${caseId}`, caseId, documentJson: "{}",
+function resultMessage(message: Record<string, unknown>, caseId = "geometry", documentJson = "{}") {
+  return { ...message, taskId: `run-1:${caseId}`, caseId, documentJson,
     areaId: "1:1", rootNodeId: "1:2", createdNodeIds: ["1:1", "1:2"],
     width: 1, height: 1, warnings: [], before: state, after: state,
     pngBase64: png };

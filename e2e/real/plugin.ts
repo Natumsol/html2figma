@@ -75,11 +75,11 @@ figma.ui.onmessage = async (value: unknown) => {
       area = figma.createFrame();
       area.name = `html2figma E2E — ${config.identity.runId}`;
       area.setPluginData("html2figma-real-owner", config.identity.areaTag);
-      area.x = x; area.y = 100; area.resize(1100, 500); area.fills = []; area.clipsContent = false;
+      area.x = x; area.y = 100; area.resize(1460, 500); area.fills = []; area.clipsContent = false;
       send("area", { taskId: task.taskId, caseId: task.caseId, areaId: area.id });
     }
-    const result = await render(document, { parent: area, x: (caseIndex % 3) * 360,
-      y: Math.floor(caseIndex / 3) * 220, loadFonts: true });
+    const result = await render(document, { parent: area, x: (caseIndex % 4) * 360,
+      y: Math.floor(caseIndex / 4) * 220, loadFonts: true });
     if (result.root.type !== "FRAME") throw new Error("Visual case root is not a frame");
     const imagePaints = await inspectImagePaints(result.root);
     if (expected.name === "media" && imagePaints.length === 0) throw new Error("Media image paint missing");
@@ -88,7 +88,8 @@ figma.ui.onmessage = async (value: unknown) => {
     assertTarget();
     const after = snapshot();
     if (!sameCanvasState(before, after)) throw new Error("Canvas state changed during render; retained nodes");
-    send("result", { taskId: task.taskId, caseId: task.caseId, documentJson: JSON.stringify(document),
+    // Echo the exact downloaded JSON after shared validation, preserving its byte identity.
+    send("result", { taskId: task.taskId, caseId: task.caseId, documentJson: task.documentJson,
       areaId: area.id, rootNodeId: result.root.id, createdNodeIds: [area.id, ...area.findAll().map(node => node.id)],
       width: result.root.width, height: result.root.height, warnings: result.warnings, imagePaints,
       before, after, pngBase64: figma.base64Encode(png) });
