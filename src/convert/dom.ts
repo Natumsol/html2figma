@@ -7,11 +7,10 @@ import type {
   Html2FigmaNode,
   ImageAstNode,
   ResourceRef,
-  SvgAstNode,
-  TextAstNode
+  SvgAstNode
 } from "../schema/types";
-import { imageMimeType } from "../utils/background";
-import { parseOptionalPx } from "../utils/length";
+import { addImageResource, serializeSvg } from "./resources";
+import { createTextNode } from "./text";
 import { createWarning } from "../utils/warnings";
 import { createBorderRectangleNode } from "./borders";
 import { readBounds } from "./layout";
@@ -55,13 +54,7 @@ export function convertElement(
   if (element instanceof HTMLVideoElement && element.poster) {
     warnUnsupportedBorderChildren(context, warnings, id, borderSides, "video poster");
 
-    const resourceId = `resource-${context.resources.length + 1}`;
-    context.resources.push({
-      id: resourceId,
-      type: "image",
-      source: element.poster,
-      mimeType: imageMimeType(element.poster)
-    });
+    const resourceId = addImageResource(element.poster, context.resources);
 
     return {
       id,
@@ -116,13 +109,7 @@ export function convertElement(
   if (element instanceof HTMLImageElement) {
     warnUnsupportedBorderChildren(context, baseNode.warnings, id, borderSides, "image");
 
-    const resourceId = `resource-${context.resources.length + 1}`;
-    context.resources.push({
-      id: resourceId,
-      type: "image",
-      source: element.currentSrc || element.src,
-      mimeType: imageMimeType(element.currentSrc || element.src)
-    });
+    const resourceId = addImageResource(element.currentSrc || element.src, context.resources);
 
     return {
       ...baseNode,
@@ -136,11 +123,14 @@ export function convertElement(
     warnUnsupportedBorderChildren(context, baseNode.warnings, id, borderSides, "svg");
 
     const resourceId = `resource-${context.resources.length + 1}`;
+    const svg = serializeSvg(element, id);
+    context.warnings.push(...svg.warnings);
+    baseNode.warnings.push(...svg.warnings);
     context.resources.push({
       id: resourceId,
       type: "svg",
       source: cssPath(element),
-      data: serializeSvg(element, context, id, baseNode.warnings),
+      data: svg.data,
       mimeType: "image/svg+xml"
     });
 
@@ -151,7 +141,7 @@ export function convertElement(
     } satisfies SvgAstNode;
   }
 
-  if (children.length === 0 && hasVisualBox(style) && borderSides.length === 0) {
+  if (!style.layout && children.length === 0 && hasVisualBox(style) && borderSides.length === 0) {
     return {
       ...baseNode,
       type: "rectangle"
@@ -197,42 +187,6 @@ function warnUnsupportedBorderChildren(
   nodeWarnings.push(warning);
 }
 
-function serializeSvg(
-  element: SVGElement,
-  context: ConvertContext,
-  nodeId: string,
-  nodeWarnings: ConvertWarning[]
-): string {
-  const clone = element.cloneNode(true) as SVGElement;
-
-  for (const use of Array.from(clone.querySelectorAll("use"))) {
-    const href = use.getAttribute("href") || use.getAttribute("xlink:href");
-    if (!href?.startsWith("#")) {
-      continue;
-    }
-
-    const symbol = element.ownerDocument.getElementById(href.slice(1));
-    if (!symbol) {
-      const warning = createWarning(
-        "svg-use-unresolved",
-        "SVG use reference could not be resolved",
-        "warning",
-        {
-          nodeId,
-          source: href
-        }
-      );
-      context.warnings.push(warning);
-      nodeWarnings.push(warning);
-      continue;
-    }
-
-    use.replaceWith(...Array.from(symbol.childNodes).map((child) => child.cloneNode(true)));
-  }
-
-  return clone.outerHTML;
-}
-
 function convertChildren(
   element: Element,
   context: ConvertContext,
@@ -253,7 +207,7 @@ function convertChildren(
 
       const text = collapseText(child.textContent ?? "");
       if (text) {
-        children.push(createTextNode(child, text, context, parentStyle, parentBounds, parentPath));
+        children.push(createTextNode(child, text, nextNodeId(context), parentStyle, parentBounds, parentPath));
       }
       continue;
     }
@@ -278,7 +232,7 @@ function convertChildren(
 
         const text = collapseText(child.textContent ?? "");
         if (text) {
-          children.push(createTextNode(child, text, context, parentStyle, parentBounds, rootPath));
+          children.push(createTextNode(child, text, nextNodeId(context), parentStyle, parentBounds, rootPath));
         }
         continue;
       }
@@ -293,133 +247,6 @@ function convertChildren(
   }
 
   return children;
-}
-
-function createTextNode(
-  textNode: ChildNode,
-  text: string,
-  context: ConvertContext,
-  parentStyle: AstStyle,
-  parentBounds: AstBounds,
-  parentPath: string
-): TextAstNode {
-  const id = nextNodeId(context);
-
-  return {
-    id,
-    type: "text",
-    name: "#text",
-    text,
-    bounds: readTextBounds(textNode, parentStyle, parentBounds),
-    style: parentStyle,
-    source: {
-      tagName: "#text",
-      path: `${parentPath} > #text`
-    },
-    warnings: [],
-    children: []
-  };
-}
-
-function readTextBounds(
-  textNode: ChildNode,
-  parentStyle: AstStyle,
-  fallbackBounds: AstBounds
-): AstBounds {
-  const document = textNode.ownerDocument;
-  if (!document) {
-    return fallbackBounds;
-  }
-
-  const range = document.createRange();
-  range.selectNodeContents(textNode);
-
-  const rects = Array.from(range.getClientRects()).filter(
-    (rect) => rect.width > 0 && rect.height > 0
-  );
-  const rect = rects.length > 0 ? unionRects(rects) : range.getBoundingClientRect();
-  range.detach();
-
-  if (rect.width === 0 || rect.height === 0) {
-    return fallbackBounds;
-  }
-
-  let y = rect.y;
-  let height = rect.height;
-  const parent = textNode.parentElement;
-  const lineHeight = parentStyle.text?.lineHeight;
-  if (parent && parent.children.length === 0 && lineHeight !== undefined) {
-    const computed = window.getComputedStyle(parent);
-    const textNodes = Array.from(parent.childNodes).filter(
-      (node) => node.nodeType === Node.TEXT_NODE && node.textContent?.trim()
-    );
-    if (computed.display === "block" && textNodes.length === 1) {
-      // Range rectangles cover font metrics, not CSS line boxes. Figma adds
-      // line-height leading itself, so using the Range y would add it twice.
-      y = fallbackBounds.y + parseOptionalPx(computed.paddingTop, 0)
-        + parseOptionalPx(computed.borderTopWidth, 0);
-      height = lineHeight * Math.max(1, new Set(rects.map((line) => line.y)).size);
-    }
-  }
-
-  if (
-    parentStyle.text?.textAlign === "center" ||
-    parentStyle.text?.textAlign === "right" ||
-    parentStyle.text?.textAlign === "justified"
-  ) {
-    return {
-      x: fallbackBounds.x,
-      y,
-      width: fallbackBounds.width,
-      height
-    };
-  }
-
-  return {
-    x: rect.x,
-    y,
-    width: hasElementSiblings(textNode)
-      ? expandInlineTextWidth(rect.width, parentStyle, fallbackBounds, rect.x)
-      : Math.max(rect.width, fallbackBounds.x + fallbackBounds.width - rect.x),
-    height
-  };
-}
-
-function expandInlineTextWidth(
-  width: number,
-  parentStyle: AstStyle,
-  fallbackBounds: AstBounds,
-  x: number
-): number {
-  const fontSize = parentStyle.text?.fontSize ?? 16;
-  const tolerance = Math.min(24, Math.max(8, fontSize * 0.35));
-  return Math.min(width + tolerance, fallbackBounds.x + fallbackBounds.width - x);
-}
-
-function hasElementSiblings(textNode: ChildNode): boolean {
-  const parent = textNode.parentElement;
-  return Boolean(parent && parent.children.length > 0);
-}
-
-function unionRects(rects: DOMRect[]): AstBounds {
-  let left = rects[0]!.left;
-  let top = rects[0]!.top;
-  let right = rects[0]!.right;
-  let bottom = rects[0]!.bottom;
-
-  for (const rect of rects.slice(1)) {
-    left = Math.min(left, rect.left);
-    top = Math.min(top, rect.top);
-    right = Math.max(right, rect.right);
-    bottom = Math.max(bottom, rect.bottom);
-  }
-
-  return {
-    x: left,
-    y: top,
-    width: right - left,
-    height: bottom - top
-  };
 }
 
 function nextNodeId(context: ConvertContext): string {

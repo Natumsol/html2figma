@@ -78,6 +78,7 @@ export async function createFigmaRuntime() {
       return createNode("FRAME");
     },
     async loadFontAsync(font: FontName) { state.fonts.push(font); },
+    base64Decode(source: string) { return new Uint8Array(Buffer.from(source, "base64")); },
     createImage(bytes: Uint8Array) {
       if (!bytes.byteLength) throw new Error("Empty image");
       state.images.push(bytes);

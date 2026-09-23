@@ -10,14 +10,14 @@ import type {
   RenderWarning,
   ResourceRef
 } from "../schema/types";
-import { createWarning } from "../utils/warnings";
+import { createWarning, uniqueWarnings } from "../utils/warnings";
 import type { FigmaAdapter, RenderableNode } from "./adapter";
 import { applyBaseProperties, toFigmaRgb } from "./apply-style";
 
 interface RenderContext {
   adapter: FigmaAdapter;
   document: Html2FigmaDocument;
-  options: RenderOptions;
+  options: RenderOptions<RenderableNode>;
   warnings: RenderWarning[];
   nodes: RenderableNode[];
 }
@@ -25,8 +25,8 @@ interface RenderContext {
 export async function renderWithAdapter(
   document: Html2FigmaDocument,
   adapter: FigmaAdapter,
-  options: RenderOptions = {}
-): Promise<RenderResult> {
+  options: RenderOptions<RenderableNode> = {}
+): Promise<RenderResult<RenderableNode>> {
   const context: RenderContext = {
     adapter,
     document,
@@ -42,14 +42,14 @@ export async function renderWithAdapter(
   const root = await createRenderableNode(document.root, context, rootBounds);
 
   adapter.appendChild(
-    (options.parent as RenderableNode | undefined) ?? adapter.currentPage,
+    options.parent ?? adapter.currentPage,
     root
   );
 
   return {
-    root: root as unknown as SceneNode,
-    nodes: context.nodes as unknown as SceneNode[],
-    warnings: context.warnings
+    root,
+    nodes: context.nodes,
+    warnings: uniqueWarnings(context.warnings)
   };
 }
 
@@ -282,7 +282,7 @@ async function applyTextProperties(
   }
 
   if (textStyle?.textDecoration) {
-    target.textDecoration = textStyle.textDecoration.toUpperCase();
+    target.textDecoration = ({ none: "NONE", underline: "UNDERLINE", strikethrough: "STRIKETHROUGH" } as const)[textStyle.textDecoration];
   }
 
   if (textStyle?.textCase) {
@@ -340,7 +340,7 @@ function fontStyleName(textStyle: AstTextStyle | undefined): string {
   return "Regular";
 }
 
-function mapTextAlign(value: NonNullable<AstTextStyle["textAlign"]>): string {
+function mapTextAlign(value: NonNullable<AstTextStyle["textAlign"]>): TextNode["textAlignHorizontal"] {
   switch (value) {
     case "center":
       return "CENTER";
@@ -353,7 +353,7 @@ function mapTextAlign(value: NonNullable<AstTextStyle["textAlign"]>): string {
   }
 }
 
-function mapTextCase(value: NonNullable<AstTextStyle["textCase"]>): string {
+function mapTextCase(value: NonNullable<AstTextStyle["textCase"]>): TextCase {
   switch (value) {
     case "upper":
       return "UPPER";

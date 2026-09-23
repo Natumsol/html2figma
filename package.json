@@ -32,15 +32,20 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:browser": "playwright test",
-    "verify": "npm run typecheck && npm run test && npm run build",
-    "example:verify": "npm run build && npm --prefix example ci && npm --prefix example run typecheck && npm --prefix example run build",
+    "verify": "npm run typecheck && npm run typecheck:boundaries && npm run test && npm run build && npm run test:consumers",
+    "example:verify": "npm run build && npm --prefix example run check:apps",
     "e2e:build": "npm --prefix example run build",
     "e2e:typecheck": "tsc --noEmit -p e2e/tsconfig.json",
     "test:e2e": "npm run e2e:build && playwright test -c e2e/playwright.config.ts",
     "test:e2e:ui": "npm run e2e:build && playwright test -c e2e/playwright.config.ts --ui",
     "e2e:report": "playwright show-report playwright-report/e2e",
     "e2e:visual:prepare": "npm run e2e:build && node e2e/visual/prepare.mjs",
-    "test:e2e:visual": "playwright test -c e2e/visual/compare.config.ts"
+    "test:e2e:visual": "playwright test -c e2e/visual/compare.config.ts",
+    "dev": "tsup --watch",
+    "test:consumers": "node tests/consumers/check.mjs",
+    "test:e2e:built": "playwright test -c e2e/playwright.config.ts",
+    "verify:all": "npm run verify && npm --prefix example run check:apps && npm run e2e:typecheck && npm run test:browser && npm run test:e2e:built",
+    "typecheck:boundaries": "tsc --noEmit -p tsconfig.browser.json && tsc --noEmit -p tsconfig.figma.json"
   },
   "devDependencies": {
     "@figma/plugin-typings": "^1.108.0",

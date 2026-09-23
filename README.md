@@ -55,10 +55,41 @@ Build the Chrome extension demo:
 ```bash
 cd example
 npm install
-npm run build -w chrome-extension
+npm run build
 ```
 
 Load `example/chrome-extension/dist` through Chrome's Load unpacked flow.
+
+## Development and verification
+
+Install both dependency trees with `npm ci` and `npm ci --prefix example`.
+Run `npm run verify:all` before handoff. It builds the library once, checks the
+browser/Figma source boundaries and published entrypoint types, runs library
+and example tests, builds both examples, then runs browser and UI E2E tests.
+The CI workflow uses this same command.
+
+Use `npm --prefix example run build` to build both examples and their library
+dependency. `example` workspace app scripts consume an already-built library;
+`build:apps` and `check:apps` are orchestration steps for reuse after that build.
+The Figma development command builds the library before starting its watchers;
+its library watcher does not clean files while the UI/plugin watchers read them.
+
+The package root exports portable AST types and `parseDocumentJson` /
+`isHtml2FigmaDocument`. Import Figma-specific `RenderOptions` and `RenderResult`
+from `html2figma/render`. The same names at the root are now platform-neutral
+generics (`RenderOptions<Parent>`, `RenderResult<Node>`), defaulting to `unknown`;
+existing Figma consumers using root result types should update their imports.
+
+Document warnings aggregate node warnings. Rendering merges those warnings by
+all fields, preserving separate node diagnostics without counting JSON copies
+twice. The import validator checks numeric ranges, unique IDs, and typed resource
+references; image retrieval failures remain rendering warnings. Embedded Base64 images are
+decoded with the Figma API directly; HTTP image URLs use network loading.
+
+Flex becomes Auto Layout only when supported flow and measured child positions
+agree. Reverse/wrapped flow, positioned or reordered children, margins, and other
+unrepresentable layouts retain measured absolute positions with a
+`flex-layout-fallback` warning.
 
 ## End-to-end Tests
 

@@ -1,0 +1,36 @@
+[
+  {
+    "name": "geometry",
+    "maxDiffPixelRatio": 0.001,
+    "expectedWarningCodes": []
+  },
+  {
+    "name": "flex-border",
+    "maxDiffPixelRatio": 0.001,
+    "expectedWarningCodes": []
+  },
+  {
+    "name": "typography",
+    "maxDiffPixelRatio": 0.02,
+    "expectedWarningCodes": []
+  },
+  {
+    "name": "flex-reverse",
+    "maxDiffPixelRatio": 0.001,
+    "expectedWarningCodes": [
+      "flex-layout-fallback"
+    ]
+  },
+  {
+    "name": "flex-absolute",
+    "maxDiffPixelRatio": 0.001,
+    "expectedWarningCodes": [
+      "flex-layout-fallback"
+    ]
+  },
+  {
+    "name": "media",
+    "maxDiffPixelRatio": 0.001,
+    "expectedWarningCodes": []
+  }
+]

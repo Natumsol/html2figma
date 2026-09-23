@@ -10,3 +10,5 @@ export type {
   RenderWarning,
   ResourceRef
 } from "./schema/types";
+
+export { parseDocumentJson, isHtml2FigmaDocument } from "./schema/validate";

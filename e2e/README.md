@@ -54,7 +54,7 @@ npm run e2e:report
 它执行本仓库构建出的 `dist/render.cjs`，不使用其他 HTML 转 Figma 工具。
 
 1. 运行 `npm run e2e:visual:prepare`。脚本启动并关闭本地服务，生成
-   `test-results/figma-visual/` 下的三组浏览器参考截图、转换 AST 和 `*.render.js`。
+   `test-results/figma-visual/` 下由 `e2e/visual/cases.json` 定义的六组浏览器参考截图、转换 AST 和 `*.render.js`。
 2. 在验收文件中，通过 `use_figma` 逐个执行生成的 `*.render.js`。
    自动化代理应先读取 `figma-use` 技能，并先只读检查文件。
    每个脚本执行真实 `render()`、创建节点并以 1× PNG 导出 Figma 画布。
@@ -62,21 +62,21 @@ npm run e2e:report
 3. 运行 `npm run test:e2e:visual`，生成画布截图附件和失败时的像素差异图。
    HTML 报告位于 `playwright-report/figma-visual/`。
 
-用例覆盖几何形状、透明度、圆角、SVG、Flex 布局、非对称边框和文本。
-对比要求尺寸一致、零渲染警告；几何用例允许至多 0.1% 像素差异，
+用例覆盖几何形状、透明度、圆角、SVG、Flex 布局、非对称边框、文本、PNG 图片，以及反向 Flex 和绝对定位子元素的降级效果。
+对比要求尺寸一致，警告必须与用例清单完全一致（降级用例恰好一条，其余零条）；几何用例允许至多 0.1% 像素差异，
 文本用例允许至多 2%，每像素颜色阈值为 0.2，用于容忍字体抗锯齿差异。
 浏览器从固定的 `@fontsource/inter@4.5.15` 加载 Inter，Figma 使用 Inter Regular。
 该字体版本使用 `wght/slnt` 字轴，与此次 Figma 环境一致；较新的字体包使用不同的字形与字轴，
 不能仅凭家族名称相同就替换截图基准字体。
 字体回退会产生警告并使验收失败。
 
-返回结果包含 AST 与 renderer 的 SHA-256，防止把旧构建的截图当作本次结果。
+返回结果包含 AST、converter 与 renderer 的 SHA-256，防止把旧构建的截图当作本次结果。
 缺少真实 Figma 结果会失败，不会跳过，也不会自动创建或更新参考截图。
 修改渲染代码后应重新执行准备、Figma 渲染和对比三个步骤。
 每次渲染在已有节点右侧追加测试图层，返回所有新增节点 ID，便于定位或清理。
 
 ## CI
 
-`.github/workflows/e2e.yml` 在 Linux Chromium 上运行类型检查、单元测试、
-浏览器转换测试和完整 UI 链路，并上传测试报告。
+`.github/workflows/e2e.yml` 通过 `npm run verify:all` 在 Linux Chromium 上运行核心库和两个示例的类型检查、单元测试、
+源码运行环境隔离与独立消费者声明检查、浏览器转换测试和完整 UI 链路，并上传测试报告。
 真实 Figma 验收单独运行，因为它依赖已认证的可编辑文件；CI 不会伪造这一步的成功。

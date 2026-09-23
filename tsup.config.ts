@@ -12,7 +12,8 @@ export default defineConfig({
   ],
   dts: true,
   sourcemap: true,
-  clean: true,
+  // A watch rebuild must not remove files while example watchers read them.
+  clean: !process.argv.includes("--watch"),
   splitting: false,
   target: "es2022"
 });

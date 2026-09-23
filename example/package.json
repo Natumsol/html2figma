@@ -8,9 +8,12 @@
     "chrome-extension"
   ],
   "scripts": {
-    "build": "npm run build -w figma-plugin && npm run build -w chrome-extension",
+    "build": "npm --prefix .. run build && npm run build:apps",
     "typecheck": "npm run typecheck -w figma-plugin && npm run typecheck -w chrome-extension",
     "dev:figma": "npm run dev -w figma-plugin",
-    "dev:chrome": "npm run dev -w chrome-extension"
+    "dev:chrome": "npm run dev -w chrome-extension",
+    "build:apps": "npm run build -w figma-plugin && npm run build -w chrome-extension",
+    "test": "npm run test --workspaces",
+    "check:apps": "npm run typecheck && npm run test && npm run build:apps"
   }
 }

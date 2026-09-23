@@ -19,7 +19,8 @@
 - `npm run test`: run all Vitest unit tests.
 - `npm run test:browser`: run Playwright browser conversion tests.
 - `npm run build`: build ESM, CJS, and declaration outputs with `tsup`.
-- `npm run verify`: run typecheck, unit tests, and build.
+- `npm run verify`: check source runtime boundaries, run unit tests, build, and compile isolated consumers.
+- `npm run verify:all`: run library checks, example typechecks/tests/builds, browser tests, and built UI E2E tests.
 - `npm run e2e:typecheck`: typecheck the independent E2E test project.
 - `npm run test:e2e`: build both examples and run end-to-end UI workflows.
 - `npm run e2e:visual:prepare`: generate browser screenshots and real Figma render scripts.
@@ -37,7 +38,7 @@ Use two-space indentation, named exports, descriptive function names, and explic
 
 Use Vitest for unit tests and Playwright for browser-dependent layout/style behavior. Name tests by behavior, such as `color.test.ts`, `render.test.ts`, or `convert.spec.ts`.
 
-Add unit tests for pure parsing, mapping, and warning behavior. Add browser tests when behavior depends on `getComputedStyle()` or `getBoundingClientRect()`. Before handoff, run `npm run verify` and `npm run test:browser`.
+Add unit tests for pure parsing, mapping, and warning behavior. Add browser tests when behavior depends on `getComputedStyle()` or `getBoundingClientRect()`. Before handoff, run `npm run verify:all`.
 
 ## Commit & Pull Request Guidelines
 

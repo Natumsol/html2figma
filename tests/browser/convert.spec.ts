@@ -85,7 +85,8 @@ test("converts reviewed DOM edge cases", async ({ page }) => {
   }, serverUrl) as Html2FigmaDocument;
 
   const [rowReverse, empty, copy] = result.root.children;
-  expect(rowReverse?.style.layout?.mode).toBe("horizontal");
+  expect(rowReverse?.style.layout).toBeUndefined();
+  expect(rowReverse?.warnings).toContainEqual(expect.objectContaining({ code: "flex-layout-fallback" }));
   expect(empty?.type).toBe("frame");
   expect(copy?.children[0]?.source.path).toBe(`${copy?.source.path} > #text`);
 });
@@ -686,4 +687,26 @@ function flattenTexts(node: Html2FigmaDocument["root"]): string[] {
     ...(node.type === "text" ? [node.text] : []),
     ...node.children.flatMap(flattenTexts)
   ];
+}
+
+for (const scenario of [
+  { name: "reversed flow", parent: "flex-direction:row-reverse", child: "" },
+  { name: "absolute child", parent: "position:relative", child: "position:absolute;left:120px;top:50px" },
+  { name: "child margins", parent: "", child: "margin-left:30px" },
+  { name: "reordered children", parent: "", child: "order:2" },
+  { name: "wrapped flow", parent: "flex-wrap:wrap", child: "" },
+  { name: "distributed spacing", parent: "justify-content:space-around", child: "" }
+]) {
+  test(`preserves measured positions when flex uses ${scenario.name}`, async ({ page }) => {
+    await page.setContent(`<div id="layout" style="display:flex;width:300px;height:120px;${scenario.parent}"><div id="first" style="width:40px;height:20px;${scenario.child}"></div><div style="width:50px;height:30px"></div></div>`);
+    const result = await page.evaluate(async (baseUrl) => {
+      const { convert } = await import(`${baseUrl}/src/convert.ts`);
+      const element = document.querySelector("#layout")!;
+      const first = element.firstElementChild!.getBoundingClientRect();
+      return { ast: convert(element), measured: { x: first.x, y: first.y } };
+    }, serverUrl);
+    expect(result.ast.root.style.layout).toBeUndefined();
+    expect(result.ast.root.children[0].bounds).toMatchObject(result.measured);
+    expect(result.ast.warnings).toContainEqual(expect.objectContaining({ code: "flex-layout-fallback", nodeId: result.ast.root.id }));
+  });
 }

@@ -41,7 +41,7 @@ export function applyStyle(target: RenderableNode, style: AstStyle): void {
       return {
         type: "IMAGE",
         imageHash: fill.resourceId,
-        scaleMode: fill.scaleMode.toUpperCase(),
+        scaleMode: ({ fill: "FILL", fit: "FIT", crop: "CROP", tile: "TILE" } as const)[fill.scaleMode],
         opacity: fill.opacity
       };
     });
@@ -56,7 +56,9 @@ export function applyStyle(target: RenderableNode, style: AstStyle): void {
       opacity: stroke.opacity
     }));
     target.strokeWeight = style.strokes[0]?.weight ?? 0;
-    target.strokeAlign = style.strokes[0]?.align.toUpperCase();
+    target.strokeAlign = style.strokes[0]
+      ? ({ inside: "INSIDE", center: "CENTER", outside: "OUTSIDE" } as const)[style.strokes[0].align]
+      : "INSIDE";
   }
 
   if (style.effects) {
@@ -80,7 +82,7 @@ export function applyStyle(target: RenderableNode, style: AstStyle): void {
 }
 
 function applyLayout(target: RenderableNode, layout: AstFlexLayout): void {
-  target.layoutMode = layout.mode.toUpperCase();
+  target.layoutMode = layout.mode === "horizontal" ? "HORIZONTAL" : "VERTICAL";
   target.primaryAxisSizingMode = "FIXED";
   target.counterAxisSizingMode = "FIXED";
   target.itemSpacing = layout.gap;
@@ -93,15 +95,15 @@ function applyLayout(target: RenderableNode, layout: AstFlexLayout): void {
   target.layoutWrap = layout.wraps ? "WRAP" : "NO_WRAP";
 }
 
-function mapPrimaryAxisAlign(value: AstFlexLayout["primaryAxisAlignItems"]): string {
-  return value === "space-between" ? "SPACE_BETWEEN" : value.toUpperCase();
+function mapPrimaryAxisAlign(value: AstFlexLayout["primaryAxisAlignItems"]): FrameNode["primaryAxisAlignItems"] {
+  return ({ "space-between": "SPACE_BETWEEN", min: "MIN", center: "CENTER", max: "MAX" } as const)[value];
 }
 
-function mapCounterAxisAlign(value: AstFlexLayout["counterAxisAlignItems"]): string {
-  return value.toUpperCase();
+function mapCounterAxisAlign(value: AstFlexLayout["counterAxisAlignItems"]): FrameNode["counterAxisAlignItems"] {
+  return ({ min: "MIN", center: "CENTER", max: "MAX" } as const)[value];
 }
 
-function toFigmaEffect(effect: AstShadow): Record<string, unknown> {
+function toFigmaEffect(effect: AstShadow): DropShadowEffect {
   return {
     type: "DROP_SHADOW",
     color: toFigmaRgba(effect.color, effect.opacity),
