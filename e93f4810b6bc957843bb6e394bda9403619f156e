@@ -1,0 +1,70 @@
+e2e/prototype-desktop/FINDINGS.md
+  e8ba3651a08cecc4 1,3,6-86
+e2e/prototype-desktop/serve.mjs
+  e8ba3651a08cecc4 16-17,34,38-39,47,60-61,73-90,93-97,99-102,104-117,148,150-152,160-175,181,183,203
+e2e/prototype-desktop/ax.swift
+  e8ba3651a08cecc4 1-77
+package.json
+  e8ba3651a08cecc4 51-54
+e2e/prototype-desktop/run.mjs
+  e8ba3651a08cecc4 1-97
+e2e/prototype-desktop/README.md
+  e8ba3651a08cecc4 3-44,83-107,147
+e2e/prototype-desktop/command.mjs
+  e8ba3651a08cecc4 1-15
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8-ntes.9",
+  "base_commit_sha": "e93f4810b6bc957843bb6e394bda9403619f156e",
+  "prompts": {
+    "e8ba3651a08cecc4": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0cd04-24b6-7832-a5c6-f6b6ce3b42aa",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Natumsol",
+      "messages": [],
+      "total_additions": 427,
+      "total_deletions": 130,
+      "accepted_lines": 417,
+      "overriden_lines": 0,
+      "per_file_stats": {
+        "e2e/prototype-desktop/run.mjs": {
+          "additions": 97,
+          "accepted_lines": 97
+        },
+        "e2e/prototype-desktop/README.md": {
+          "additions": 68,
+          "deletions": 1,
+          "accepted_lines": 68
+        },
+        "e2e/prototype-desktop/FINDINGS.md": {
+          "additions": 84,
+          "deletions": 100,
+          "accepted_lines": 84
+        },
+        "package.json": {
+          "additions": 6,
+          "deletions": 3,
+          "accepted_lines": 4
+        },
+        "e2e/prototype-desktop/command.mjs": {
+          "additions": 15,
+          "accepted_lines": 15
+        },
+        "e2e/prototype-desktop/serve.mjs": {
+          "additions": 75,
+          "deletions": 21,
+          "accepted_lines": 72
+        },
+        "e2e/prototype-desktop/ax.swift": {
+          "additions": 82,
+          "deletions": 5,
+          "accepted_lines": 77
+        }
+      }
+    }
+  }
+}
