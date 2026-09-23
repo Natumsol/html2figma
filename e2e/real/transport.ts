@@ -7,6 +7,10 @@ export function createTransport(config: PluginConfig): string {
 const config=${JSON.stringify(config).replaceAll("<", "\\u003c")};
 let started=false;
 let delivery=Promise.resolve();
+async function claim(message) {
+ const task=await (await post('claim',message)).json();
+ parent.postMessage({pluginMessage:{type:'execute',runId:config.identity.runId,task}},'*');
+}
 async function post(route,body) {
  const response=await fetch('http://localhost:5173/bridge/'+config.token+'/'+route,{
   method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),
@@ -20,11 +24,14 @@ window.addEventListener('message',event=>{
  const message=event.data?.pluginMessage;
  if(!message || message.bridge!=='html2figma-real' || message.runId!==config.identity.runId)return;
  delivery=delivery.then(async()=>{
-  await post(message.type,message);
+  const response=await post(message.type,message);
   if(message.type==='ready' && !started) {
    started=true;
-   const task=await (await post('claim',message)).json();
-   parent.postMessage({pluginMessage:{type:'execute',runId:config.identity.runId,task}},'*');
+   await claim(message);
+  }
+  if(message.type==='result') {
+   const receipt=await response.json();
+   if(!receipt.complete) { await claim(message); return; }
   }
   if(message.type==='result' || message.type==='failure') {
    parent.postMessage({pluginMessage:{type:'receipt',runId:config.identity.runId}},'*');

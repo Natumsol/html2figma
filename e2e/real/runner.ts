@@ -5,10 +5,9 @@ import { execFileSync } from "node:child_process";
 import { chromium } from "@playwright/test";
 import { record, type Identity } from "./protocol";
 import { acquireLock, startReferenceServer, runBuild, lockPath, type Assets } from "./host";
-import { prepareGeometry } from "./prepare";
+import { prepareCases } from "./prepare";
 import { buildPlugin, assertNormalBuildIsolated } from "./build";
 import { createReceiver } from "./receiver";
-import { compareGeometry } from "./images";
 import { writeReport } from "./report";
 
 declare const __PROJECT_ROOT__: string;
@@ -99,36 +98,34 @@ async function main() {
     }
     const runId = randomUUID();
     output = join(directory, runId); await mkdir(output);
-    summary = { ...summary, runId, target, coverage: "geometry only; real plugin API; no desktop UI controls; nodes retained" };
+    summary = { ...summary, runId, target, coverage: "six serial visual cases; real plugin API; nodes retained" };
     const files: Assets = new Map();
     closeReference = await startReferenceServer(files);
     await runBuild(root, abort.signal);
     await assertNormalBuildIsolated(root);
-    const prepared = await prepareGeometry(root, output, files);
+    const prepared = await prepareCases(root, output, files);
     if (abort.signal.aborted) throw new Error("Interrupted during preparation");
     const identity: Identity = { protocol: 1, runId, buildId: "", ...target, areaTag: `html2figma:${runId}`,
       documentSha256: prepared.documentSha256, converterSha256: prepared.converterSha256, rendererSha256: prepared.rendererSha256 };
     const token = randomUUID();
-    const artifact = await buildPlugin(root, output, { identity, token, documentJson: prepared.documentJson, bind });
-    summary = { ...summary, identity, pluginSha256: artifact.pluginSha256, browserVersion: prepared.browserVersion };
+    const artifact = await buildPlugin(root, output, { identity, token, cases: prepared.cases, bind });
+    summary = { ...summary, identity, pluginSha256: artifact.pluginSha256, browserVersion: prepared.browserVersion,
+      cases: prepared.cases.map(({ documentJson, ...entry }) => entry) };
     await writeFile(join(output, "manifest.json"), JSON.stringify(summary, null, 2));
     await closeReference(); closeReference = undefined;
-    receiver = await createReceiver({ output, token, identity, documentJson: prepared.documentJson, width: 320, height: 180, port: 5173 });
+    receiver = await createReceiver({ output, token, identity, cases: prepared.cases, references: prepared.references, port: 5173 });
     const activeReceiver = receiver;
     const expire = (reason: string) => { void activeReceiver.expire(reason).catch(error => console.error("Evidence write failed", String(error))); };
     abort.signal.addEventListener("abort", () => expire("Interrupted; no retry"), { once: true });
     timer = setTimeout(() => expire("Handshake/task timeout; start the current plugin after PACKAGE_READY. No retry."), timeoutMs);
     console.log(JSON.stringify({ status: "PACKAGE_READY", output, manifest: artifact.manifest, plugin: "html2figma Real E2E", timeoutMs,
-      instruction: "Import this manifest once, then run this named plugin in the configured file. No automated clicks will be used." }));
+      instruction: "Run the already-imported named plugin in the configured file. No automated clicks will be used." }));
     if (abort.signal.aborted) expire("Interrupted before plugin connection");
     const state = await receiver.finished;
     summary = { ...summary, ...state };
     if (state.status !== "complete") throw new Error(state.error ?? "No real result");
-    const comparison = compareGeometry(await readFile(join(output, "geometry-figma.png")), prepared.reference);
-    if (comparison?.diff) await writeFile(join(output, "geometry-diff.png"), comparison.diff);
-    summary = { ...summary, status: comparison ? "failed" : "passed", threshold: 0.2, maxDiffPixelRatio: 0.001,
-      visualError: comparison?.errorMessage ?? null };
-    if (comparison) throw new Error(comparison.errorMessage);
+    if (state.results.length !== prepared.cases.length || state.unexecuted.length) throw new Error("Incomplete six-case run");
+    summary = { ...summary, status: "passed", threshold: 0.2 };
   } catch (error) {
     process.exitCode = 1;
     summary = { ...summary, status: summary.status === "unknown" ? "unknown" : "failed", error: String(error) };

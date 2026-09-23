@@ -23,6 +23,6 @@ export function decodePng(bytes: Buffer, width: number, height: number): void {
   if (decoded.width !== width || decoded.height !== height) throw new Error("Decoded dimensions mismatch");
 }
 
-export function compareGeometry(actual: Buffer, expected: Buffer) {
-  return getComparator("image/png")(actual, expected, { threshold: 0.2, maxDiffPixelRatio: 0.001 });
+export function compareVisual(actual: Buffer, expected: Buffer, maxDiffPixelRatio: number) {
+  return getComparator("image/png")(actual, expected, { threshold: 0.2, maxDiffPixelRatio });
 }

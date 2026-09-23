@@ -1,11 +1,14 @@
-# 真实 Figma 后台验收：geometry
+# 真实 Figma 后台验收：六个视觉场景
 
 [2026-09-23 实机验收记录](ACCEPTANCE.md)保存了已通过的一轮结果与证据边界。
+[2026-09-23 六场景实机验收记录](SIX_CASES_ACCEPTANCE.md)保存了本入口的六项结果。
 
-本入口实现 [#2](https://github.com/Natumsol/html2figma/issues/2) 的单样例切片：
-当前浏览器 convert → 共享 JSON 校验 → 真实 Figma render → PNG → 视觉比较。
+本入口在 [#2](https://github.com/Natumsol/html2figma/issues/2) 单样例切片上实现 [#3](https://github.com/Natumsol/html2figma/issues/3)：
+同一轮对 geometry、flex-border、typography、flex-reverse、flex-absolute、media
+依次执行当前浏览器 convert → 共享 JSON 校验 → 真实 Figma render → PNG → 视觉比较。
 全程不激活桌面窗口、不模拟点击/键盘、不使用剪贴板，不修改选区或视口。
-当前只执行 geometry，保留所有新增图层；六场景、扩展集成和成功清理由后续任务实现。
+六个场景各自保存输入、浏览器图、Figma 图和必要时的差异图；保留所有新增图层。
+扩展集成和成功清理由后续任务实现。
 
 ## 准备与运行
 
@@ -31,7 +34,7 @@ npm run test:e2e:real -- --bind --file-key YOUR_FILE_KEY --page-id 0:1 --timeout
 `test-results/real-figma/plugin/manifest.json`，运行「html2figma Real E2E」。
 已有原型插件是另外一个插件；不能把原型注册视为正式 E2E 插件已注册。
 
-启动插件后 UI 隐藏，命令自动执行本轮单样例，保存报告并退出；你可以切回其他工作。
+启动插件后 UI 隐藏，命令自动串行执行本轮六个样例，保存报告并退出；你可以切回其他工作。
 目标文件/page 必须保持可用；观察到 page、选区或视口变化会使运行失败并保留现场，
 不会自动恢复用户状态。插件成功回传或报告失败并收到确认后关闭自身。
 
@@ -50,7 +53,7 @@ npm run test:e2e:real
 
 每轮产物保存在忽略目录 `test-results/real-figma/<runId>/`：
 
-- 当前输入、冻结的 converter/renderer/schema、实际插件 bundle 和构建身份。
+- 六份当前输入、冻结的 converter/renderer/schema、实际插件 bundle 和构建身份。
 - 独立编号的事件、结果、浏览器 PNG、Figma PNG、必要时的差异图。
 - `report.json` 和 `report.html`：状态、节点链接、尺寸、警告、身份及环境版本。
 
@@ -60,7 +63,10 @@ npm run e2e:real:report -- /absolute/path/to/run-directory
 
 此命令输出已存在的 HTML 报告路径，不自动打开浏览器或激活窗口。
 成功退出 0；环境、构建、连接、执行、图像或产物保存失败退出非零。缺失结果不会跳过。
-采用既有 geometry 标准：320×180、零警告、颜色阈值 0.2、最大差异像素比例 0.001。
+采用 `e2e/visual/cases.json` 标准：颜色阈值 0.2，typography 最大差异像素比例
+0.02，其余五项 0.001；flex-reverse 与 flex-absolute 各需一条
+`flex-layout-fallback` 警告，其余零警告。任何场景失败便停止派发后续场景，
+报告列出未执行项；晚到结果不能把失败改成通过。
 普通插件构建不包含 Bridge，现有 UI 测试继续覆盖文件/粘贴控件；本报告不冒充这些
 真实桌面控件的验收，也不代表八项完整验收已完成。
 

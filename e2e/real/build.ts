@@ -33,7 +33,7 @@ export async function buildPlugin(root: string, output: string, config: PluginCo
 
 export async function assertNormalBuildIsolated(root: string): Promise<void> {
   const normal = await readFile(join(root, "example/figma-plugin/dist/plugin/main.js"), "utf8");
-  if (["html2figma-real", "render-geometry", "__REAL_CONFIG__", "/bridge/"].some(marker => normal.includes(marker))) {
+  if (["html2figma-real", "render-case", "__REAL_CONFIG__", "/bridge/"].some(marker => normal.includes(marker))) {
     throw new Error("Normal plugin build contains E2E control code");
   }
 }
