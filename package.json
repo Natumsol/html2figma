@@ -44,8 +44,12 @@
     "dev": "tsup --watch",
     "test:consumers": "node tests/consumers/check.mjs",
     "test:e2e:built": "playwright test -c e2e/playwright.config.ts",
-    "verify:all": "npm run verify && npm --prefix example run check:apps && npm run e2e:typecheck && npm run test:browser && npm run test:e2e:built",
-    "typecheck:boundaries": "tsc --noEmit -p tsconfig.browser.json && tsc --noEmit -p tsconfig.figma.json"
+    "verify:all": "npm run verify && npm --prefix example run check:apps && npm run e2e:typecheck && npm run test:e2e:real:unit && npm run test:browser && npm run test:e2e:built",
+    "typecheck:boundaries": "tsc --noEmit -p tsconfig.browser.json && tsc --noEmit -p tsconfig.figma.json",
+    "e2e:real:doctor": "node e2e/real/cli.mjs doctor",
+    "test:e2e:real": "node e2e/real/cli.mjs run",
+    "e2e:real:report": "node e2e/real/cli.mjs report",
+    "test:e2e:real:unit": "vitest run -c e2e/real/vitest.config.ts"
   },
   "devDependencies": {
     "@figma/plugin-typings": "^1.108.0",
@@ -53,6 +57,7 @@
     "@playwright/test": "^1.52.0",
     "@types/chrome": "^0.0.306",
     "@types/node": "^22.20.4",
+    "esbuild": "0.27.7",
     "tsup": "^8.4.0",
     "typescript": "^5.8.3",
     "vitest": "^3.1.3"

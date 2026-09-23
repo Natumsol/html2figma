@@ -46,6 +46,17 @@ npm run e2e:report
 通过 Figma API 测试替身记录节点、字体、图片、通知和画布操作。
 这部分检查消息与渲染行为；真实 Figma 的属性约束和像素效果由下面的独立流程验收。
 
+## 本机后台 API 验收
+
+新增 [geometry 后台验收入口](real/README.md)，使用独立的「html2figma Real E2E」
+隐藏 UI 插件，后台调用本仓库真实 renderer，无需 Figma MCP 或桌面点击。
+当前仅覆盖单样例，创建图层保留；它不替代现有 UI 控件测试或下面的历史六场景流程。
+
+```sh
+npm run e2e:real:doctor
+npm run test:e2e:real -- --bind --file-key YOUR_FILE_KEY --page-id 0:1
+```
+
 ## 真实 Figma 画布截图验收
 
 已有 [2026-09-23 验收记录](visual/ACCEPTANCE.md)，包含真实 Figma 节点链接与本次发现的回归问题。
