@@ -19,15 +19,26 @@ export interface CanvasState {
 }
 
 export interface RenderTask {
-  type: "render-geometry";
+  type: "render-case";
   taskId: string;
+  caseId: string;
   documentJson: string;
+}
+
+export interface VisualCase {
+  name: string;
+  documentJson: string;
+  documentSha256: string;
+  width: number;
+  height: number;
+  maxDiffPixelRatio: number;
+  expectedWarningCodes: string[];
 }
 
 export interface PluginConfig {
   identity: Identity;
   token: string;
-  documentJson: string;
+  cases: VisualCase[];
   bind: boolean;
 }
 

@@ -5,15 +5,22 @@ export function escapeHtml(value: string): string {
 }
 export async function writeReport(output: string, summary: Record<string, unknown>) {
   await writeFile(join(output, "report.json"), JSON.stringify(summary, null, 2));
-  const result = summary.result as { rootNodeId?: string } | undefined;
+  const cases = (summary.cases ?? []) as Array<{ name: string; documentSha256: string; maxDiffPixelRatio: number }>;
+  const results = (summary.results ?? []) as Array<{ caseId: string; rootNodeId?: string; status: string;
+    warnings?: Array<{ code: string }>; visualError?: string }>;
   const target = summary.target as { fileKey?: string } | undefined;
-  const link = result?.rootNodeId && target?.fileKey
-    ? `<a href="https://www.figma.com/design/${encodeURIComponent(target.fileKey)}?node-id=${encodeURIComponent(result.rootNodeId)}">Figma node</a>` : "";
+  const rows = cases.map(entry => {
+    const result = results.find(item => item.caseId === entry.name);
+    const name = escapeHtml(entry.name);
+    const link = result?.rootNodeId && target?.fileKey
+      ? `<a href="https://www.figma.com/design/${encodeURIComponent(target.fileKey)}?node-id=${encodeURIComponent(result.rootNodeId)}">Figma node</a>` : "";
+    const image = (suffix: string) => `<a href="${name}-${suffix}.png"><img src="${name}-${suffix}.png" alt="${name} ${suffix}"></a>`;
+    const warnings = result?.warnings?.map(warning => warning.code).join(", ") ?? "";
+    return `<tr><td>${name}</td><td>${escapeHtml(result?.status ?? "unexecuted")}</td><td>${escapeHtml(entry.documentSha256)}</td><td>${entry.maxDiffPixelRatio}</td><td>${escapeHtml(warnings)}</td><td>${image("browser")}</td><td>${result ? image("figma") : ""}</td><td>${result?.visualError ? image("diff") : ""}</td><td>${link}</td></tr>`;
+  }).join("\n");
   await writeFile(join(output, "report.html"), `<!doctype html><html lang="en"><meta charset="utf-8">
-<title>html2figma real geometry acceptance</title><style>body{font:16px system-ui;margin:32px;max-width:1000px}pre{white-space:pre-wrap}figure{display:inline-block;margin:12px}img{max-width:100%}</style>
-<h1>Geometry: ${escapeHtml(String(summary.status))}</h1><p>Real plugin API acceptance. Desktop UI controls are not covered. Created nodes are retained.</p>${link}
-<figure><figcaption>Browser</figcaption><img src="geometry-browser.png"></figure>
-${summary.result ? '<figure><figcaption>Figma</figcaption><img src="geometry-figma.png"></figure>' : ""}
-${summary.visualError ? '<figure><figcaption>Diff</figcaption><img src="geometry-diff.png"></figure>' : ""}
+<title>html2figma real six-case acceptance</title><style>body{font:16px system-ui;margin:32px}table{border-collapse:collapse}td,th{padding:8px;border:1px solid #ccc}img{width:240px;height:auto}pre{white-space:pre-wrap}</style>
+<h1>Six visual cases: ${escapeHtml(String(summary.status))}</h1><p>Real plugin API acceptance. Created nodes are retained.</p>
+<table><thead><tr><th>Case</th><th>Status</th><th>Document SHA-256</th><th>Max diff ratio</th><th>Warnings</th><th>Browser</th><th>Figma</th><th>Diff</th><th>Node</th></tr></thead><tbody>${rows}</tbody></table>
 <pre>${escapeHtml(JSON.stringify(summary, null, 2))}</pre></html>`);
 }
