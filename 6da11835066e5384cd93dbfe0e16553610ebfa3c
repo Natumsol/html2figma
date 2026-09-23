@@ -1,0 +1,35 @@
+e2e/real/ACCEPTANCE.md
+  e8ba3651a08cecc4 1-30
+e2e/real/README.md
+  e8ba3651a08cecc4 3-4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8-ntes.9",
+  "base_commit_sha": "6da11835066e5384cd93dbfe0e16553610ebfa3c",
+  "prompts": {
+    "e8ba3651a08cecc4": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0cd04-24b6-7832-a5c6-f6b6ce3b42aa",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Natumsol",
+      "messages": [],
+      "total_additions": 32,
+      "total_deletions": 0,
+      "accepted_lines": 32,
+      "overriden_lines": 0,
+      "per_file_stats": {
+        "e2e/real/ACCEPTANCE.md": {
+          "additions": 30,
+          "accepted_lines": 30
+        },
+        "e2e/real/README.md": {
+          "additions": 2,
+          "accepted_lines": 2
+        }
+      }
+    }
+  }
+}
