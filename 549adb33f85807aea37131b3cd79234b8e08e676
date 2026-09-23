@@ -1,0 +1,213 @@
+README.md
+  0bf9681c835f9b66 63-79
+e2e/helpers/plugin.ts
+  0bf9681c835f9b66 1-15
+e2e/fixtures/visual.html
+  0bf9681c835f9b66 1-34
+e2e/helpers/extension.ts
+  0bf9681c835f9b66 1-44
+e2e/visual/compare.config.ts
+  0bf9681c835f9b66 1-11
+.github/workflows/e2e.yml
+  0bf9681c835f9b66 1-39
+AGENTS.md
+  0bf9681c835f9b66 12,23-26
+e2e/specs/capture-import.spec.ts
+  0bf9681c835f9b66 1-107
+ARCHITECTURE.md
+  0bf9681c835f9b66 32-33,64-65,84-85,88-89
+tests/unit/render.test.ts
+  0bf9681c835f9b66 17,38-43,65,69-79
+e2e/server.mjs
+  0bf9681c835f9b66 1-76
+src/schema/types.ts
+  0bf9681c835f9b66 64
+e2e/visual/prepare.mjs
+  0bf9681c835f9b66 1-60
+e2e/specs/plugin.spec.ts
+  0bf9681c835f9b66 1-74
+playwright.config.ts
+  0bf9681c835f9b66 5
+src/convert/layout.ts
+  0bf9681c835f9b66 53-58
+tests/browser/convert.spec.ts
+  0bf9681c835f9b66 2,536-562
+e2e/tsconfig.json
+  0bf9681c835f9b66 1-14
+src/render/create-node.ts
+  0bf9681c835f9b66 42,59,79-89
+e2e/playwright.config.ts
+  0bf9681c835f9b66 1-29
+src/convert/dom.ts
+  0bf9681c835f9b66 14,347-364,372,374,380,384
+e2e/fixtures/host.html
+  0bf9681c835f9b66 1-21
+e2e/README.md
+  0bf9681c835f9b66 1-82
+e2e/visual/compare.spec.ts
+  0bf9681c835f9b66 1-30
+e2e/visual/ACCEPTANCE.md
+  0bf9681c835f9b66 1-41
+package.json
+  0bf9681c835f9b66 36-43,47,49-50
+.gitignore
+  0bf9681c835f9b66 6
+e2e/fixtures/capture.html
+  0bf9681c835f9b66 1-32
+e2e/helpers/figma-runtime.ts
+  0bf9681c835f9b66 1-117
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8-ntes.9",
+  "base_commit_sha": "549adb33f85807aea37131b3cd79234b8e08e676",
+  "prompts": {
+    "0bf9681c835f9b66": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0c88e-047a-70f0-8c8a-633d238621b6",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "刘甲（彧瑾）",
+      "messages": [],
+      "total_additions": 988,
+      "total_deletions": 57,
+      "accepted_lines": 959,
+      "overriden_lines": 0,
+      "per_file_stats": {
+        "e2e/visual/ACCEPTANCE.md": {
+          "additions": 41,
+          "accepted_lines": 41
+        },
+        "src/convert/layout.ts": {
+          "additions": 6,
+          "deletions": 4,
+          "accepted_lines": 6
+        },
+        "e2e/fixtures/host.html": {
+          "additions": 21,
+          "accepted_lines": 21
+        },
+        "e2e/visual/compare.config.ts": {
+          "additions": 12,
+          "deletions": 1,
+          "accepted_lines": 11
+        },
+        ".github/workflows/e2e.yml": {
+          "additions": 39,
+          "accepted_lines": 39
+        },
+        "AGENTS.md": {
+          "additions": 5,
+          "accepted_lines": 5
+        },
+        "e2e/fixtures/capture.html": {
+          "additions": 32,
+          "accepted_lines": 32
+        },
+        "e2e/specs/plugin.spec.ts": {
+          "additions": 77,
+          "deletions": 3,
+          "accepted_lines": 74
+        },
+        "e2e/visual/prepare.mjs": {
+          "additions": 62,
+          "deletions": 2,
+          "accepted_lines": 60
+        },
+        "e2e/specs/capture-import.spec.ts": {
+          "additions": 108,
+          "deletions": 1,
+          "accepted_lines": 107
+        },
+        "e2e/visual/compare.spec.ts": {
+          "additions": 31,
+          "deletions": 1,
+          "accepted_lines": 30
+        },
+        "e2e/helpers/plugin.ts": {
+          "additions": 15,
+          "accepted_lines": 15
+        },
+        "ARCHITECTURE.md": {
+          "additions": 8,
+          "accepted_lines": 8
+        },
+        "e2e/tsconfig.json": {
+          "additions": 14,
+          "accepted_lines": 14
+        },
+        "e2e/playwright.config.ts": {
+          "additions": 29,
+          "accepted_lines": 29
+        },
+        "e2e/fixtures/visual.html": {
+          "additions": 35,
+          "deletions": 1,
+          "accepted_lines": 34
+        },
+        ".gitignore": {
+          "additions": 1,
+          "accepted_lines": 1
+        },
+        "src/convert/dom.ts": {
+          "additions": 23,
+          "deletions": 4,
+          "accepted_lines": 23
+        },
+        "src/schema/types.ts": {
+          "additions": 1,
+          "accepted_lines": 1
+        },
+        "package.json": {
+          "additions": 13,
+          "deletions": 3,
+          "accepted_lines": 11
+        },
+        "e2e/helpers/extension.ts": {
+          "additions": 54,
+          "deletions": 10,
+          "accepted_lines": 44
+        },
+        "tests/browser/convert.spec.ts": {
+          "additions": 28,
+          "deletions": 5,
+          "accepted_lines": 28
+        },
+        "tests/unit/render.test.ts": {
+          "additions": 19,
+          "deletions": 1,
+          "accepted_lines": 19
+        },
+        "src/render/create-node.ts": {
+          "additions": 13,
+          "deletions": 13,
+          "accepted_lines": 13
+        },
+        "playwright.config.ts": {
+          "additions": 1,
+          "accepted_lines": 1
+        },
+        "README.md": {
+          "additions": 17,
+          "accepted_lines": 17
+        },
+        "e2e/helpers/figma-runtime.ts": {
+          "additions": 121,
+          "deletions": 4,
+          "accepted_lines": 117
+        },
+        "e2e/server.mjs": {
+          "additions": 78,
+          "deletions": 2,
+          "accepted_lines": 76
+        },
+        "e2e/README.md": {
+          "additions": 84,
+          "deletions": 2,
+          "accepted_lines": 82
+        }
+      }
+    }
+  }
+}
