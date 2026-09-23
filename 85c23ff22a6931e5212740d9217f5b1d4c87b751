@@ -1,0 +1,287 @@
+src/convert/layout.ts
+  87a009cb0a954b75 66,68-127
+  0bf9681c835f9b66 44,49-51
+src/convert/styles.ts
+  0bf9681c835f9b66 9,96
+e2e/visual/compare.spec.ts
+  87a009cb0a954b75 32
+  0bf9681c835f9b66 8,19
+AGENTS.md
+  0bf9681c835f9b66 22
+src/render.ts
+  0bf9681c835f9b66 3-4
+  87a009cb0a954b75 17-22
+src/schema/validate.ts
+  0bf9681c835f9b66 1-374
+example/figma-plugin/src/shared/document.ts
+  87a009cb0a954b75 2
+e2e/visual/ACCEPTANCE.md
+  0bf9681c835f9b66 5-28
+tests/consumers/check.mjs
+  0bf9681c835f9b66 1-36
+src/render/apply-style.ts
+  0bf9681c835f9b66 44,59
+example/package.json
+  87a009cb0a954b75 17
+  0bf9681c835f9b66 11,14
+src/utils/warnings.ts
+  87a009cb0a954b75 16-29
+src/index.ts
+  87a009cb0a954b75 13-14
+e2e/specs/regressions.spec.ts
+  0bf9681c835f9b66 1-77
+package.json
+  0bf9681c835f9b66 35-36,43
+tests/unit/validation.test.ts
+  0bf9681c835f9b66 1-50
+src/convert/resources.ts
+  0bf9681c835f9b66 1-43
+src/convert/text.ts
+  0bf9681c835f9b66 1-127
+README.md
+  0bf9681c835f9b66 58,86-87
+example/figma-plugin/package.json
+  0bf9681c835f9b66 8
+e2e/visual/cases.json
+  0bf9681c835f9b66 1-36
+e2e/README.md
+  0bf9681c835f9b66 57,65-66,73,80-81
+e2e/helpers/figma-runtime.ts
+  0bf9681c835f9b66 81
+tsup.config.ts
+  0bf9681c835f9b66 15
+tsconfig.figma.json
+  0bf9681c835f9b66 1-10
+src/schema/types.ts
+  0bf9681c835f9b66 181,189
+tests/browser/convert.spec.ts
+  0bf9681c835f9b66 88
+  87a009cb0a954b75 691-712
+src/render/adapter.ts
+  87a009cb0a954b75 25-32
+  0bf9681c835f9b66 9-11
+tests/unit/render.test.ts
+  0bf9681c835f9b66 85,100
+tsconfig.browser.json
+  0bf9681c835f9b66 1-10
+e2e/visual/prepare.mjs
+  0bf9681c835f9b66 7
+e2e/fixtures/visual.html
+  87a009cb0a954b75 24-29,40-42
+  0bf9681c835f9b66 30
+src/render/create-node.ts
+  0bf9681c835f9b66 13,20,28-29,50-52,285,343,356
+src/convert/dom.ts
+  0bf9681c835f9b66 10,13
+.github/workflows/e2e.yml
+  0bf9681c835f9b66 28
+src/render/figma-adapter.ts
+  0bf9681c835f9b66 16-20,25-29
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8-ntes.9",
+  "base_commit_sha": "85c23ff22a6931e5212740d9217f5b1d4c87b751",
+  "prompts": {
+    "0bf9681c835f9b66": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0c88e-047a-70f0-8c8a-633d238621b6",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Natumsol",
+      "messages": [],
+      "total_additions": 54,
+      "total_deletions": 4,
+      "accepted_lines": 877,
+      "overriden_lines": 0,
+      "per_file_stats": {
+        "example/chrome-extension/package.json": {
+          "accepted_lines": 2
+        },
+        "tests/consumers/check.mjs": {
+          "accepted_lines": 36
+        },
+        ".github/workflows/e2e.yml": {
+          "accepted_lines": 1
+        },
+        "tsconfig.browser.json": {
+          "accepted_lines": 10
+        },
+        "src/render/create-node.ts": {
+          "accepted_lines": 10
+        },
+        "package.json": {
+          "accepted_lines": 3
+        },
+        "tests/unit/render.test.ts": {
+          "accepted_lines": 3
+        },
+        "tsconfig.figma.json": {
+          "accepted_lines": 10
+        },
+        "src/render.ts": {
+          "accepted_lines": 2
+        },
+        "e2e/README.md": {
+          "accepted_lines": 6
+        },
+        "src/convert/resources.ts": {
+          "accepted_lines": 43
+        },
+        "src/convert/text.ts": {
+          "accepted_lines": 127
+        },
+        "tests/unit/validation.test.ts": {
+          "accepted_lines": 50
+        },
+        "AGENTS.md": {
+          "accepted_lines": 2
+        },
+        "src/convert/layout.ts": {
+          "accepted_lines": 5
+        },
+        "src/schema/types.ts": {
+          "accepted_lines": 5
+        },
+        "e2e/specs/regressions.spec.ts": {
+          "additions": 15,
+          "accepted_lines": 77
+        },
+        "src/schema/validate.ts": {
+          "accepted_lines": 374
+        },
+        "src/render/adapter.ts": {
+          "accepted_lines": 3
+        },
+        "tests/browser/convert.spec.ts": {
+          "accepted_lines": 2
+        },
+        "src/render/figma-adapter.ts": {
+          "additions": 11,
+          "deletions": 2,
+          "accepted_lines": 11
+        },
+        "src/convert/styles.ts": {
+          "accepted_lines": 3
+        },
+        "README.md": {
+          "additions": 2,
+          "deletions": 1,
+          "accepted_lines": 3
+        },
+        "tsup.config.ts": {
+          "accepted_lines": 1
+        },
+        "e2e/visual/ACCEPTANCE.md": {
+          "additions": 24,
+          "accepted_lines": 24
+        },
+        "e2e/fixtures/visual.html": {
+          "additions": 1,
+          "deletions": 1,
+          "accepted_lines": 1
+        },
+        "src/convert/dom.ts": {
+          "accepted_lines": 9
+        },
+        "src/render/apply-style.ts": {
+          "accepted_lines": 8
+        },
+        "e2e/visual/compare.spec.ts": {
+          "accepted_lines": 3
+        },
+        "example/package.json": {
+          "accepted_lines": 2
+        },
+        "e2e/visual/prepare.mjs": {
+          "accepted_lines": 3
+        },
+        "example/figma-plugin/package.json": {
+          "accepted_lines": 1
+        },
+        "e2e/visual/cases.json": {
+          "accepted_lines": 36
+        },
+        "e2e/helpers/figma-runtime.ts": {
+          "additions": 1,
+          "accepted_lines": 1
+        }
+      }
+    },
+    "87a009cb0a954b75": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0cc1a-dce0-7a93-86df-f5dea6ec82e6",
+        "model": "gpt-6-luna"
+      },
+      "human_author": "Natumsol",
+      "messages": [],
+      "total_additions": 27,
+      "total_deletions": 335,
+      "accepted_lines": 213,
+      "overriden_lines": 0,
+      "per_file_stats": {
+        "README.md": {
+          "accepted_lines": 30
+        },
+        "tests/unit/render.test.ts": {
+          "accepted_lines": 16
+        },
+        "src/render/adapter.ts": {
+          "accepted_lines": 20
+        },
+        "src/render/apply-style.ts": {
+          "accepted_lines": 2
+        },
+        "src/index.ts": {
+          "additions": 2,
+          "accepted_lines": 2
+        },
+        "tsup.config.ts": {
+          "accepted_lines": 1
+        },
+        "src/schema/types.ts": {
+          "accepted_lines": 2
+        },
+        "package.json": {
+          "accepted_lines": 5
+        },
+        "tests/browser/convert.spec.ts": {
+          "accepted_lines": 23
+        },
+        "example/figma-plugin/src/shared/document.ts": {
+          "additions": 1,
+          "deletions": 335,
+          "accepted_lines": 1
+        },
+        "e2e/fixtures/visual.html": {
+          "additions": 10,
+          "accepted_lines": 9
+        },
+        "example/package.json": {
+          "accepted_lines": 3
+        },
+        "src/render.ts": {
+          "accepted_lines": 9
+        },
+        "AGENTS.md": {
+          "accepted_lines": 1
+        },
+        "src/convert/layout.ts": {
+          "accepted_lines": 64
+        },
+        "src/utils/warnings.ts": {
+          "additions": 14,
+          "accepted_lines": 14
+        },
+        "e2e/visual/prepare.mjs": {
+          "accepted_lines": 6
+        },
+        "e2e/visual/compare.spec.ts": {
+          "accepted_lines": 5
+        }
+      }
+    }
+  }
+}
