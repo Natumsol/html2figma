@@ -1,0 +1,180 @@
+e2e/fixtures/visual.html
+  0bf9681c835f9b66 31-44,57-69
+e2e/real/vitest.config.ts
+  0bf9681c835f9b66 3
+e2e/real/runner.ts
+  0bf9681c835f9b66 63,72,113,125-129,133-134,168
+e2e/real/README.md
+  0bf9681c835f9b66 1,10-13,19-20,59,68,89-90,102,115-128
+e2e/visual/fidelity-cases.json
+  0bf9681c835f9b66 1-126
+e2e/real/receiver.test.ts
+  0bf9681c835f9b66 75-77,100-101
+src/utils/background.ts
+  0bf9681c835f9b66 29-30
+e2e/real/images.ts
+  0bf9681c835f9b66 12-48,85-86,95-96,102-130,141-146
+e2e/README.md
+  0bf9681c835f9b66 54-55,58,62-63,75,84
+e2e/COVERAGE.md
+  0bf9681c835f9b66 1-42
+e2e/real/receiver.ts
+  0bf9681c835f9b66 189-190,203-207,211,214-218,222
+src/convert/text.ts
+  0bf9681c835f9b66 55,67,71-75
+e2e/real/prepare.ts
+  0bf9681c835f9b66 4,9-22,24-68,71-107,112-115,117-118,123,127-141,144-167,177-178
+tests/browser/convert.spec.ts
+  0bf9681c835f9b66 139-177,397-440
+e2e/visual/cases.json
+  0bf9681c835f9b66 15,35-68
+e2e/real/plugin.ts
+  0bf9681c835f9b66 8-9,128-130,133-134,147-149
+src/convert/dom.ts
+  0bf9681c835f9b66 72-95,140-142
+tests/unit/background.test.ts
+  0bf9681c835f9b66 3,34-37
+e2e/real/report.ts
+  0bf9681c835f9b66 8-10,13-16,32-39,42,47
+e2e/real/protocol.ts
+  0bf9681c835f9b66 38-41,47-50,52-53
+e2e/fixtures/fidelity.html
+  0bf9681c835f9b66 1-88
+e2e/real/images.test.ts
+  0bf9681c835f9b66 15-17,19,22-42
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8-ntes.9",
+  "base_commit_sha": "df6c864b7474ee53f337badff50ff6a63a8ea819",
+  "prompts": {
+    "0bf9681c835f9b66": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0c88e-047a-70f0-8c8a-633d238621b6",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Natumsol",
+      "messages": [],
+      "total_additions": 920,
+      "total_deletions": 181,
+      "accepted_lines": 798,
+      "overriden_lines": 0,
+      "per_file_stats": {
+        "e2e/real/images.ts": {
+          "additions": 86,
+          "deletions": 15,
+          "accepted_lines": 76
+        },
+        "e2e/README.md": {
+          "additions": 9,
+          "deletions": 4,
+          "accepted_lines": 7
+        },
+        "e2e/real/plugin.ts": {
+          "additions": 10,
+          "deletions": 4,
+          "accepted_lines": 10
+        },
+        "e2e/fixtures/visual.html": {
+          "additions": 32,
+          "deletions": 5,
+          "accepted_lines": 27
+        },
+        "e2e/COVERAGE.md": {
+          "additions": 83,
+          "deletions": 41,
+          "accepted_lines": 42
+        },
+        "src/utils/background.ts": {
+          "additions": 2,
+          "accepted_lines": 2
+        },
+        "e2e/real/protocol.ts": {
+          "additions": 10,
+          "accepted_lines": 10
+        },
+        "e2e/real/images.test.ts": {
+          "additions": 26,
+          "deletions": 2,
+          "accepted_lines": 25
+        },
+        "e2e/real/receiver.test.ts": {
+          "additions": 5,
+          "deletions": 2,
+          "accepted_lines": 5
+        },
+        "e2e/real/receiver.ts": {
+          "additions": 15,
+          "deletions": 6,
+          "accepted_lines": 14
+        },
+        "e2e/real/vitest.config.ts": {
+          "additions": 1,
+          "deletions": 1,
+          "accepted_lines": 1
+        },
+        "e2e/real/report.ts": {
+          "additions": 24,
+          "deletions": 11,
+          "accepted_lines": 17
+        },
+        "e2e/fixtures/fidelity.html": {
+          "additions": 88,
+          "accepted_lines": 88
+        },
+        "e2e/real/prepare.ts": {
+          "additions": 158,
+          "deletions": 30,
+          "accepted_lines": 146
+        },
+        "e2e/fixtures/fidelity-product.png": {
+          "additions": 4,
+          "accepted_lines": 4
+        },
+        "e2e/real/host.ts": {
+          "additions": 3,
+          "deletions": 3,
+          "accepted_lines": 1
+        },
+        "tests/browser/convert.spec.ts": {
+          "additions": 83,
+          "accepted_lines": 83
+        },
+        "tests/unit/background.test.ts": {
+          "additions": 6,
+          "deletions": 1,
+          "accepted_lines": 6
+        },
+        "e2e/real/README.md": {
+          "additions": 45,
+          "deletions": 30,
+          "accepted_lines": 26
+        },
+        "e2e/visual/fidelity-cases.json": {
+          "additions": 145,
+          "deletions": 19,
+          "accepted_lines": 126
+        },
+        "e2e/real/runner.ts": {
+          "additions": 11,
+          "deletions": 4,
+          "accepted_lines": 11
+        },
+        "src/convert/dom.ts": {
+          "additions": 27,
+          "accepted_lines": 27
+        },
+        "src/convert/text.ts": {
+          "additions": 9,
+          "accepted_lines": 9
+        },
+        "e2e/visual/cases.json": {
+          "additions": 38,
+          "deletions": 3,
+          "accepted_lines": 35
+        }
+      }
+    }
+  }
+}
