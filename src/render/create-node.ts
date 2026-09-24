@@ -20,6 +20,7 @@ interface RenderContext {
   options: RenderOptions<RenderableNode>;
   warnings: RenderWarning[];
   nodes: RenderableNode[];
+  createdNodes: RenderableNode[];
 }
 
 export async function renderWithAdapter(
@@ -32,25 +33,32 @@ export async function renderWithAdapter(
     document,
     options,
     warnings: document.warnings.slice(),
-    nodes: []
+    nodes: [],
+    createdNodes: []
   };
   const rootBounds = {
     ...document.root.bounds,
     x: options.x ?? document.root.bounds.x,
     y: options.y ?? document.root.bounds.y
   };
-  const root = await createRenderableNode(document.root, context, rootBounds);
-
-  adapter.appendChild(
-    options.parent ?? adapter.currentPage,
-    root
-  );
-
-  return {
-    root,
-    nodes: context.nodes,
-    warnings: uniqueWarnings(context.warnings)
-  };
+  try {
+    const root = await createRenderableNode(document.root, context, rootBounds);
+    adapter.appendChild(options.parent ?? adapter.currentPage, root);
+    return { root, nodes: context.nodes, warnings: uniqueWarnings(context.warnings) };
+  } catch (error) {
+    const cleanupErrors: unknown[] = [];
+    for (const node of context.createdNodes.reverse()) {
+      try {
+        adapter.removeNode(node);
+      } catch (cleanupError) {
+        cleanupErrors.push(cleanupError);
+      }
+    }
+    if (cleanupErrors.length) {
+      throw new AggregateError([error, ...cleanupErrors], "Render failed and could not remove all created nodes");
+    }
+    throw error;
+  }
 }
 
 async function createRenderableNode(
@@ -59,6 +67,7 @@ async function createRenderableNode(
   bounds: AstBounds
 ): Promise<RenderableNode> {
   const node = await createAdapterNode(source, context);
+  context.createdNodes.push(node);
   const styledSource = await withResolvedImageFills(source, context);
 
   applyBaseProperties(node, {

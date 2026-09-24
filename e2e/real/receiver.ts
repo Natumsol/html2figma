@@ -2,7 +2,7 @@ import { createServer, type IncomingMessage } from "node:http";
 import type { AddressInfo } from "node:net";
 import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { compareVisual, decodePng } from "./images";
+import { createImageComparator } from "./images";
 import { record, readCanvasState, sameCanvasState, type CanvasState, type CleanupTask, type Identity, type VisualCase } from "./protocol";
 
 interface ReceiverOptions {
@@ -45,6 +45,7 @@ export async function createReceiver(options: ReceiverOptions) {
   let areaId: string | undefined;
   let sequence = 0;
   let queue: Promise<unknown> = Promise.resolve();
+  let imageComparator: Promise<Awaited<ReturnType<typeof createImageComparator>>> | undefined;
   let resolveFinished!: (state: RunState) => void;
   const finished = new Promise<RunState>(resolve => { resolveFinished = resolve; });
   let resolveRendered!: (state: RunState) => void;
@@ -196,11 +197,12 @@ export async function createReceiver(options: ReceiverOptions) {
           if (!readyState || !sameCanvasState(readyState, before) || !sameCanvasState(before, after)) throw new Error("Canvas state changed");
           if (typeof body.pngBase64 !== "string" || !/^[A-Za-z0-9+/]+={0,2}$/.test(body.pngBase64)) throw new Error("Invalid PNG encoding");
           const png = Buffer.from(body.pngBase64, "base64");
-          decodePng(png, current().width, current().height);
+          const comparator = await (imageComparator ??= createImageComparator());
+          const comparison = await comparator.compare(png, options.references.get(current().name)!,
+            current().width, current().height, current().maxDiffPixelRatio);
           const name = current().name;
           await writeFile(join(options.output, `${name}-figma.png`), png, { flag: "wx" });
           const { pngBase64, ...result } = body;
-          const comparison = compareVisual(png, options.references.get(name)!, current().maxDiffPixelRatio);
           if (comparison?.diff) await writeFile(join(options.output, `${name}-diff.png`), comparison.diff, { flag: "wx" });
           const saved = { ...result, documentSha256: current().documentSha256,
             maxDiffPixelRatio: current().maxDiffPixelRatio, threshold: 0.2,
@@ -258,6 +260,7 @@ export async function createReceiver(options: ReceiverOptions) {
       server.closeAllConnections();
       await new Promise<void>((resolve, reject) => server.close(error => error ? reject(error) : resolve()));
       await queue;
+      await (await imageComparator)?.close();
     }
   };
 }

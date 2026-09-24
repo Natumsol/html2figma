@@ -172,9 +172,7 @@ export interface Html2FigmaDocument {
 }
 
 export interface ConvertOptions {
-  strict?: boolean;
   includeHidden?: boolean;
-  preserveTextNodes?: boolean;
   maxDepth?: number;
 }
 

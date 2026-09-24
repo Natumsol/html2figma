@@ -13,7 +13,7 @@ npm install html2figma
 ```ts
 import { convert } from "html2figma/convert";
 
-const documentAst = convert(document.body, { strict: false });
+const documentAst = convert(document.body);
 ```
 
 `convert` expects a real browser DOM node, such as `document.body` or `document.documentElement`. It reads computed CSS and layout data from the live page, so run it in a browser context after the content has rendered.

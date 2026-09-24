@@ -48,9 +48,11 @@ npm run e2e:report
 
 ## 本机后台 API 验收
 
-新增 [geometry 后台验收入口](real/README.md)，使用独立的「html2figma Real E2E」
+新增 [真实 Figma 后台验收入口](real/README.md)，使用独立的「html2figma Real E2E」
 隐藏 UI 插件，后台调用本仓库真实 renderer，无需 Figma MCP 或桌面点击。
-当前仅覆盖单样例，创建图层保留；它不替代现有 UI 控件测试或下面的历史六场景流程。
+同一轮覆盖六个视觉场景与两条扩展下载链路；全部通过后保存证据并清理本轮节点，
+失败时保留现场。插件仍需在每轮准备完成后由用户启动。现有 UI 控件测试与历史
+六场景流程保持独立。
 
 ```sh
 npm run e2e:real:doctor

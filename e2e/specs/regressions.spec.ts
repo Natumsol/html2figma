@@ -61,6 +61,35 @@ test("rejects invalid nested values and resources after a successful import", as
   expect(plugin.currentPage.children).toEqual([]);
 });
 
+test("requires revalidation after editing an imported JSON document", async ({ page }) => {
+  const document = await captureFixture(page, "typography");
+  const plugin = await openPlugin(page);
+  await plugin.ui.getByRole("button", { name: "Import JSON", exact: true }).click();
+  const input = plugin.ui.locator("[data-json-input]");
+  const render = plugin.ui.locator("[data-render-json]");
+  await input.fill(JSON.stringify(document));
+  await plugin.ui.getByRole("button", { name: "Validate", exact: true }).click();
+  await expect(render).toBeEnabled();
+
+  await input.fill("not json");
+  await expect(render).toBeDisabled();
+  await expect(plugin.ui.locator("[data-json-summary]")).toHaveText("Validate the current JSON before rendering.");
+  expect(plugin.state.messages).toEqual([]);
+});
+
+test("removes partially created Figma layers when rendering fails", async ({ page }) => {
+  const document = await captureFixture(page, "typography");
+  const plugin = await openPlugin(page);
+  plugin.state.rejectFonts = true;
+  await plugin.ui.getByRole("button", { name: "Import JSON", exact: true }).click();
+  await plugin.ui.locator("[data-json-input]").fill(JSON.stringify(document));
+  await plugin.ui.getByRole("button", { name: "Validate", exact: true }).click();
+  await plugin.ui.locator("[data-render-json]").click();
+
+  await expect.poll(() => plugin.state.notifications).toContain("Failed to render imported paste JSON");
+  expect(plugin.currentPage.children).toEqual([]);
+});
+
 test("imports embedded PNG bytes without remote image requests", async ({ page }) => {
   const document = await captureFixture(page, "media");
   expect(document.resources[0].source).toMatch(/^data:image\/png;base64,/);

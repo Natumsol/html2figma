@@ -31,10 +31,12 @@ export async function createFigmaRuntime() {
     images: [] as Uint8Array[],
     svgs: [] as string[],
     zoomedNodes: [] as SceneNodeRecord[],
-    errors: [] as string[]
+    errors: [] as string[],
+    rejectFonts: false
   };
 
   const parents = new WeakMap<SceneNodeRecord, SceneNodeRecord>();
+  let currentPage: SceneNodeRecord;
 
   function createNode(type: string): SceneNodeRecord {
     let positioning = "AUTO";
@@ -48,8 +50,15 @@ export async function createFigmaRuntime() {
         node.height = height;
       },
       appendChild(child: SceneNodeRecord) {
+        const previous = parents.get(child);
+        if (previous) previous.children.splice(previous.children.indexOf(child), 1);
         node.children.push(child);
         parents.set(child, node);
+      },
+      remove() {
+        const parent = parents.get(node);
+        if (parent) parent.children.splice(parent.children.indexOf(node), 1);
+        parents.delete(node);
       },
       get layoutPositioning() { return positioning; },
       set layoutPositioning(value: string) {
@@ -60,10 +69,14 @@ export async function createFigmaRuntime() {
         positioning = value;
       }
     };
+    if (type !== "PAGE") {
+      currentPage.children.push(node);
+      parents.set(node, currentPage);
+    }
     return node;
   }
 
-  const currentPage = Object.assign(createNode("PAGE"), {
+  currentPage = Object.assign(createNode("PAGE"), {
     selection: [] as SceneNodeRecord[]
   });
   const api = {
@@ -77,7 +90,10 @@ export async function createFigmaRuntime() {
       state.svgs.push(svg);
       return createNode("FRAME");
     },
-    async loadFontAsync(font: FontName) { state.fonts.push(font); },
+    async loadFontAsync(font: FontName) {
+      state.fonts.push(font);
+      if (state.rejectFonts) throw new Error("Font unavailable");
+    },
     base64Decode(source: string) { return new Uint8Array(Buffer.from(source, "base64")); },
     createImage(bytes: Uint8Array) {
       if (!bytes.byteLength) throw new Error("Empty image");

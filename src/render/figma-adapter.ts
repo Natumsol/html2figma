@@ -11,6 +11,9 @@ export function createFigmaAdapter(pluginApi: PluginAPI = figma): FigmaAdapter {
     appendChild: (parent: RenderableNode, child: RenderableNode) => {
       (parent as unknown as ChildrenMixin).appendChild(child as unknown as SceneNode);
     },
+    removeNode: (node: RenderableNode) => {
+      (node as unknown as SceneNode).remove();
+    },
     loadFontAsync: (fontName: FontName) => pluginApi.loadFontAsync(fontName),
     createImageAsync: async (source: string) => {
       const embedded = /^data:[^,]*;base64,([\s\S]*)$/i.exec(source);

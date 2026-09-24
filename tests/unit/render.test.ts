@@ -13,6 +13,8 @@ class FakeAdapter implements FigmaAdapter {
   createdTypes: string[] = [];
   rejectFontFamily?: string;
   rejectImages = false;
+  autoAttachCreated = false;
+  removedTypes: string[] = [];
   imageSources: string[] = [];
   private parents = new WeakMap<RenderableNode, RenderableNode>();
 
@@ -33,6 +35,8 @@ class FakeAdapter implements FigmaAdapter {
   }
 
   appendChild(parent: RenderableNode, child: RenderableNode): void {
+    const previous = this.parents.get(child);
+    if (previous?.children) previous.children.splice(previous.children.indexOf(child), 1);
     parent.children ??= [];
     parent.children.push(child);
     this.parents.set(child, parent);
@@ -41,6 +45,13 @@ class FakeAdapter implements FigmaAdapter {
       child.x = 16;
       child.y = 16;
     }
+  }
+
+  removeNode(node: RenderableNode): void {
+    this.removedTypes.push(node.type ?? "unknown");
+    const parent = this.parents.get(node);
+    if (parent?.children) parent.children.splice(parent.children.indexOf(node), 1);
+    this.parents.delete(node);
   }
 
   async loadFontAsync(fontName: FontName): Promise<void> {
@@ -76,11 +87,31 @@ class FakeAdapter implements FigmaAdapter {
         positioning = value;
       }
     });
+    if (this.autoAttachCreated) {
+      this.currentPage.children!.push(node);
+      this.parents.set(node, this.currentPage);
+    }
     return node;
   }
 }
 
 describe("renderWithAdapter", () => {
+  it("removes created scene nodes when rendering fails after node creation", async () => {
+    const adapter = new FakeAdapter();
+    adapter.autoAttachCreated = true;
+    adapter.rejectFontFamily = "Inter";
+    const document = createDocument({ root: {
+      id: "frame-1", type: "frame", name: "Card",
+      bounds: { x: 0, y: 0, width: 160, height: 80 }, style: {},
+      source: { tagName: "div", path: "html > body > div" },
+      warnings: [], children: [createTextNode()]
+    } });
+
+    await expect(renderWithAdapter(document, adapter)).rejects.toThrow("Font unavailable");
+    expect(adapter.currentPage.children).toEqual([]);
+    expect(adapter.removedTypes).toEqual(["TEXT", "FRAME"]);
+  });
+
   it("reports each conversion warning once after JSON transport and preserves new render warnings", async () => {
     const warning = { code: "unsupported-transform", message: "Unsupported transform", severity: "warning" as const, nodeId: "text-1" };
     const document = createDocument({

@@ -58,6 +58,10 @@ The render side lives under `src/render/`.
 6. Image fills are resolved through `createImageAsync()`.
 7. SVG resources are created through `createNodeFromSvg()` when data is available.
 
+If rendering throws after node creation, the adapter attempts to remove every
+node created by that render call. Cleanup failures are reported with the
+original rendering error.
+
 The adapter abstraction keeps render behavior unit-testable without a live Figma runtime.
 
 Generated helper rectangles, including asymmetric border layers, render through the normal rectangle path. Text case metadata maps directly to Figma text case.

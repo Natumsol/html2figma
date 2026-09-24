@@ -80,6 +80,12 @@ function hydrateJsonImport(): void {
     return;
   }
 
+  input.addEventListener("input", () => {
+    importedDocument = undefined;
+    renderButton.disabled = true;
+    summary.textContent = "Validate the current JSON before rendering.";
+  });
+
   validate.addEventListener("click", () => {
     loadJson(input.value, "paste", summary, renderButton);
   });

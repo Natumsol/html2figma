@@ -39,6 +39,7 @@ export interface FigmaAdapter {
   createText(): RenderableNode;
   createNodeFromSvg(svg: string): RenderableNode;
   appendChild(parent: RenderableNode, child: RenderableNode): void;
+  removeNode(node: RenderableNode): void;
   loadFontAsync(fontName: FontName): Promise<void>;
   createImageAsync(source: string): Promise<string>;
 }

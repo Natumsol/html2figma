@@ -1,2 +1,3 @@
 import { defineConfig } from "vitest/config";
-export default defineConfig({ test: { environment: "node", include: ["e2e/real/**/*.test.ts"] } });
+export default defineConfig({ test: { environment: "node", fileParallelism: false,
+  include: ["e2e/real/**/*.test.ts"] } });
