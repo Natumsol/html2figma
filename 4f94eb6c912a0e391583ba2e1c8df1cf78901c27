@@ -1,0 +1,29 @@
+e2e/real/README.md
+  e8ba3651a08cecc4 25-31,67-80,109-114
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8-ntes.9",
+  "base_commit_sha": "4f94eb6c912a0e391583ba2e1c8df1cf78901c27",
+  "prompts": {
+    "e8ba3651a08cecc4": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0cd04-24b6-7832-a5c6-f6b6ce3b42aa",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Natumsol",
+      "messages": [],
+      "total_additions": 29,
+      "total_deletions": 0,
+      "accepted_lines": 29,
+      "overriden_lines": 0,
+      "per_file_stats": {
+        "e2e/real/README.md": {
+          "additions": 29,
+          "accepted_lines": 29
+        }
+      }
+    }
+  }
+}
