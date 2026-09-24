@@ -1,0 +1,71 @@
+e2e/real/receiver.ts
+  0bf9681c835f9b66 215-216
+e2e/README.md
+  0bf9681c835f9b66 52-53,55,60
+e2e/real/launch-plugin.applescript
+  0bf9681c835f9b66 1-18
+e2e/real/README.md
+  0bf9681c835f9b66 14-16,24,41-42,47,50-51,67-76,83,122-123
+e2e/real/runner.ts
+  0bf9681c835f9b66 4-5,19,57-58,63,71-72,78-80,110-116,135,144,146-156
+e2e/real/receiver.test.ts
+  0bf9681c835f9b66 5,80-100
+e2e/real/plugin.ts
+  0bf9681c835f9b66 45-46,48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8-ntes.9",
+  "base_commit_sha": "86c9ce04964420e17cdb9d1f9e99a7def539a0a9",
+  "prompts": {
+    "0bf9681c835f9b66": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0c88e-047a-70f0-8c8a-633d238621b6",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Natumsol",
+      "messages": [],
+      "total_additions": 133,
+      "total_deletions": 53,
+      "accepted_lines": 104,
+      "overriden_lines": 0,
+      "per_file_stats": {
+        "e2e/real/plugin.ts": {
+          "additions": 3,
+          "accepted_lines": 3
+        },
+        "e2e/real/receiver.test.ts": {
+          "additions": 24,
+          "deletions": 1,
+          "accepted_lines": 24
+        },
+        "e2e/real/launch-plugin.applescript": {
+          "additions": 23,
+          "deletions": 5,
+          "accepted_lines": 18
+        },
+        "e2e/real/receiver.ts": {
+          "additions": 2,
+          "deletions": 1,
+          "accepted_lines": 2
+        },
+        "e2e/README.md": {
+          "additions": 6,
+          "deletions": 5,
+          "accepted_lines": 4
+        },
+        "e2e/real/README.md": {
+          "additions": 40,
+          "deletions": 28,
+          "accepted_lines": 22
+        },
+        "e2e/real/runner.ts": {
+          "additions": 35,
+          "deletions": 13,
+          "accepted_lines": 31
+        }
+      }
+    }
+  }
+}
