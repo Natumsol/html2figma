@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Element and CSS fidelity cases</title>
+    <style>
+      @font-face {
+        font-family: Inter;
+        font-style: normal;
+        font-weight: 400;
+        src: url('/__e2e/inter-latin-400-normal.woff2') format('woff2');
+      }
+      @font-face {
+        font-family: Inter;
+        font-style: normal;
+        font-weight: 700;
+        src: url('/__e2e/inter-latin-700-normal.woff2') format('woff2');
+      }
+      body { margin: 24px; }
+      section { box-sizing: border-box; width: 320px; height: 160px; margin-bottom: 24px; background: white; }
+      #div-radius-opacity-target { position: relative; left: 16px; top: 16px; width: 128px; height: 96px; background: rgb(20, 80, 220); border-radius: 12px; opacity: 0.7; }
+      #div-shadow-target { position: relative; left: 24px; top: 24px; width: 128px; height: 80px; background: rgb(20, 160, 100); box-shadow: 8px 8px 0 rgb(220, 40, 60); }
+      #div-flex-target { display: flex; width: 288px; height: 112px; margin: 16px; padding: 12px; box-sizing: border-box; gap: 12px; background: rgb(235, 242, 250); }
+      #div-flex-target div { width: 64px; height: 64px; background: rgb(20, 80, 220); }
+      #div-flex-target div + div { background: rgb(20, 160, 100); }
+      #article-card-target { box-sizing: border-box; width: 288px; height: 128px; margin: 16px; padding: 16px; background: rgb(235, 242, 250); border-radius: 12px; }
+      #article-card-target p { margin: 0; font: 20px/28px Inter, sans-serif; color: rgb(15, 23, 42); }
+      #article-card-target div { width: 128px; height: 32px; margin-top: 12px; background: rgb(20, 80, 220); }
+      #article-flex-target { box-sizing: border-box; display: flex; width: 288px; height: 112px; margin: 16px; padding: 12px; gap: 12px; background: rgb(235, 242, 250); }
+      #article-flex-target div { width: 64px; height: 64px; background: rgb(20, 160, 100); }
+      #article-flex-target div + div { background: rgb(220, 40, 60); }
+      #span-badge-target { display: inline-block; margin: 16px; padding: 8px 12px; background: rgb(20, 80, 220); border-radius: 8px; color: white; font: 20px/28px Inter, sans-serif; }
+      #span-inline-line { padding: 16px; font: 20px/28px Inter, sans-serif; color: rgb(15, 23, 42); }
+      #span-inline-target { color: rgb(20, 80, 220); text-decoration: underline; }
+      #p-line-height-target { width: 288px; margin: 16px; color: rgb(15, 23, 42); font: 20px/32px Inter, sans-serif; }
+      #p-centered-target { width: 288px; margin: 16px; color: rgb(20, 80, 220); font: 20px/28px Inter, sans-serif; text-align: center; text-transform: uppercase; letter-spacing: 1px; }
+      #p-bold-target { width: 288px; margin: 16px; color: rgb(15, 23, 42); font: 700 20px/28px Inter, sans-serif; }
+      #p-italic-target { width: 288px; margin: 16px; color: rgb(15, 23, 42); font: italic 20px/28px Inter, sans-serif; }
+      #p-wrap-target { width: 168px; margin: 16px; color: rgb(15, 23, 42); font: 20px/28px Inter, sans-serif; }
+      #p-right-target { width: 288px; margin: 16px; color: rgb(15, 23, 42); font: 20px/28px Inter, sans-serif; text-align: right; }
+      #span-strike-target { display: inline-block; margin: 16px; color: rgb(15, 23, 42); font: 20px/28px Inter, sans-serif; text-decoration: line-through; }
+      #p-lowercase-target { width: 288px; margin: 16px; color: rgb(15, 23, 42); font: 20px/28px Inter, sans-serif; text-transform: lowercase; }
+      #p-capitalize-target { width: 288px; margin: 16px; color: rgb(15, 23, 42); font: 20px/28px Inter, sans-serif; text-transform: capitalize; }
+      #p-font-fallback-target { width: 288px; margin: 16px; color: rgb(15, 23, 42); font: 20px/28px 'Missing E2E Font', Inter, sans-serif; }
+      #svg-fill-target, #svg-stroke-target { display: block; width: 128px; height: 96px; margin: 16px; }
+      #svg-stroke-target { opacity: 0.7; }
+      #img-cover-target { display: block; width: 128px; height: 128px; margin: 16px; object-fit: cover; border-radius: 10px; }
+      #img-contain-target { display: block; width: 180px; height: 120px; margin: 16px; object-fit: contain; background: rgb(219, 234, 254); }
+      #canvas-pixels-target, #canvas-opacity-target { display: block; width: 128px; height: 80px; margin: 16px; }
+      #canvas-opacity-target { opacity: 0.7; }
+    </style>
+  </head>
+  <body>
+    <section id="div-radius-opacity"><div id="div-radius-opacity-target"></div></section>
+    <section id="div-shadow"><div id="div-shadow-target"></div></section>
+    <section id="div-flex"><div id="div-flex-target"><div></div><div></div></div></section>
+    <section id="article-card"><article id="article-card-target"><p>Editable content</p><div></div></article></section>
+    <section id="article-flex"><article id="article-flex-target"><div></div><div></div></article></section>
+    <section id="span-badge"><span id="span-badge-target">Badge label</span></section>
+    <section id="span-inline"><div id="span-inline-line">Before <span id="span-inline-target">inline</span> after</div></section>
+    <section id="p-line-height"><p id="p-line-height-target">Paragraph spacing</p></section>
+    <section id="p-centered"><p id="p-centered-target">Centered label</p></section>
+    <section id="p-bold"><p id="p-bold-target">Bold heading</p></section>
+    <section id="p-italic"><p id="p-italic-target">Italic label</p></section>
+    <section id="p-wrap"><p id="p-wrap-target">A longer paragraph wraps across several lines.</p></section>
+    <section id="p-right"><p id="p-right-target">Right aligned</p></section>
+    <section id="span-strike"><span id="span-strike-target">Previous price</span></section>
+    <section id="p-lowercase"><p id="p-lowercase-target">LOWERCASE LABEL</p></section>
+    <section id="p-capitalize"><p id="p-capitalize-target">title case label</p></section>
+    <section id="p-font-fallback"><p id="p-font-fallback-target">Fallback font</p></section>
+    <section id="svg-fill"><svg id="svg-fill-target" viewBox="0 0 128 96"><rect x="8" y="8" width="64" height="64" fill="#1450dc"/><circle cx="92" cy="48" r="24" fill="#14a064"/></svg></section>
+    <section id="svg-stroke"><svg id="svg-stroke-target" viewBox="0 0 128 96"><circle cx="64" cy="48" r="32" fill="none" stroke="#1450dc" stroke-width="8"/></svg></section>
+    <section id="img-cover"><img id="img-cover-target" src="/__e2e/fidelity-product.png" alt="Product"></section>
+    <section id="img-contain"><img id="img-contain-target" src="/__e2e/fidelity-product.png" alt="Product"></section>
+    <section id="canvas-pixels"><canvas id="canvas-pixels-target" width="128" height="80"></canvas></section>
+    <section id="canvas-opacity"><canvas id="canvas-opacity-target" width="128" height="80"></canvas></section>
+    <script>
+      for (const id of ['canvas-pixels-target', 'canvas-opacity-target']) {
+        const canvas = document.getElementById(id);
+        const context = canvas.getContext('2d');
+        context.fillStyle = 'rgb(20, 80, 220)';
+        context.fillRect(0, 0, 128, 80);
+        context.fillStyle = 'rgb(220, 40, 60)';
+        context.fillRect(16, 16, 64, 40);
+      }
+    </script>
+  </body>
+</html>

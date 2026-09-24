@@ -72,7 +72,9 @@ test("persists a valid PNG result and ignores attempts to complete twice", async
   expect((await receiver.finished).status).toBe("complete");
   expect((await post("result", result)).status).toBe(409);
   expect(await readFile(join(output, "geometry-figma.png"))).toEqual(Buffer.from(result.pngBase64, "base64"));
-  expect(JSON.parse(await readFile(join(output, "geometry.result.json"), "utf8"))).toMatchObject({ rootNodeId: "1:2" });
+  expect(JSON.parse(await readFile(join(output, "geometry.result.json"), "utf8"))).toMatchObject({
+    rootNodeId: "1:2", differentPixels: 0, actualDiffPixelRatio: 0
+  });
   const events = (await readdir(output)).filter(name => name.startsWith("event-"));
   expect(events).toHaveLength(10);
 });
@@ -95,7 +97,8 @@ test("acknowledges a saved visual failure so the plugin can close without cleanu
   const reply = await post("result", { ...resultMessage(message), pngBase64: changedImage.toString("base64") });
   expect(reply.status).toBe(200);
   expect(await reply.json()).toMatchObject({ accepted: false, aborted: true });
-  expect(await receiver.finished).toMatchObject({ status: "failed", results: [{ status: "failed" }] });
+  expect(await receiver.finished).toMatchObject({ status: "failed", results: [{ status: "failed",
+    differentPixels: 1, actualDiffPixelRatio: 1 }] });
   expect((await readdir(output)).some(name => name.startsWith("cleanup"))).toBe(false);
 }, 15_000);
 

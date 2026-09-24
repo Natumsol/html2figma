@@ -12,6 +12,7 @@
   {
     "name": "typography",
     "maxDiffPixelRatio": 0.02,
+    "maxTextRegionDiffPixelRatio": 0.12,
     "expectedWarningCodes": []
   },
   {
@@ -30,6 +31,40 @@
   },
   {
     "name": "media",
+    "maxDiffPixelRatio": 0.001,
+    "expectedWarningCodes": [],
+    "minImagePaints": 1
+  },
+  {
+    "name": "edge-borders",
+    "maxDiffPixelRatio": 0.001,
+    "expectedWarningCodes": []
+  },
+  {
+    "name": "text-transform",
+    "maxDiffPixelRatio": 0.02,
+    "maxTextRegionDiffPixelRatio": 0.12,
+    "expectedWarningCodes": []
+  },
+  {
+    "name": "background-image",
+    "maxDiffPixelRatio": 0.001,
+    "expectedWarningCodes": [],
+    "minImagePaints": 1
+  },
+  {
+    "name": "video-poster",
+    "maxDiffPixelRatio": 0.001,
+    "expectedWarningCodes": [],
+    "minImagePaints": 1
+  },
+  {
+    "name": "flex-wrap",
+    "maxDiffPixelRatio": 0.001,
+    "expectedWarningCodes": ["flex-layout-fallback"]
+  },
+  {
+    "name": "shadow-dom",
     "maxDiffPixelRatio": 0.001,
     "expectedWarningCodes": []
   }

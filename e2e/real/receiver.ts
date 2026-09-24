@@ -186,7 +186,8 @@ export async function createReceiver(options: ReceiverOptions) {
           if (!areaId || body.areaId !== areaId || body.documentJson !== current().documentJson ||
               body.width !== current().width || body.height !== current().height ||
               !Array.isArray(body.warnings) ||
-              JSON.stringify(body.warnings.map(warning => record(warning).code)) !== JSON.stringify(current().expectedWarningCodes) ||
+              JSON.stringify(body.warnings.map(warning => record(warning).code)) !==
+                JSON.stringify(current().expectedRenderWarningCodes ?? current().expectedWarningCodes) ||
               typeof body.rootNodeId !== "string" || !Array.isArray(body.createdNodeIds) ||
               !body.createdNodeIds.every(id => typeof id === "string" && /^\d+:\d+$/.test(id)) ||
               !body.createdNodeIds.includes(body.rootNodeId) || !body.createdNodeIds.includes(body.areaId)) {
@@ -199,18 +200,26 @@ export async function createReceiver(options: ReceiverOptions) {
           const png = Buffer.from(body.pngBase64, "base64");
           const comparator = await (imageComparator ??= createImageComparator());
           const comparison = await comparator.compare(png, options.references.get(current().name)!,
-            current().width, current().height, current().maxDiffPixelRatio);
+            current().width, current().height, current().maxDiffPixelRatio,
+            current().textRegion && current().maxTextRegionDiffPixelRatio !== undefined
+              ? { region: current().textRegion!, maxDiffPixelRatio: current().maxTextRegionDiffPixelRatio!,
+                inkColors: current().textInkColors!, minInkRetention: current().minTextInkRetention! }
+              : undefined);
           const name = current().name;
           await writeFile(join(options.output, `${name}-figma.png`), png, { flag: "wx" });
           const { pngBase64, ...result } = body;
-          if (comparison?.diff) await writeFile(join(options.output, `${name}-diff.png`), comparison.diff, { flag: "wx" });
+          if (comparison.diff) await writeFile(join(options.output, `${name}-diff.png`), comparison.diff, { flag: "wx" });
           const saved = { ...result, documentSha256: current().documentSha256,
             maxDiffPixelRatio: current().maxDiffPixelRatio, threshold: 0.2,
-            visualError: comparison?.errorMessage ?? null, status: comparison ? "failed" : "passed" };
+            differentPixels: comparison.differentPixels, actualDiffPixelRatio: comparison.actualDiffPixelRatio,
+            textRegion: current().textRegion, textRegionDifferentPixels: comparison.textRegionDifferentPixels,
+            textRegionDiffPixelRatio: comparison.textRegionDiffPixelRatio,
+            textInkRetention: comparison.textInkRetention, minTextInkRetention: current().minTextInkRetention,
+            visualError: comparison.errorMessage ?? null, status: comparison.passed ? "passed" : "failed" };
           await writeFile(join(options.output, `${name}.result.json`), JSON.stringify(saved, null, 2), { flag: "wx" });
           state.results.push(saved);
           await journal("result", saved);
-          if (comparison) {
+          if (!comparison.passed) {
             await fail(`${name}: ${comparison.errorMessage}`, true);
             response.setHeader("Content-Type", "application/json");
             response.end(JSON.stringify({ accepted: false, aborted: true }));

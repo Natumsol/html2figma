@@ -5,6 +5,8 @@ import { createTransport } from "./transport";
 
 declare const __REAL_CONFIG__: PluginConfig;
 const config = __REAL_CONFIG__;
+const columnWidth = Math.max(360, ...config.cases.map(entry => entry.width + 40));
+const rowHeight = Math.max(220, ...config.cases.map(entry => entry.height + 40));
 const markerKey = "html2figma-real-binding-v1";
 const ownerKey = "html2figma-real-owner";
 const caseKey = "html2figma-real-case";
@@ -123,11 +125,13 @@ figma.ui.onmessage = async (value: unknown) => {
       area = figma.createFrame();
       area.name = `html2figma E2E — ${config.identity.runId}`;
       area.setPluginData(ownerKey, config.identity.areaTag);
-      area.x = x; area.y = 100; area.resize(1460, 500); area.fills = []; area.clipsContent = false;
+      area.x = x; area.y = 100;
+      area.resize(columnWidth * 4 + 20, Math.ceil(config.cases.length / 4) * rowHeight + 40);
+      area.fills = []; area.clipsContent = false;
       send("area", { taskId: task.taskId, caseId: task.caseId, areaId: area.id });
     }
-    const result = await render(document, { parent: area, x: (caseIndex % 4) * 360,
-      y: Math.floor(caseIndex / 4) * 220, loadFonts: true });
+    const result = await render(document, { parent: area, x: (caseIndex % 4) * columnWidth,
+      y: Math.floor(caseIndex / 4) * rowHeight, loadFonts: true });
     if (result.root.type !== "FRAME") throw new Error("Visual case root is not a frame");
     const rootNodes = [result.root, ...result.root.findAll()];
     for (const node of rootNodes) {
@@ -140,7 +144,9 @@ figma.ui.onmessage = async (value: unknown) => {
     if (appeared.some(node => !allowed.has(node.id))) throw new Error("Render created nodes outside the owned case");
     if (config.injectFailureCase === expected.name) throw new Error(`Injected render failure after node creation: ${expected.name}`);
     const imagePaints = await inspectImagePaints(result.root);
-    if (expected.name === "media" && imagePaints.length === 0) throw new Error("Media image paint missing");
+    if (imagePaints.length < (expected.minImagePaints ?? 0)) {
+      throw new Error(`${expected.name}: expected at least ${expected.minImagePaints} image paints, received ${imagePaints.length}`);
+    }
     const png = await result.root.exportAsync({ format: "PNG", constraint: { type: "SCALE", value: 1 },
       colorProfile: "SRGB", useAbsoluteBounds: true });
     assertTarget();

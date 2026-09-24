@@ -35,12 +35,22 @@ export interface CleanupTask {
 
 export interface VisualCase {
   name: string;
+  fixture?: string;
+  element?: string;
+  expectedNodeType?: string;
+  expectedCss?: Record<string, string>;
   documentJson: string;
   documentSha256: string;
   width: number;
   height: number;
   maxDiffPixelRatio: number;
+  textRegion?: { x: number; y: number; width: number; height: number };
+  textInkColors?: Array<[number, number, number]>;
+  minTextInkRetention?: number;
+  maxTextRegionDiffPixelRatio?: number;
   expectedWarningCodes: string[];
+  expectedRenderWarningCodes?: string[];
+  minImagePaints?: number;
   capture?: { mode: "page" | "selection"; sourceUrl: string; extensionSha256: string;
     downloadFilename: string; downloadedJsonSha256: string };
 }

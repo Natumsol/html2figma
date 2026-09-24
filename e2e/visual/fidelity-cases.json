@@ -1,0 +1,126 @@
+[
+  {
+    "name": "div-radius-opacity", "element": "div", "expectedNodeType": "rectangle",
+    "expectedCss": { "background-color": "rgb(20, 80, 220)", "border-top-left-radius": "12px", "opacity": "0.7" },
+    "maxDiffPixelRatio": 0.001, "expectedWarningCodes": []
+  },
+  {
+    "name": "div-shadow", "element": "div", "expectedNodeType": "rectangle",
+    "expectedCss": { "background-color": "rgb(20, 160, 100)", "box-shadow": "rgb(220, 40, 60) 8px 8px 0px 0px" },
+    "maxDiffPixelRatio": 0.001, "expectedWarningCodes": []
+  },
+  {
+    "name": "div-flex", "element": "div", "expectedNodeType": "frame",
+    "expectedCss": { "display": "flex", "gap": "12px", "padding-top": "12px" },
+    "maxDiffPixelRatio": 0.001, "expectedWarningCodes": []
+  },
+  {
+    "name": "article-card", "element": "article", "expectedNodeType": "frame",
+    "expectedCss": { "background-color": "rgb(235, 242, 250)", "padding-top": "16px", "border-top-left-radius": "12px" },
+    "maxDiffPixelRatio": 0.02, "maxTextRegionDiffPixelRatio": 0.12, "expectedWarningCodes": []
+  },
+  {
+    "name": "article-flex", "element": "article", "expectedNodeType": "frame",
+    "expectedCss": { "display": "flex", "gap": "12px", "padding-top": "12px" },
+    "maxDiffPixelRatio": 0.001, "expectedWarningCodes": []
+  },
+  {
+    "name": "span-badge", "element": "span", "expectedNodeType": "frame",
+    "expectedCss": { "display": "inline-block", "background-color": "rgb(20, 80, 220)", "border-top-left-radius": "8px" },
+    "maxDiffPixelRatio": 0.02, "maxTextRegionDiffPixelRatio": 0.12, "expectedWarningCodes": []
+  },
+  {
+    "name": "span-inline", "element": "span", "expectedNodeType": "frame",
+    "expectedCss": { "color": "rgb(20, 80, 220)", "text-decoration-line": "underline" },
+    "maxDiffPixelRatio": 0.02, "maxTextRegionDiffPixelRatio": 0.12, "expectedWarningCodes": []
+  },
+  {
+    "name": "p-line-height", "element": "p", "expectedNodeType": "frame",
+    "expectedCss": { "font-size": "20px", "line-height": "32px" },
+    "maxDiffPixelRatio": 0.02, "maxTextRegionDiffPixelRatio": 0.12, "expectedWarningCodes": []
+  },
+  {
+    "name": "p-centered", "element": "p", "expectedNodeType": "frame",
+    "expectedCss": { "text-align": "center", "text-transform": "uppercase", "letter-spacing": "1px" },
+    "maxDiffPixelRatio": 0.02, "maxTextRegionDiffPixelRatio": 0.12, "expectedWarningCodes": []
+  },
+  {
+    "name": "p-bold", "element": "p", "expectedNodeType": "frame",
+    "expectedCss": { "font-weight": "700", "font-size": "20px", "line-height": "28px" },
+    "expectedTextStyle": { "fontWeight": 700, "fontSize": 20, "lineHeight": 28 },
+    "maxDiffPixelRatio": 0.02, "maxTextRegionDiffPixelRatio": 0.12, "expectedWarningCodes": []
+  },
+  {
+    "name": "p-italic", "element": "p", "expectedNodeType": "frame",
+    "expectedCss": { "font-style": "italic", "font-size": "20px" },
+    "expectedTextStyle": { "fontStyle": "italic", "fontSize": 20 },
+    "maxDiffPixelRatio": 0.02, "maxTextRegionDiffPixelRatio": 0.12, "expectedWarningCodes": []
+  },
+  {
+    "name": "p-wrap", "element": "p", "expectedNodeType": "frame",
+    "expectedCss": { "width": "168px", "line-height": "28px", "white-space": "normal" },
+    "expectedTextStyle": { "lineHeight": 28 }, "minTextLines": 3,
+    "maxDiffPixelRatio": 0.02, "maxTextRegionDiffPixelRatio": 0.12, "expectedWarningCodes": []
+  },
+  {
+    "name": "p-right", "element": "p", "expectedNodeType": "frame",
+    "expectedCss": { "text-align": "right", "font-size": "20px" },
+    "expectedTextStyle": { "textAlign": "right" },
+    "maxDiffPixelRatio": 0.02, "maxTextRegionDiffPixelRatio": 0.12, "expectedWarningCodes": []
+  },
+  {
+    "name": "span-strike", "element": "span", "expectedNodeType": "frame",
+    "expectedCss": { "display": "inline-block", "text-decoration-line": "line-through" },
+    "expectedTextStyle": { "textDecoration": "strikethrough" },
+    "maxDiffPixelRatio": 0.002, "maxTextRegionDiffPixelRatio": 0.02, "expectedWarningCodes": []
+  },
+  {
+    "name": "p-lowercase", "element": "p", "expectedNodeType": "frame",
+    "expectedCss": { "text-transform": "lowercase" },
+    "expectedTextStyle": { "textCase": "lower" },
+    "maxDiffPixelRatio": 0.02, "maxTextRegionDiffPixelRatio": 0.12, "expectedWarningCodes": []
+  },
+  {
+    "name": "p-capitalize", "element": "p", "expectedNodeType": "frame",
+    "expectedCss": { "text-transform": "capitalize" },
+    "expectedTextStyle": { "textCase": "title" },
+    "maxDiffPixelRatio": 0.02, "maxTextRegionDiffPixelRatio": 0.12, "expectedWarningCodes": []
+  },
+  {
+    "name": "p-font-fallback", "element": "p", "expectedNodeType": "frame",
+    "expectedCss": { "font-family": "\"Missing E2E Font\", Inter, sans-serif" },
+    "expectedTextStyle": { "fontFamily": "Missing E2E Font" },
+    "maxDiffPixelRatio": 0.02, "maxTextRegionDiffPixelRatio": 0.12,
+    "expectedWarningCodes": [], "expectedRenderWarningCodes": ["font-load-failed"]
+  },
+  {
+    "name": "svg-fill", "element": "svg", "expectedNodeType": "svg",
+    "expectedCss": { "width": "128px", "height": "96px" },
+    "maxDiffPixelRatio": 0.001, "expectedWarningCodes": []
+  },
+  {
+    "name": "svg-stroke", "element": "svg", "expectedNodeType": "svg",
+    "expectedCss": { "width": "128px", "opacity": "0.7" },
+    "maxDiffPixelRatio": 0.001, "expectedWarningCodes": []
+  },
+  {
+    "name": "img-cover", "element": "img", "expectedNodeType": "image",
+    "expectedCss": { "object-fit": "cover", "border-top-left-radius": "10px" },
+    "minImagePaints": 1, "maxDiffPixelRatio": 0.001, "expectedWarningCodes": []
+  },
+  {
+    "name": "img-contain", "element": "img", "expectedNodeType": "image",
+    "expectedCss": { "object-fit": "contain", "background-color": "rgb(219, 234, 254)" },
+    "minImagePaints": 1, "maxDiffPixelRatio": 0.001, "expectedWarningCodes": []
+  },
+  {
+    "name": "canvas-pixels", "element": "canvas", "expectedNodeType": "image",
+    "expectedCss": { "width": "128px", "height": "80px" },
+    "minImagePaints": 1, "maxDiffPixelRatio": 0.001, "expectedWarningCodes": []
+  },
+  {
+    "name": "canvas-opacity", "element": "canvas", "expectedNodeType": "image",
+    "expectedCss": { "width": "128px", "opacity": "0.7" },
+    "minImagePaints": 1, "maxDiffPixelRatio": 0.001, "expectedWarningCodes": []
+  }
+]

@@ -28,6 +28,20 @@
       #flex-absolute .badge { position: absolute; left: 180px; top: 60px; background: rgb(220, 40, 60); }
       #media { position: relative; height: 160px; }
       #media img { position: absolute; left: 16px; top: 16px; width: 128px; height: 128px; object-fit: cover; }
+      #edge-borders { position: relative; height: 130px; }
+      #edge-borders .top { position: absolute; left: 16px; top: 16px; width: 120px; height: 80px; border-top: 4px solid rgb(20, 80, 220); background: rgb(235, 242, 250); }
+      #edge-borders .right { position: absolute; left: 160px; top: 16px; width: 120px; height: 80px; border-right: 6px solid rgb(20, 160, 100); background: rgb(235, 242, 250); }
+      #text-transform { height: 100px; padding: 16px; font: 20px/28px Inter, sans-serif; color: rgb(15, 23, 42); text-align: center; text-transform: uppercase; }
+      #background-image { position: relative; height: 160px; }
+      #background-image .photo { position: absolute; left: 16px; top: 16px; width: 288px; height: 128px; background-color: rgb(219, 234, 254); background-size: contain; background-position: center; background-repeat: no-repeat; }
+      #video-poster { position: relative; height: 160px; }
+      #video-poster video { position: absolute; left: 16px; top: 16px; width: 128px; height: 128px; object-fit: cover; }
+      #flex-wrap { display: flex; flex-wrap: wrap; height: 150px; gap: 8px; padding: 16px; }
+      #flex-wrap div { width: 100px; height: 42px; background: rgb(20, 80, 220); }
+      #flex-wrap div:nth-child(2) { background: rgb(20, 160, 100); }
+      #flex-wrap div:nth-child(3) { background: rgb(220, 40, 60); }
+      #shadow-dom { height: 120px; padding: 16px; }
+      #shadow-host { display: block; width: 200px; height: 72px; background: rgb(219, 234, 254); }
     </style>
   </head>
   <body>
@@ -40,5 +54,18 @@
     <section id="flex-reverse"><div></div><div></div></section>
     <section id="flex-absolute"><div></div><div class="badge"></div></section>
     <section id="media"><img src="data:image/png;base64,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" alt="Product"></section>
+    <section id="edge-borders"><div class="top"></div><div class="right"></div></section>
+    <section id="text-transform">Converted title</section>
+    <section id="background-image"><div class="photo"></div></section>
+    <section id="video-poster"><video muted playsinline></video></section>
+    <section id="flex-wrap"><div></div><div></div><div></div></section>
+    <section id="shadow-dom"><div id="shadow-host"></div></section>
+    <script>
+      const imageSource = document.querySelector('#media img').src;
+      document.querySelector('#background-image .photo').style.backgroundImage = `url("${imageSource}")`;
+      document.querySelector('#video-poster video').poster = imageSource;
+      const shadow = document.querySelector('#shadow-host').attachShadow({ mode: 'open' });
+      shadow.innerHTML = '<div style="width:120px;height:48px;background:rgb(20,160,100)"></div>';
+    </script>
   </body>
 </html>

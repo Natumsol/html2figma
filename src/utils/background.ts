@@ -26,6 +26,8 @@ export function parseBackgroundImage(value: string): ParsedBackgroundImage {
 }
 
 export function imageMimeType(source: string): string | undefined {
+  const embedded = /^data:(image\/[a-z0-9.+-]+)(?:;|,)/i.exec(source);
+  if (embedded) return embedded[1]!.toLowerCase();
   const path = source.split("?")[0]?.toLowerCase() ?? "";
   if (path.endsWith(".png")) {
     return "image/png";

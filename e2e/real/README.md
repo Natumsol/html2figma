@@ -1,4 +1,4 @@
-# 真实 Figma 后台验收：六个视觉场景与两条扩展集成
+# 真实 Figma 后台验收：元素还原度、综合视觉场景与扩展集成
 
 [2026-09-23 实机验收记录](ACCEPTANCE.md)保存了已通过的一轮结果与证据边界。
 [2026-09-23 六场景实机验收记录](SIX_CASES_ACCEPTANCE.md)保存了本入口的六项结果。
@@ -7,14 +7,17 @@
 [2026-09-24 两轮八项最终验收记录](TWO_RUN_ACCEPTANCE.md)保存了独立双轮与故障证据。
 
 本入口在 [#2](https://github.com/Natumsol/html2figma/issues/2) 单样例切片上实现 [#3](https://github.com/Natumsol/html2figma/issues/3) 与 [#4](https://github.com/Natumsol/html2figma/issues/4)：
-同一轮对 geometry、flex-border、typography、flex-reverse、flex-absolute、media
-依次执行当前浏览器 convert → 共享 JSON 校验 → 真实 Figma render → PNG → 视觉比较。
+同一轮对 `e2e/visual/cases.json` 中的十二个综合视觉场景和
+`e2e/visual/fidelity-cases.json` 中的二十三个元素 × CSS 场景依次执行当前浏览器 convert →
+共享 JSON 校验 → 真实 Figma render → PNG → 视觉比较。新增样例覆盖独立单边边框、
+文本变换、图片背景、视频封面、Flex 换行和开放的 Shadow DOM。
 随后在无头 Chromium 中运行真实构建后的扩展，分别完成整页抓取与选区抓取，
 下载两份 JSON，再经隐藏插件的共享 JSON 校验路径渲染并比较。
 默认运行时，启动插件前自动打开绑定文件、激活 Figma，并通过 AppleScript 点击
 开发插件菜单；场景执行阶段不操作桌面 UI，也不修改选区或视口。使用
 `--manual-plugin` 时由用户在 `PACKAGE_READY` 后启动插件。
-八个场景各自保存输入、浏览器图、Figma 图和必要时的差异图。全部渲染通过后，
+三十七个场景各自保存输入、浏览器图、Figma 图、逐项差异像素数与比例，
+以及必要时的差异图。全部渲染通过后，
 运行器先保存 `report.before-cleanup.json/html`，再发送一次有限清理任务。插件核对
 本轮区域、全部通过节点及 SVG 内部节点的所有权和清单后，删除本轮区域；最终保存
 清理回执与 `report.json/html`。故障时不发送清理任务，保留失败、未知和此前通过的节点。
@@ -53,7 +56,7 @@ npm run test:e2e:real -- --manual-plugin --bind --file-key YOUR_FILE_KEY --page-
 `test-results/real-figma/plugin/manifest.json`，运行「html2figma Real E2E」。
 已有原型插件是另外一个插件；不能把原型注册视为正式 E2E 插件已注册。
 
-启动插件后 UI 隐藏，命令自动串行执行本轮八个样例，保存初版报告、清理通过节点、
+启动插件后 UI 隐藏，命令自动串行执行本轮三十七个样例，保存初版报告、清理通过节点、
 保存最终报告并退出；你可以切回其他工作。
 目标文件/page 必须保持可用；观察到 page、选区或视口变化会使运行失败并保留现场，
 不会自动恢复用户状态。插件成功回传或报告失败并收到确认后关闭自身。
@@ -62,6 +65,7 @@ npm run test:e2e:real -- --manual-plugin --bind --file-key YOUR_FILE_KEY --page-
 
 ```sh
 npm run test:e2e:real
+npm run test:e2e:real -- --case img-contain
 ```
 
 每轮重新构建，自动打开绑定文件，并在 `PACKAGE_READY` 后通过 AppleScript
@@ -82,8 +86,8 @@ npm run test:e2e:real
 在同一目标 Mac 上依次运行两次 `npm run test:e2e:real -- --timeout-ms 600000`。
 每轮在 `PACKAGE_READY` 后自动启动已导入的插件；第一轮结束并释放
 运行锁和端口后，再开始第二轮。不要把同一轮的重复握手或旧报告算成第二轮。两轮成功时
-应各有新的 runId、八份本轮 Figma PNG、`report.before-cleanup.json/html`、
-`cleanup.result.json` 和最终 `report.json/html`，且 `attempted` 恰好八项、
+应各有新的 runId、三十七份本轮 Figma PNG、`report.before-cleanup.json/html`、
+`cleanup.result.json` 和最终 `report.json/html`，且 `attempted` 恰好三十七项、
 `unexecuted` 为空、`cleanup.status` 为 `passed`。逐项核对尺寸、精确警告、
 视觉标准、构建/输入身份及 page/selection/viewport 快照；清理回执的
 `topLevelAfter` 应只比 `topLevelBefore` 少本轮区域 ID。
@@ -95,7 +99,7 @@ npm run test:e2e:real
 
 每轮产物保存在忽略目录 `test-results/real-figma/<runId>/`：
 
-- 八份当前输入、两份真实扩展下载 JSON、冻结的扩展和 converter/renderer/schema、
+- 三十七份当前输入、两份真实扩展下载 JSON、冻结的扩展和 converter/renderer/schema、
   实际插件 bundle 和构建身份。
 - 独立编号的事件、结果、浏览器 PNG、Figma PNG、必要时的差异图。
 - `report.before-cleanup.json/html`：清理前完整结果与节点链接；`report.json/html`：
@@ -108,9 +112,20 @@ npm run e2e:real:report -- /absolute/path/to/run-directory
 
 此命令输出已存在的 HTML 报告路径，不自动打开浏览器或激活窗口。
 成功退出 0；环境、构建、连接、执行、图像或产物保存失败退出非零。缺失结果不会跳过。
-采用 `e2e/visual/cases.json` 标准：颜色阈值 0.2，typography 最大差异像素比例
-0.02，其余五项 0.001；flex-reverse 与 flex-absolute 各需一条
-`flex-layout-fallback` 警告，其余零警告。任何场景失败便停止派发后续场景，
+采用两个用例清单各自声明的最大差异像素比例，颜色阈值统一为 0.2。
+元素用例中含文字的整图最大差异像素比例为 0.02，其余为 0.001；
+文字用例另对 AST 文本节点的局部区域设置 0.12 的差异上限，
+且 Figma 图中接近文本颜色的像素数不得低于浏览器参考图的 45%，防止小面积文字消失仍通过；
+`span-strike` 单独收紧到整图 0.002、文字区域 0.02，防止行内文字与删除线再次出现 2px 偏移。
+综合场景中 typography 和 text-transform
+为 0.02，其余十个视觉场景为 0.001。flex-reverse、flex-absolute
+和 flex-wrap 各需一条 `flex-layout-fallback` 警告，其余零警告。media、
+background-image、video-poster、img 与 canvas 用例还要求 Figma 中至少有一个有效图片填充。
+元素用例在截图前检查目标元素的标签、计算后的 CSS 属性、AST 节点类型，
+并检查新增文字用例的 AST 文本属性和多行高度；字体回退另检查渲染器警告。
+通过标准仍以真实 Figma PNG 与浏览器 PNG 的像素差异为准。
+`--case NAME` 可单独运行一个场景进行定位；默认仍运行全部场景。
+任何场景失败便停止派发后续场景，
 报告列出未执行项；晚到结果不能把失败改成通过。
 如需验证失败现场，可用 `--inject-failure-case flex-border` 运行一次专用 E2E 构建：
 插件在该用例实际创建节点后报告受控失败，命令应非零退出，保留本轮所有节点。

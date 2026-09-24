@@ -69,6 +69,30 @@ export function convertElement(
     } satisfies ImageAstNode;
   }
 
+  if (element instanceof HTMLCanvasElement) {
+    warnUnsupportedBorderChildren(context, warnings, id, borderSides, "canvas");
+    try {
+      const resourceId = addImageResource(element.toDataURL("image/png"), context.resources);
+      return {
+        id,
+        name: readableName(element),
+        bounds,
+        style: { ...style, fills: [...(style.fills ?? []),
+          { type: "image", resourceId, opacity: 1, scaleMode: "fill" }] },
+        source,
+        warnings,
+        children: [],
+        type: "image",
+        resourceId
+      } satisfies ImageAstNode;
+    } catch {
+      const warning = createWarning("canvas-export-failed", "Canvas pixels could not be exported", "warning",
+        { nodeId: id, source: source.path });
+      context.warnings.push(warning);
+      warnings.push(warning);
+    }
+  }
+
   const children = convertChildren(
     element,
     context,
@@ -113,6 +137,9 @@ export function convertElement(
 
     return {
       ...baseNode,
+      style: { ...style, fills: [...(style.fills ?? []),
+        { type: "image", resourceId, opacity: 1,
+          scaleMode: computedStyle.objectFit === "contain" ? "fit" : "fill" }] },
       type: "image",
       resourceId,
       alt: element.alt || undefined

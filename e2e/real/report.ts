@@ -5,10 +5,15 @@ export function escapeHtml(value: string): string {
 }
 export async function writeReport(output: string, summary: Record<string, unknown>, basename = "report") {
   await writeFile(join(output, `${basename}.json`), JSON.stringify(summary, null, 2));
-  const cases = (summary.cases ?? []) as Array<{ name: string; documentSha256: string; maxDiffPixelRatio: number;
+  const cases = (summary.cases ?? []) as Array<{ name: string; element?: string; expectedCss?: Record<string, string>;
+    documentSha256: string; maxDiffPixelRatio: number; maxTextRegionDiffPixelRatio?: number;
+    minTextInkRetention?: number;
     capture?: { mode: string; downloadedJsonSha256: string; extensionSha256: string } }>;
   const results = (summary.results ?? []) as Array<{ caseId: string; rootNodeId?: string; status: string;
-    warnings?: Array<{ code: string }>; visualError?: string }>;
+    warnings?: Array<{ code: string }>; visualError?: string;
+    differentPixels?: number | null; actualDiffPixelRatio?: number | null;
+    textRegionDifferentPixels?: number | null; textRegionDiffPixelRatio?: number | null;
+    textInkRetention?: number | null }>;
   const attempted = (summary.attempted ?? []) as string[];
   const failure = summary.failure as { caseId?: string; areaId?: string } | undefined;
   const cleanup = summary.cleanup as { status?: string; error?: string } | undefined;
@@ -24,13 +29,21 @@ export async function writeReport(output: string, summary: Record<string, unknow
     const image = (suffix: string) => `<a href="${name}-${suffix}.png"><img src="${name}-${suffix}.png" alt="${name} ${suffix}"></a>`;
     const warnings = result?.warnings?.map(warning => warning.code).join(", ") ?? "";
     const source = entry.capture ? `Extension ${escapeHtml(entry.capture.mode)} download` : "Browser convert";
+    const css = escapeHtml(Object.entries(entry.expectedCss ?? {}).map(([property, value]) =>
+      `${property}: ${value}`).join("; "));
+    const difference = result?.differentPixels === undefined || result.differentPixels === null ||
+      result.actualDiffPixelRatio === undefined || result.actualDiffPixelRatio === null
+      ? "" : `${result.differentPixels} (${(result.actualDiffPixelRatio * 100).toFixed(3)}%)`;
+    const textDifference = result?.textRegionDifferentPixels === undefined || result.textRegionDifferentPixels === null ||
+      result.textRegionDiffPixelRatio === undefined || result.textRegionDiffPixelRatio === null
+      ? "" : `${result.textRegionDifferentPixels} (${(result.textRegionDiffPixelRatio * 100).toFixed(3)}%)`;
     const status = result?.status ?? (attempted.includes(entry.name)
       ? summary.status === "unknown" ? "unknown" : "failed" : "unexecuted");
-    return `<tr><td>${name}</td><td>${source}</td><td>${escapeHtml(status)}</td><td>${escapeHtml(entry.documentSha256)}</td><td>${entry.maxDiffPixelRatio}</td><td>${escapeHtml(warnings)}</td><td>${image("browser")}</td><td>${result ? image("figma") : ""}</td><td>${result?.visualError ? image("diff") : ""}</td><td>${link}</td></tr>`;
+    return `<tr><td>${name}</td><td>${escapeHtml(entry.element ?? "mixed")}</td><td>${css}</td><td>${source}</td><td>${escapeHtml(status)}</td><td>${escapeHtml(entry.documentSha256)}</td><td>${entry.maxDiffPixelRatio}</td><td>${difference}</td><td>${entry.maxTextRegionDiffPixelRatio ?? ""}</td><td>${textDifference}</td><td>${entry.minTextInkRetention ?? ""}</td><td>${result?.textInkRetention?.toFixed(3) ?? ""}</td><td>${escapeHtml(warnings)}</td><td>${image("browser")}</td><td>${result ? image("figma") : ""}</td><td>${result?.visualError ? image("diff") : ""}</td><td>${link}</td></tr>`;
   }).join("\n");
   await writeFile(join(output, `${basename}.html`), `<!doctype html><html lang="en"><meta charset="utf-8">
 <title>html2figma real acceptance</title><style>body{font:16px system-ui;margin:32px}table{border-collapse:collapse}td,th{padding:8px;border:1px solid #ccc}img{width:240px;height:auto}pre{white-space:pre-wrap}</style>
 <h1>${cases.length} cases: ${escapeHtml(String(summary.status))}</h1><p>Real plugin API acceptance. Cleanup: ${escapeHtml(cleanup?.status ?? "not attempted")}. Passed nodes are cleaned only after the initial report is saved; failed or unknown nodes are retained. Browser-only UI tests are separate.</p>
-<table><thead><tr><th>Case</th><th>Source</th><th>Status</th><th>Document SHA-256</th><th>Max diff ratio</th><th>Warnings</th><th>Browser</th><th>Figma</th><th>Diff</th><th>Node</th></tr></thead><tbody>${rows}</tbody></table>
+<table><thead><tr><th>Case</th><th>Element</th><th>CSS</th><th>Source</th><th>Status</th><th>Document SHA-256</th><th>Max diff ratio</th><th>Observed diff</th><th>Max text diff ratio</th><th>Observed text diff</th><th>Min ink retention</th><th>Observed ink retention</th><th>Warnings</th><th>Browser</th><th>Figma</th><th>Diff</th><th>Node</th></tr></thead><tbody>${rows}</tbody></table>
 <pre>${escapeHtml(JSON.stringify(summary, null, 2))}</pre></html>`);
 }

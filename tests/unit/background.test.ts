@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { parseBackgroundImage } from "../../src/utils/background";
+import { imageMimeType, parseBackgroundImage } from "../../src/utils/background";
 
 describe("parseBackgroundImage", () => {
   test("parses a single url background image", () => {
@@ -30,4 +30,9 @@ describe("parseBackgroundImage", () => {
       reason: "multiple"
     });
   });
+});
+
+test("recognizes embedded image MIME types", () => {
+  expect(imageMimeType("data:image/png;base64,AAAA")).toBe("image/png");
+  expect(imageMimeType("data:image/jpeg;base64,AAAA")).toBe("image/jpeg");
 });

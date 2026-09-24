@@ -51,12 +51,16 @@ npm run e2e:report
 新增 [真实 Figma 后台验收入口](real/README.md)，使用独立的「html2figma Real E2E」
 隐藏 UI 插件，后台调用本仓库真实 renderer，无需 Figma MCP；默认自动打开绑定文件，
 并在准备完成后通过 AppleScript 点击插件菜单。首次导入开发插件时使用 `--manual-plugin`。
-同一轮覆盖六个视觉场景与两条扩展下载链路；全部通过后保存证据并清理本轮节点，
+同一轮覆盖十二个综合视觉场景、二十三个按 HTML 元素与 CSS 属性组织的还原度场景，
+以及两条扩展下载链路；全部通过后保存证据并清理本轮节点，
 失败时保留现场。插件仍需在每轮准备完成后启动。现有 UI 控件测试与历史
 六场景流程保持独立。
+各能力在浏览器、构建后 UI 和真实画布中的覆盖情况见 [覆盖矩阵](COVERAGE.md)。
 
 ```sh
 npm run e2e:real:doctor
+npm run test:e2e:real
+npm run test:e2e:real -- --case canvas-pixels
 npm run test:e2e:real -- --manual-plugin --bind --file-key YOUR_FILE_KEY --page-id 0:1
 ```
 
@@ -68,7 +72,7 @@ npm run test:e2e:real -- --manual-plugin --bind --file-key YOUR_FILE_KEY --page-
 它执行本仓库构建出的 `dist/render.cjs`，不使用其他 HTML 转 Figma 工具。
 
 1. 运行 `npm run e2e:visual:prepare`。脚本启动并关闭本地服务，生成
-   `test-results/figma-visual/` 下由 `e2e/visual/cases.json` 定义的六组浏览器参考截图、转换 AST 和 `*.render.js`。
+   `test-results/figma-visual/` 下由 `e2e/visual/cases.json` 定义的十二组浏览器参考截图、转换 AST 和 `*.render.js`。
 2. 在验收文件中，通过 `use_figma` 逐个执行生成的 `*.render.js`。
    自动化代理应先读取 `figma-use` 技能，并先只读检查文件。
    每个脚本执行真实 `render()`、创建节点并以 1× PNG 导出 Figma 画布。
@@ -77,6 +81,7 @@ npm run test:e2e:real -- --manual-plugin --bind --file-key YOUR_FILE_KEY --page-
    HTML 报告位于 `playwright-report/figma-visual/`。
 
 用例覆盖几何形状、透明度、圆角、SVG、Flex 布局、非对称边框、文本、PNG 图片，以及反向 Flex 和绝对定位子元素的降级效果。
+该手动流程只读取综合场景清单；元素 × CSS 场景请使用 `npm run test:e2e:real` 自动验收。
 对比要求尺寸一致，警告必须与用例清单完全一致（降级用例恰好一条，其余零条）；几何用例允许至多 0.1% 像素差异，
 文本用例允许至多 2%，每像素颜色阈值为 0.2，用于容忍字体抗锯齿差异。
 浏览器从固定的 `@fontsource/inter@4.5.15` 加载 Inter，Figma 使用 Inter Regular。

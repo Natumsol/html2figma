@@ -60,6 +60,7 @@ async function main() {
   }
   if (command !== "run") throw new Error("Use run, doctor or report");
   let bind = false; let fileKey: string | undefined; let pageId: string | undefined;
+  let caseName: string | undefined;
   let timeoutMs = 120_000; let injectFailureCase: string | undefined; let launchPlugin = true;
   while (args.length) {
     const flag = args.shift();
@@ -68,6 +69,7 @@ async function main() {
     else if (flag === "--page-id") pageId = args.shift();
     else if (flag === "--timeout-ms") timeoutMs = Number(args.shift());
     else if (flag === "--inject-failure-case") injectFailureCase = args.shift();
+    else if (flag === "--case") caseName = args.shift();
     else if (flag === "--launch-plugin") launchPlugin = true;
     else if (flag === "--manual-plugin") launchPlugin = false;
     else throw new Error(`Unknown option: ${flag}`);
@@ -108,7 +110,7 @@ async function main() {
     const runId = randomUUID();
     output = join(directory, runId); await mkdir(output);
     summary = { ...summary, runId, target, launcher: launchPlugin ? "AppleScript" : "manual",
-      coverage: "six visual and two extension cases; real plugin API; passed nodes cleaned after evidence" };
+      coverage: "configured visual and extension cases; real plugin API; passed nodes cleaned after evidence" };
     if (launchPlugin) {
       const fileUrl = `figma://file/${target.fileKey}?node-id=${target.pageId.replace(":", "-")}`;
       await execFileAsync("open", ["-a", "Figma", fileUrl], { timeout: 15_000 });
@@ -120,11 +122,16 @@ async function main() {
     await assertNormalBuildIsolated(root);
     const prepared = await prepareCases(root, output, files);
     const extensionPrepared = await prepareExtensionCases(root, output, files);
-    const cases = [...prepared.cases, ...extensionPrepared.cases];
+    const allCases = [...prepared.cases, ...extensionPrepared.cases];
+    if (caseName && !allCases.some(entry => entry.name === caseName)) {
+      throw new Error(`Unknown real acceptance case: ${caseName}`);
+    }
+    const cases = caseName ? allCases.filter(entry => entry.name === caseName) : allCases;
     if (injectFailureCase && !cases.some(entry => entry.name === injectFailureCase)) {
       throw new Error(`Unknown injected failure case: ${injectFailureCase}`);
     }
-    const references = new Map([...prepared.references, ...extensionPrepared.references]);
+    const references = new Map([...prepared.references, ...extensionPrepared.references].filter(
+      ([name]) => !caseName || name === caseName));
     if (abort.signal.aborted) throw new Error("Interrupted during preparation");
     const identity: Identity = { protocol: 1, runId, buildId: "", ...target, areaTag: `html2figma:${runId}`,
       documentSha256: sha256(JSON.stringify(cases.map(entry => [entry.name, entry.documentSha256]))),
@@ -158,7 +165,7 @@ async function main() {
     const rendered = await receiver.rendered;
     summary = { ...summary, ...rendered };
     if (rendered.status !== "rendered") throw new Error(rendered.error ?? "Rendering did not finish");
-    if (rendered.results.length !== cases.length || rendered.unexecuted.length) throw new Error("Incomplete eight-case render");
+    if (rendered.results.length !== cases.length || rendered.unexecuted.length) throw new Error("Incomplete real-case render");
     await writeReport(output, { ...summary, status: "evidence-saved", threshold: 0.2 }, "report.before-cleanup");
     await receiver.authorizeCleanup();
     const state = await receiver.finished;

@@ -52,6 +52,7 @@ function readTextBounds(
   let height = rect.height;
   const parent = textNode.parentElement;
   const lineHeight = parentStyle.text?.lineHeight;
+  let usesBlockLineBox = false;
   if (parent && parent.children.length === 0 && lineHeight !== undefined) {
     const computed = window.getComputedStyle(parent);
     const textNodes = Array.from(parent.childNodes).filter(
@@ -63,7 +64,15 @@ function readTextBounds(
       y = fallbackBounds.y + parseOptionalPx(computed.paddingTop, 0)
         + parseOptionalPx(computed.borderTopWidth, 0);
       height = lineHeight * Math.max(1, new Set(rects.map((line) => line.y)).size);
+      usesBlockLineBox = true;
     }
+  }
+
+  if (!usesBlockLineBox && lineHeight !== undefined && rects.length === 1 && lineHeight > rect.height) {
+    // Inline Range rectangles start below the CSS line box by half of its
+    // leading. Figma applies that leading again when rendering the text node.
+    y -= (lineHeight - rect.height) / 2;
+    height = lineHeight;
   }
 
   if (

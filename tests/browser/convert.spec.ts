@@ -136,6 +136,45 @@ test("uses inline text bounds instead of the parent element box", async ({ page 
   expect(text?.bounds.width).toBeLessThan(result.root.bounds.width);
 });
 
+test("places inline text at the line box top when line height adds leading", async ({ page }) => {
+  await page.setContent(`
+    <span id="target" style="display:inline-block;font:20px/28px Arial;text-decoration:line-through">
+      Previous price
+    </span>
+  `);
+
+  const result = await page.evaluate(async baseUrl => {
+    const { convert } = await import(`${baseUrl}/src/convert.ts`);
+    return convert(document.querySelector("#target")!);
+  }, serverUrl) as Html2FigmaDocument;
+
+  const text = result.root.children[0];
+  expect(text?.type).toBe("text");
+  expect(text?.bounds.y).toBeCloseTo(result.root.bounds.y, 0);
+  expect(text?.bounds.height).toBe(28);
+});
+
+test("keeps mixed inline text on one line box", async ({ page }) => {
+  await page.setContent(`
+    <div id="target" style="padding:16px;font:20px/28px Arial">
+      Before <span>inline</span> after
+    </div>
+  `);
+
+  const result = await page.evaluate(async baseUrl => {
+    const { convert } = await import(`${baseUrl}/src/convert.ts`);
+    return convert(document.querySelector("#target")!);
+  }, serverUrl) as Html2FigmaDocument;
+
+  const lineTop = result.root.bounds.y + 16;
+  const textNodes = [result.root.children[0], result.root.children[1]?.children[0], result.root.children[2]];
+  expect(textNodes.map(node => node?.type)).toEqual(["text", "text", "text"]);
+  for (const node of textNodes) {
+    expect(node?.bounds.y).toBeCloseTo(lineTop, 0);
+    expect(node?.bounds.height).toBe(28);
+  }
+});
+
 test("captures CSS text-transform as AST text case", async ({ page }) => {
   await page.setContent(`
     <div id="target" style="font: 16px/20px Arial; text-transform: uppercase;">
@@ -353,6 +392,50 @@ test("converts video poster images into image nodes", async ({ page }) => {
     type: "image",
     source: expect.stringContaining("poster.jpg")
   }));
+});
+
+test("maps image object-fit cover and contain to Figma image fills", async ({ page }) => {
+  await page.setContent(`
+    <img id="cover" src="https://example.com/product.png" style="width:128px;height:80px;object-fit:cover">
+    <img id="contain" src="https://example.com/product.png" style="width:128px;height:80px;object-fit:contain">
+  `);
+  const results = await page.evaluate(async (baseUrl) => {
+    const { convert } = await import(`${baseUrl}/src/convert.ts`);
+    return ["cover", "contain"].map(id => convert(document.getElementById(id)!));
+  }, serverUrl) as Html2FigmaDocument[];
+
+  expect(results[0]?.root).toMatchObject({ type: "image", style: { fills: [{ type: "image", scaleMode: "fill" }] } });
+  expect(results[1]?.root).toMatchObject({ type: "image", style: { fills: [{ type: "image", scaleMode: "fit" }] } });
+});
+
+test("captures canvas pixels as an embedded image resource", async ({ page }) => {
+  await page.setContent('<canvas id="target" width="128" height="80" style="width:128px;height:80px"></canvas>');
+  const result = await page.evaluate(async (baseUrl) => {
+    const canvas = document.getElementById("target") as HTMLCanvasElement;
+    const context = canvas.getContext("2d")!;
+    context.fillStyle = "rgb(20, 80, 220)";
+    context.fillRect(0, 0, 128, 80);
+    const { convert } = await import(`${baseUrl}/src/convert.ts`);
+    return convert(canvas);
+  }, serverUrl) as Html2FigmaDocument;
+
+  expect(result.root).toMatchObject({ type: "image", source: { tagName: "canvas" } });
+  expect(result.resources).toContainEqual(expect.objectContaining({ type: "image", mimeType: "image/png",
+    source: expect.stringMatching(/^data:image\/png;base64,/) }));
+  expect(result.warnings).toEqual([]);
+});
+
+test("warns when canvas pixels cannot be read", async ({ page }) => {
+  await page.setContent('<canvas id="target" width="128" height="80"></canvas>');
+  const result = await page.evaluate(async (baseUrl) => {
+    const canvas = document.getElementById("target") as HTMLCanvasElement;
+    Object.defineProperty(canvas, "toDataURL", { value: () => { throw new DOMException("Tainted", "SecurityError"); } });
+    const { convert } = await import(`${baseUrl}/src/convert.ts`);
+    return convert(canvas);
+  }, serverUrl) as Html2FigmaDocument;
+
+  expect(result.root.type).toBe("frame");
+  expect(result.warnings.map(warning => warning.code)).toContain("canvas-export-failed");
 });
 
 test("drops fallback children from video poster image nodes", async ({ page }) => {
