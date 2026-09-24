@@ -4,6 +4,7 @@
 [2026-09-23 六场景实机验收记录](SIX_CASES_ACCEPTANCE.md)保存了本入口的六项结果。
 [2026-09-23 扩展下载到真实画布验收记录](EXTENSION_ACCEPTANCE.md)保存了八项同轮结果。
 [2026-09-23 安全清理与失败留痕验收记录](SAFE_CLEANUP_ACCEPTANCE.md)保存了正常清理和受控失败结果。
+[2026-09-24 两轮八项最终验收记录](TWO_RUN_ACCEPTANCE.md)保存了独立双轮与故障证据。
 
 本入口在 [#2](https://github.com/Natumsol/html2figma/issues/2) 单样例切片上实现 [#3](https://github.com/Natumsol/html2figma/issues/3) 与 [#4](https://github.com/Natumsol/html2figma/issues/4)：
 同一轮对 geometry、flex-border、typography、flex-reverse、flex-absolute、media
@@ -20,6 +21,14 @@ Figma 阶段不激活桌面窗口、不模拟点击/键盘、不使用剪贴板�
 
 需要 macOS、已登录且运行中的 Figma、Node 22.12+、根目录及 example 的 npm 依赖、
 Playwright Chromium，以及可编辑的专用 Figma Design 文件。先运行：
+
+```sh
+npm ci
+npm ci --prefix example
+npx playwright install chromium
+```
+
+首次在专用 Figma 文件中准备好 Inter 字体与开发插件导入权限。日常检查先运行：
 
 ```sh
 npm run e2e:real:doctor
@@ -56,6 +65,20 @@ npm run test:e2e:real
 支持 1000–600000 毫秒。超时不重试渲染，已领取但未确认的任务记为 `unknown`。
 普通运行不会补写缺失的文件标记；首次绑定中断时可对同一目标显式再次传入 `--bind`。
 
+## 两轮独立回归
+
+在同一目标 Mac 上依次运行两次 `npm run test:e2e:real -- --timeout-ms 600000`。
+每次等待 `PACKAGE_READY` 后，分别在已绑定文件中启动一次已导入的插件；第一轮结束并释放
+运行锁和端口后，再开始第二轮。不要把同一轮的重复握手或旧报告算成第二轮。两轮成功时
+应各有新的 runId、八份本轮 Figma PNG、`report.before-cleanup.json/html`、
+`cleanup.result.json` 和最终 `report.json/html`，且 `attempted` 恰好八项、
+`unexecuted` 为空、`cleanup.status` 为 `passed`。逐项核对尺寸、精确警告、
+视觉标准、构建/输入身份及 page/selection/viewport 快照；清理回执的
+`topLevelAfter` 应只比 `topLevelBefore` 少本轮区域 ID。
+
+每轮结束后再运行 `npm run e2e:real:doctor`，确认 `lockExists: false` 和
+`portAvailable: true`；它只证明自有运行锁与 5173 端口已释放，不代替实机验收。
+
 ## 结果与隔离
 
 每轮产物保存在忽略目录 `test-results/real-figma/<runId>/`：
@@ -83,6 +106,13 @@ npm run e2e:real:report -- /absolute/path/to/run-directory
 两条扩展集成各要求 320×180、零警告、颜色阈值 0.2 和最大差异像素比例 0.02。
 普通插件构建不包含 Bridge，现有 UI 测试继续覆盖文件/粘贴控件；本报告不冒充
 真实 Figma 文件选择、粘贴或按钮控件的验收。
+
+连接未成功时，报告会记录非零退出、失败原因和未执行项；先确认 Figma 仍运行、目标文件
+和页面正确、插件是在本轮 `PACKAGE_READY` 后启动。超时的包已失效，不能在旧插件中
+继续执行；排查后用新命令生成新 runId。已领取任务超时会标记 `unknown`，不得在
+同一轮重投。用例、证据保存或清理失败时查看该轮 `event-*.json`、结构化错误和保留
+的节点现场；不要删除旧区域、自动重试渲染或放宽阈值。若连接失败发生在握手前，
+`attempted` 应为空，画布没有本轮任务写入。
 
 每个用户的临时目录中有全局运行锁，跨工作区阻止同时运行；端口被占用时直接失败。
 不自动移除遗留锁：先检查锁目录的 owner.json 和对应 PID，确认无运行任务后人工移除。
