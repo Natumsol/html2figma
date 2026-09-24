@@ -212,7 +212,8 @@ export async function createReceiver(options: ReceiverOptions) {
           await journal("result", saved);
           if (comparison) {
             await fail(`${name}: ${comparison.errorMessage}`, true);
-            response.writeHead(409).end("Visual comparison failed; remaining tasks stopped");
+            response.setHeader("Content-Type", "application/json");
+            response.end(JSON.stringify({ accepted: false, aborted: true }));
             return;
           }
           caseIndex++;

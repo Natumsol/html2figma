@@ -11,7 +11,9 @@
 依次执行当前浏览器 convert → 共享 JSON 校验 → 真实 Figma render → PNG → 视觉比较。
 随后在无头 Chromium 中运行真实构建后的扩展，分别完成整页抓取与选区抓取，
 下载两份 JSON，再经隐藏插件的共享 JSON 校验路径渲染并比较。
-Figma 阶段不激活桌面窗口、不模拟点击/键盘、不使用剪贴板，不修改选区或视口。
+默认运行时，启动插件前自动打开绑定文件、激活 Figma，并通过 AppleScript 点击
+开发插件菜单；场景执行阶段不操作桌面 UI，也不修改选区或视口。使用
+`--manual-plugin` 时由用户在 `PACKAGE_READY` 后启动插件。
 八个场景各自保存输入、浏览器图、Figma 图和必要时的差异图。全部渲染通过后，
 运行器先保存 `report.before-cleanup.json/html`，再发送一次有限清理任务。插件核对
 本轮区域、全部通过节点及 SVG 内部节点的所有权和清单后，删除本轮区域；最终保存
@@ -19,7 +21,7 @@ Figma 阶段不激活桌面窗口、不模拟点击/键盘、不使用剪贴板�
 
 ## 准备与运行
 
-需要 macOS、已登录且运行中的 Figma、Node 22.12+、根目录及 example 的 npm 依赖、
+需要 macOS、已登录的 Figma、Node 22.12+、根目录及 example 的 npm 依赖、
 Playwright Chromium，以及可编辑的专用 Figma Design 文件。先运行：
 
 ```sh
@@ -36,15 +38,17 @@ npm run e2e:real:doctor
 
 诊断是只读检查：报告版本、Chromium、运行锁、5173 端口及本地目标配置。
 未观察到必要环境、未配置目标、端口冲突或锁占用时退出码为 2；运行期间的真实握手
-才会验证 Figma 文件、持久标记和插件构建，doctor 不把进程存在当作连接成功。
+才会验证 Figma 文件、持久标记和插件构建。默认运行会自行启动 Figma，
+因此 doctor 不要求启动前存在 Figma 进程。
 
 第一次运行显式指定专用文件 key 和 page ID：
 
 ```sh
-npm run test:e2e:real -- --bind --file-key YOUR_FILE_KEY --page-id 0:1 --timeout-ms 300000
+npm run test:e2e:real -- --manual-plugin --bind --file-key YOUR_FILE_KEY --page-id 0:1 --timeout-ms 300000
 ```
 
-命令构建库和两个示例，启动自己的 loopback 服务，生成浏览器参考图，并打印
+首次使用 `--manual-plugin`，因为开发插件尚未导入，自动启动无法找到插件。命令构建库和
+两个示例，启动自己的 loopback 服务，生成浏览器参考图，并打印
 `PACKAGE_READY`、本轮输出目录和 manifest 绝对路径。此时在 Figma 中首次导入
 `test-results/real-figma/plugin/manifest.json`，运行「html2figma Real E2E」。
 已有原型插件是另外一个插件；不能把原型注册视为正式 E2E 插件已注册。
@@ -60,15 +64,23 @@ npm run test:e2e:real -- --bind --file-key YOUR_FILE_KEY --page-id 0:1 --timeout
 npm run test:e2e:real
 ```
 
-每轮重新构建，看到 `PACKAGE_READY` 后运行指定插件，以便加载当前构建。
-不依赖开发插件自动重载，也不自动启动插件。默认等待 120 秒；`--timeout-ms`
+每轮重新构建，自动打开绑定文件，并在 `PACKAGE_READY` 后通过 AppleScript
+启动已导入的指定插件，以便加载当前构建。Figma 未运行时也会启动桌面应用。
+如需手动启动，在命令中加入 `--manual-plugin`，并在 `PACKAGE_READY` 后运行插件。
+`--launch-plugin` 仍可显式指定自动模式。
+本机需要允许运行命令的终端控制 Figma 与「系统事件」，并预先从**当前仓库**的
+`test-results/real-figma/plugin/manifest.json` 导入插件。打开文件可能改变启动前
+的视口；测试只要求插件握手后选区与视口保持不变。启动失败会使本轮非零退出；
+即使点击成功，仍需等待插件握手核对文件、页面、绑定和构建身份。
+自动启动不依赖开发插件自动重载。
+默认等待 120 秒；`--timeout-ms`
 支持 1000–600000 毫秒。超时不重试渲染，已领取但未确认的任务记为 `unknown`。
 普通运行不会补写缺失的文件标记；首次绑定中断时可对同一目标显式再次传入 `--bind`。
 
 ## 两轮独立回归
 
 在同一目标 Mac 上依次运行两次 `npm run test:e2e:real -- --timeout-ms 600000`。
-每次等待 `PACKAGE_READY` 后，分别在已绑定文件中启动一次已导入的插件；第一轮结束并释放
+每轮在 `PACKAGE_READY` 后自动启动已导入的插件；第一轮结束并释放
 运行锁和端口后，再开始第二轮。不要把同一轮的重复握手或旧报告算成第二轮。两轮成功时
 应各有新的 runId、八份本轮 Figma PNG、`report.before-cleanup.json/html`、
 `cleanup.result.json` 和最终 `report.json/html`，且 `attempted` 恰好八项、
@@ -107,8 +119,8 @@ npm run e2e:real:report -- /absolute/path/to/run-directory
 普通插件构建不包含 Bridge，现有 UI 测试继续覆盖文件/粘贴控件；本报告不冒充
 真实 Figma 文件选择、粘贴或按钮控件的验收。
 
-连接未成功时，报告会记录非零退出、失败原因和未执行项；先确认 Figma 仍运行、目标文件
-和页面正确、插件是在本轮 `PACKAGE_READY` 后启动。超时的包已失效，不能在旧插件中
+连接未成功时，报告会记录非零退出、失败原因和未执行项；先确认 Figma 已打开目标文件
+和页面，且插件在本轮 `PACKAGE_READY` 后启动。超时的包已失效，不能在旧插件中
 继续执行；排查后用新命令生成新 runId。已领取任务超时会标记 `unknown`，不得在
 同一轮重投。用例、证据保存或清理失败时查看该轮 `event-*.json`、结构化错误和保留
 的节点现场；不要删除旧区域、自动重试渲染或放宽阈值。若连接失败发生在握手前，

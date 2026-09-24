@@ -2,6 +2,7 @@ import { afterEach, expect, test } from "vitest";
 import { mkdtemp, rm, readFile, readdir, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { chromium } from "@playwright/test";
 import { createReceiver } from "./receiver";
 
 const cleanup: Array<() => Promise<unknown>> = [];
@@ -75,6 +76,28 @@ test("persists a valid PNG result and ignores attempts to complete twice", async
   const events = (await readdir(output)).filter(name => name.startsWith("event-"));
   expect(events).toHaveLength(10);
 });
+
+test("acknowledges a saved visual failure so the plugin can close without cleanup", async () => {
+  const { post, message, receiver, output } = await setup();
+  await post("ready", { ...message, state });
+  await post("claim", message);
+  await post("area", { ...message, taskId: "run-1:geometry", caseId: "geometry", areaId: "1:1" });
+  const browser = await chromium.launch({ channel: "chromium", headless: true });
+  let changedImage: Buffer;
+  try {
+    const page = await browser.newPage({ viewport: { width: 1, height: 1 }, deviceScaleFactor: 1 });
+    await page.setContent('<body style="margin:0;background:#ff0000"></body>');
+    changedImage = await page.screenshot();
+  } finally {
+    await browser.close();
+  }
+
+  const reply = await post("result", { ...resultMessage(message), pngBase64: changedImage.toString("base64") });
+  expect(reply.status).toBe(200);
+  expect(await reply.json()).toMatchObject({ accepted: false, aborted: true });
+  expect(await receiver.finished).toMatchObject({ status: "failed", results: [{ status: "failed" }] });
+  expect((await readdir(output)).some(name => name.startsWith("cleanup"))).toBe(false);
+}, 15_000);
 
 test("dispatches the second case only after the first result is saved", async () => {
   const { post, message, receiver, output } = await setup(["geometry", "flex-border"]);

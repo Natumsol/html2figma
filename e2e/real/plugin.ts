@@ -42,7 +42,10 @@ async function inspectImagePaints(root: FrameNode): Promise<Array<Record<string,
       if (!image) throw new Error(`Image paint has no Figma resource on node ${node.id}`);
       const bytes = await image.getBytesAsync();
       if (!bytes.length) throw new Error(`Image paint has empty Figma resource on node ${node.id}`);
+      const size = await image.getSizeAsync();
+      if (size.width <= 0 || size.height <= 0) throw new Error(`Image paint has invalid dimensions on node ${node.id}`);
       paints.push({ nodeId: node.id, imageHash: fill.imageHash, byteLength: bytes.length,
+        sourceWidth: size.width, sourceHeight: size.height,
         x: node.x, y: node.y, width: node.width, height: node.height, visible: node.visible });
     }
   }

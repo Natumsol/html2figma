@@ -1,7 +1,8 @@
 import { readFile, writeFile, mkdir, access } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { randomUUID } from "node:crypto";
-import { execFileSync } from "node:child_process";
+import { execFile, execFileSync } from "node:child_process";
+import { promisify } from "node:util";
 import { chromium } from "@playwright/test";
 import { record, type Identity } from "./protocol";
 import { acquireLock, startReferenceServer, runBuild, lockPath, type Assets } from "./host";
@@ -15,6 +16,7 @@ declare const __PROJECT_ROOT__: string;
 const root = __PROJECT_ROOT__;
 const directory = join(root, "test-results/real-figma");
 const configPath = join(directory, "target.json");
+const execFileAsync = promisify(execFile);
 interface Target { fileKey: string; pageId: string; binding: string }
 function readTarget(value: unknown): Target {
   const target = record(value);
@@ -52,13 +54,13 @@ async function main() {
     try { const close = await startReferenceServer(new Map()); await close(); } catch { portAvailable = false; }
     console.log(JSON.stringify({ ...info, target: target ?? "not configured", lockExists, portAvailable,
       manifest: join(directory, "plugin/manifest.json"),
-      next: "Start the dedicated plugin in the bound file after PACKAGE_READY. Live handshake is verified only during a run." }, null, 2));
-    if (info.platform !== "darwin" || !info.browserInstalled || info.figmaProcess !== "running" || !target || lockExists || !portAvailable) process.exitCode = 2;
+      next: "Runs open the bound Figma file and launch the imported plugin automatically. Use --manual-plugin to start it yourself after PACKAGE_READY. Live handshake is verified only during a run." }, null, 2));
+    if (info.platform !== "darwin" || !info.browserInstalled || !target || lockExists || !portAvailable) process.exitCode = 2;
     return;
   }
   if (command !== "run") throw new Error("Use run, doctor or report");
   let bind = false; let fileKey: string | undefined; let pageId: string | undefined;
-  let timeoutMs = 120_000; let injectFailureCase: string | undefined;
+  let timeoutMs = 120_000; let injectFailureCase: string | undefined; let launchPlugin = true;
   while (args.length) {
     const flag = args.shift();
     if (flag === "--bind") bind = true;
@@ -66,12 +68,16 @@ async function main() {
     else if (flag === "--page-id") pageId = args.shift();
     else if (flag === "--timeout-ms") timeoutMs = Number(args.shift());
     else if (flag === "--inject-failure-case") injectFailureCase = args.shift();
+    else if (flag === "--launch-plugin") launchPlugin = true;
+    else if (flag === "--manual-plugin") launchPlugin = false;
     else throw new Error(`Unknown option: ${flag}`);
   }
   if (!Number.isInteger(timeoutMs) || timeoutMs < 1000 || timeoutMs > 600_000) throw new Error("Timeout must be 1000–600000 ms");
   if (!bind && (fileKey || pageId)) throw new Error("Target changes require explicit --bind");
   const info = await environment();
-  if (info.platform !== "darwin" || !info.browserInstalled || info.figmaProcess !== "running") throw new Error("Run doctor: macOS, Figma and Chromium must be available");
+  if (info.platform !== "darwin" || !info.browserInstalled || (!launchPlugin && info.figmaProcess !== "running")) {
+    throw new Error("Run doctor: macOS and Chromium must be available; manual runs also require Figma to be running");
+  }
   const release = await acquireLock();
   const abort = new AbortController();
   const interrupt = () => abort.abort();
@@ -101,7 +107,13 @@ async function main() {
     }
     const runId = randomUUID();
     output = join(directory, runId); await mkdir(output);
-    summary = { ...summary, runId, target, coverage: "six visual and two extension cases; real plugin API; passed nodes cleaned after evidence" };
+    summary = { ...summary, runId, target, launcher: launchPlugin ? "AppleScript" : "manual",
+      coverage: "six visual and two extension cases; real plugin API; passed nodes cleaned after evidence" };
+    if (launchPlugin) {
+      const fileUrl = `figma://file/${target.fileKey}?node-id=${target.pageId.replace(":", "-")}`;
+      await execFileAsync("open", ["-a", "Figma", fileUrl], { timeout: 15_000 });
+      console.log(JSON.stringify({ status: "FIGMA_FILE_OPEN_REQUESTED", fileKey: target.fileKey, pageId: target.pageId }));
+    }
     const files: Assets = new Map();
     closeReference = await startReferenceServer(files);
     await runBuild(root, abort.signal);
@@ -120,7 +132,7 @@ async function main() {
       extensionSha256: extensionPrepared.extensionSha256 };
     const token = randomUUID();
     const artifact = await buildPlugin(root, output, { identity, token, cases, bind, injectFailureCase });
-    summary = { ...summary, identity, pluginSha256: artifact.pluginSha256, browserVersion: prepared.browserVersion,
+    summary = { ...summary, environment: await environment(), identity, pluginSha256: artifact.pluginSha256, browserVersion: prepared.browserVersion,
       extensionBrowserVersion: extensionPrepared.browserVersion, injectFailureCase: injectFailureCase ?? null,
       cases: cases.map(({ documentJson, ...entry }) => entry) };
     await writeFile(join(output, "manifest.json"), JSON.stringify(summary, null, 2));
@@ -129,9 +141,19 @@ async function main() {
     const activeReceiver = receiver;
     const expire = (reason: string) => { void activeReceiver.expire(reason).catch(error => console.error("Evidence write failed", String(error))); };
     abort.signal.addEventListener("abort", () => expire("Interrupted; no retry"), { once: true });
-    timer = setTimeout(() => expire("Handshake/task timeout; start the current plugin after PACKAGE_READY. No retry."), timeoutMs);
+    timer = setTimeout(() => expire("Handshake/task timeout; check the current plugin launch after PACKAGE_READY. No retry."), timeoutMs);
     console.log(JSON.stringify({ status: "PACKAGE_READY", output, manifest: artifact.manifest, plugin: "html2figma Real E2E", timeoutMs,
-      instruction: "Run the already-imported named plugin in the configured file. No automated clicks will be used." }));
+      instruction: launchPlugin
+        ? "AppleScript will open the already-imported plugin in Figma."
+        : "Run the already-imported named plugin in the configured file. No automated clicks will be used." }));
+    if (launchPlugin && !abort.signal.aborted) {
+      try {
+        await execFileAsync("osascript", [join(root, "e2e/real/launch-plugin.applescript")], { timeout: 75_000 });
+        console.log(JSON.stringify({ status: "PLUGIN_LAUNCH_REQUESTED", plugin: "html2figma Real E2E" }));
+      } catch (error) {
+        throw new Error(`AppleScript could not launch the Figma plugin: ${String(error)}`);
+      }
+    }
     if (abort.signal.aborted) expire("Interrupted before plugin connection");
     const rendered = await receiver.rendered;
     summary = { ...summary, ...rendered };

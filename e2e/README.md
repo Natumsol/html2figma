@@ -49,14 +49,15 @@ npm run e2e:report
 ## 本机后台 API 验收
 
 新增 [真实 Figma 后台验收入口](real/README.md)，使用独立的「html2figma Real E2E」
-隐藏 UI 插件，后台调用本仓库真实 renderer，无需 Figma MCP 或桌面点击。
+隐藏 UI 插件，后台调用本仓库真实 renderer，无需 Figma MCP；默认自动打开绑定文件，
+并在准备完成后通过 AppleScript 点击插件菜单。首次导入开发插件时使用 `--manual-plugin`。
 同一轮覆盖六个视觉场景与两条扩展下载链路；全部通过后保存证据并清理本轮节点，
-失败时保留现场。插件仍需在每轮准备完成后由用户启动。现有 UI 控件测试与历史
+失败时保留现场。插件仍需在每轮准备完成后启动。现有 UI 控件测试与历史
 六场景流程保持独立。
 
 ```sh
 npm run e2e:real:doctor
-npm run test:e2e:real -- --bind --file-key YOUR_FILE_KEY --page-id 0:1
+npm run test:e2e:real -- --manual-plugin --bind --file-key YOUR_FILE_KEY --page-id 0:1
 ```
 
 ## 真实 Figma 画布截图验收
