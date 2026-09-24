@@ -14,7 +14,7 @@ async function claim(message) {
 async function post(route,body) {
  const response=await fetch('http://localhost:5173/bridge/'+config.token+'/'+route,{
   method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),
-  signal:AbortSignal.timeout(10000)
+  signal:AbortSignal.timeout(route==='result'?60000:10000)
  });
  if(!response.ok)throw new Error('Bridge '+route+' HTTP '+response.status);
  return response;
@@ -31,9 +31,17 @@ window.addEventListener('message',event=>{
   }
   if(message.type==='result') {
    const receipt=await response.json();
+   if(receipt.cleanupTask) {
+    parent.postMessage({pluginMessage:{type:'execute',runId:config.identity.runId,task:receipt.cleanupTask}},'*');
+    return;
+   }
+   if(receipt.aborted) {
+    parent.postMessage({pluginMessage:{type:'receipt',runId:config.identity.runId}},'*');
+    return;
+   }
    if(!receipt.complete) { await claim(message); return; }
   }
-  if(message.type==='result' || message.type==='failure') {
+  if(message.type==='result' || message.type==='failure' || message.type==='cleanup-result' || message.type==='cleanup-failure') {
    parent.postMessage({pluginMessage:{type:'receipt',runId:config.identity.runId}},'*');
   }
  }).catch(error=>console.error('E2E transport stopped; no retry',String(error)));

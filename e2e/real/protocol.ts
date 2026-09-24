@@ -26,6 +26,13 @@ export interface RenderTask {
   documentJson: string;
 }
 
+export interface CleanupTask {
+  type: "cleanup-passed";
+  taskId: string;
+  areaId: string;
+  roots: Array<{ caseId: string; rootNodeId: string; createdNodeIds: string[] }>;
+}
+
 export interface VisualCase {
   name: string;
   documentJson: string;
@@ -43,6 +50,7 @@ export interface PluginConfig {
   token: string;
   cases: VisualCase[];
   bind: boolean;
+  injectFailureCase?: string;
 }
 
 export function record(value: unknown): Record<string, unknown> {

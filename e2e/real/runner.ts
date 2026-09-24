@@ -57,13 +57,15 @@ async function main() {
     return;
   }
   if (command !== "run") throw new Error("Use run, doctor or report");
-  let bind = false; let fileKey: string | undefined; let pageId: string | undefined; let timeoutMs = 120_000;
+  let bind = false; let fileKey: string | undefined; let pageId: string | undefined;
+  let timeoutMs = 120_000; let injectFailureCase: string | undefined;
   while (args.length) {
     const flag = args.shift();
     if (flag === "--bind") bind = true;
     else if (flag === "--file-key") fileKey = args.shift();
     else if (flag === "--page-id") pageId = args.shift();
     else if (flag === "--timeout-ms") timeoutMs = Number(args.shift());
+    else if (flag === "--inject-failure-case") injectFailureCase = args.shift();
     else throw new Error(`Unknown option: ${flag}`);
   }
   if (!Number.isInteger(timeoutMs) || timeoutMs < 1000 || timeoutMs > 600_000) throw new Error("Timeout must be 1000–600000 ms");
@@ -99,7 +101,7 @@ async function main() {
     }
     const runId = randomUUID();
     output = join(directory, runId); await mkdir(output);
-    summary = { ...summary, runId, target, coverage: "six visual and two extension cases; real plugin API; nodes retained" };
+    summary = { ...summary, runId, target, coverage: "six visual and two extension cases; real plugin API; passed nodes cleaned after evidence" };
     const files: Assets = new Map();
     closeReference = await startReferenceServer(files);
     await runBuild(root, abort.signal);
@@ -107,6 +109,9 @@ async function main() {
     const prepared = await prepareCases(root, output, files);
     const extensionPrepared = await prepareExtensionCases(root, output, files);
     const cases = [...prepared.cases, ...extensionPrepared.cases];
+    if (injectFailureCase && !cases.some(entry => entry.name === injectFailureCase)) {
+      throw new Error(`Unknown injected failure case: ${injectFailureCase}`);
+    }
     const references = new Map([...prepared.references, ...extensionPrepared.references]);
     if (abort.signal.aborted) throw new Error("Interrupted during preparation");
     const identity: Identity = { protocol: 1, runId, buildId: "", ...target, areaTag: `html2figma:${runId}`,
@@ -114,9 +119,9 @@ async function main() {
       converterSha256: prepared.converterSha256, rendererSha256: prepared.rendererSha256,
       extensionSha256: extensionPrepared.extensionSha256 };
     const token = randomUUID();
-    const artifact = await buildPlugin(root, output, { identity, token, cases, bind });
+    const artifact = await buildPlugin(root, output, { identity, token, cases, bind, injectFailureCase });
     summary = { ...summary, identity, pluginSha256: artifact.pluginSha256, browserVersion: prepared.browserVersion,
-      extensionBrowserVersion: extensionPrepared.browserVersion,
+      extensionBrowserVersion: extensionPrepared.browserVersion, injectFailureCase: injectFailureCase ?? null,
       cases: cases.map(({ documentJson, ...entry }) => entry) };
     await writeFile(join(output, "manifest.json"), JSON.stringify(summary, null, 2));
     await closeReference(); closeReference = undefined;
@@ -128,12 +133,20 @@ async function main() {
     console.log(JSON.stringify({ status: "PACKAGE_READY", output, manifest: artifact.manifest, plugin: "html2figma Real E2E", timeoutMs,
       instruction: "Run the already-imported named plugin in the configured file. No automated clicks will be used." }));
     if (abort.signal.aborted) expire("Interrupted before plugin connection");
+    const rendered = await receiver.rendered;
+    summary = { ...summary, ...rendered };
+    if (rendered.status !== "rendered") throw new Error(rendered.error ?? "Rendering did not finish");
+    if (rendered.results.length !== cases.length || rendered.unexecuted.length) throw new Error("Incomplete eight-case render");
+    await writeReport(output, { ...summary, status: "evidence-saved", threshold: 0.2 }, "report.before-cleanup");
+    await receiver.authorizeCleanup();
     const state = await receiver.finished;
     summary = { ...summary, ...state };
     if (state.status !== "complete") throw new Error(state.error ?? "No real result");
-    if (state.results.length !== cases.length || state.unexecuted.length) throw new Error("Incomplete eight-case run");
+    if (state.cleanup?.status !== "passed") throw new Error("Cleanup did not complete");
     summary = { ...summary, status: "passed", threshold: 0.2 };
   } catch (error) {
+    try { await receiver?.abortCleanup(String(error)); }
+    catch (cleanupError) { console.error("Cleanup abort evidence failed:", String(cleanupError)); }
     process.exitCode = 1;
     summary = { ...summary, status: summary.status === "unknown" ? "unknown" : "failed", error: String(error) };
     console.error(String(error));

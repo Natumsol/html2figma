@@ -3,7 +3,7 @@ import type { AddressInfo } from "node:net";
 import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { compareVisual, decodePng } from "./images";
-import { record, readCanvasState, sameCanvasState, type CanvasState, type Identity, type VisualCase } from "./protocol";
+import { record, readCanvasState, sameCanvasState, type CanvasState, type CleanupTask, type Identity, type VisualCase } from "./protocol";
 
 interface ReceiverOptions {
   output: string;
@@ -14,11 +14,13 @@ interface ReceiverOptions {
   port: number;
 }
 export interface RunState {
-  status: "waiting" | "ready" | "claimed" | "complete" | "failed" | "unknown";
+  status: "waiting" | "ready" | "claimed" | "rendered" | "cleanup-claimed" | "complete" | "failed" | "unknown";
   error?: string;
   results: Record<string, unknown>[];
   attempted: string[];
   unexecuted: string[];
+  cleanup?: { status: "passed" | "failed" | "unknown"; areaId: string; removedNodeIds?: string[]; error?: string };
+  failure?: Record<string, unknown>;
 }
 
 async function readBody(request: IncomingMessage): Promise<Record<string, unknown>> {
@@ -45,9 +47,24 @@ export async function createReceiver(options: ReceiverOptions) {
   let queue: Promise<unknown> = Promise.resolve();
   let resolveFinished!: (state: RunState) => void;
   const finished = new Promise<RunState>(resolve => { resolveFinished = resolve; });
+  let resolveRendered!: (state: RunState) => void;
+  const rendered = new Promise<RunState>(resolve => { resolveRendered = resolve; });
+  let renderedSettled = false;
+  let releaseCleanup!: (authorized: boolean) => void;
+  const cleanupGate = new Promise<boolean>(resolve => { releaseCleanup = resolve; });
   const terminal = () => ["complete", "failed", "unknown"].includes(state.status);
   const current = () => options.cases[caseIndex];
   const taskId = () => `${options.identity.runId}:${current().name}`;
+  const snapshot = () => ({ ...state, results: [...state.results], attempted: [...state.attempted],
+    unexecuted: [...state.unexecuted] });
+  const settleRendered = () => { if (!renderedSettled) { renderedSettled = true; resolveRendered(snapshot()); } };
+  const cleanupTask = (): CleanupTask => {
+    if (!areaId || state.results.length !== options.cases.length ||
+        state.results.some(result => result.status !== "passed")) throw new Error("Incomplete cleanup evidence");
+    return { type: "cleanup-passed", taskId: `${options.identity.runId}:cleanup`, areaId,
+      roots: state.results.map(result => ({ caseId: result.caseId as string,
+        rootNodeId: result.rootNodeId as string, createdNodeIds: result.createdNodeIds as string[] })) };
+  };
   async function journal(type: string, data: unknown) {
     const event = { sequence: ++sequence, time: new Date().toISOString(), type, data };
     await writeFile(join(options.output, `event-${String(sequence).padStart(4, "0")}.json`), JSON.stringify(event, null, 2), { flag: "wx" });
@@ -55,11 +72,12 @@ export async function createReceiver(options: ReceiverOptions) {
   }
   async function fail(error: string, known = false) {
     if (terminal()) return;
-    state.status = !known && state.status === "claimed" ? "unknown" : "failed";
+    const prior = state.status;
+    state.status = !known && ["claimed", "cleanup-claimed"].includes(prior) ? "unknown" : "failed";
     state.error = error;
+    if (prior === "cleanup-claimed" && areaId) state.cleanup = { status: known ? "failed" : "unknown", areaId, error };
     try { await journal("failure", { error, unexecuted: state.unexecuted }); }
-    finally { resolveFinished({ ...state, results: [...state.results], attempted: [...state.attempted],
-      unexecuted: [...state.unexecuted] }); }
+    finally { releaseCleanup(false); settleRendered(); resolveFinished(snapshot()); }
   }
   function verify(message: Record<string, unknown>) {
     for (const [key, expected] of Object.entries(options.identity)) {
@@ -83,7 +101,7 @@ export async function createReceiver(options: ReceiverOptions) {
     if (request.method === "OPTIONS") { response.writeHead(204).end(); return; }
     if (request.method !== "POST") { response.writeHead(405).end(); return; }
     const action = route.slice(prefix.length);
-    if (!["ready", "claim", "area", "result", "failure"].includes(action)) { response.writeHead(404).end(); return; }
+    if (!["ready", "claim", "area", "result", "failure", "cleanup-result", "cleanup-failure"].includes(action)) { response.writeHead(404).end(); return; }
     let body: Record<string, unknown>;
     try { body = await readBody(request); }
     catch { response.writeHead(400).end("Invalid body"); return; }
@@ -110,9 +128,50 @@ export async function createReceiver(options: ReceiverOptions) {
             documentJson: current().documentJson }));
         } else if (action === "failure") {
           if (typeof body.error !== "string" || body.error.length > 4000) throw new Error("Invalid failure");
+          state.failure = body;
+          await writeFile(join(options.output, `${current().name}.failure.json`), JSON.stringify(body, null, 2), { flag: "wx" });
           await journal("plugin-failure", body);
           await fail(`Plugin failure: ${body.error}`, true);
           response.end("saved");
+        } else if (action === "cleanup-failure") {
+          if (state.status !== "cleanup-claimed" || body.taskId !== `${options.identity.runId}:cleanup` ||
+              body.areaId !== areaId || typeof body.error !== "string" || body.error.length > 4000) {
+            throw new Error("Invalid cleanup failure");
+          }
+          await writeFile(join(options.output, "cleanup.failure.json"), JSON.stringify(body, null, 2), { flag: "wx" });
+          await journal("cleanup-failure", body);
+          await fail(`Cleanup failure: ${body.error}`, true);
+          response.end("saved");
+        } else if (action === "cleanup-result") {
+          if (state.status !== "cleanup-claimed" || body.taskId !== `${options.identity.runId}:cleanup` ||
+              body.areaId !== areaId || !Array.isArray(body.removedNodeIds) ||
+              !body.removedNodeIds.every(id => typeof id === "string" && /^\d+:\d+$/.test(id))) {
+            throw new Error("Invalid cleanup result");
+          }
+          const expected = new Set(cleanupTask().roots.flatMap(root => root.createdNodeIds));
+          if (body.removedNodeIds.length !== expected.size || body.removedNodeIds.some(id => !expected.has(id))) {
+            throw new Error("Cleanup removed-node inventory mismatch");
+          }
+          const topLevelBefore = body.topLevelBefore;
+          const topLevelAfter = body.topLevelAfter;
+          if (!Array.isArray(topLevelBefore) || !Array.isArray(topLevelAfter) ||
+              ![...topLevelBefore, ...topLevelAfter].every(id => typeof id === "string" && /^\d+:\d+$/.test(id)) ||
+              topLevelBefore.filter(id => id === areaId).length !== 1 ||
+              JSON.stringify(topLevelBefore.filter(id => id !== areaId)) !== JSON.stringify(topLevelAfter)) {
+            throw new Error("Cleanup changed unrelated top-level nodes");
+          }
+          const before = readCanvasState(body.before);
+          const after = readCanvasState(body.after);
+          if (!readyState || !sameCanvasState(readyState, before) || !sameCanvasState(before, after)) {
+            throw new Error("Canvas state changed during cleanup");
+          }
+          await writeFile(join(options.output, "cleanup.result.json"), JSON.stringify(body, null, 2), { flag: "wx" });
+          state.cleanup = { status: "passed", areaId: areaId!, removedNodeIds: body.removedNodeIds as string[] };
+          await journal("cleanup-result", body);
+          state.status = "complete";
+          await journal("complete", { cleanup: state.cleanup });
+          resolveFinished(snapshot());
+          response.end(JSON.stringify({ accepted: true, complete: true }));
         } else {
           if (state.status !== "claimed" || body.taskId !== taskId() || body.caseId !== current().name) throw new Error("Unexpected task result");
           if (typeof body.areaId !== "string" || !/^\d+:\d+$/.test(body.areaId)) throw new Error("Invalid area identity");
@@ -156,14 +215,20 @@ export async function createReceiver(options: ReceiverOptions) {
           }
           caseIndex++;
           const complete = caseIndex === options.cases.length;
-          state.status = complete ? "complete" : "ready";
-          await journal(complete ? "complete" : "next-ready", { completed: name, next: complete ? null : current().name });
-          if (complete) resolveFinished({ ...state, results: [...state.results], attempted: [...state.attempted], unexecuted: [] });
+          state.status = complete ? "rendered" : "ready";
+          await journal(complete ? "rendered" : "next-ready", { completed: name, next: complete ? null : current().name });
+          if (complete) {
+            settleRendered();
+            const authorized = await cleanupGate;
+            if (!authorized) { response.end(JSON.stringify({ accepted: false, aborted: true })); return; }
+            state.status = "cleanup-claimed";
+            await journal("cleanup-claimed", cleanupTask());
+          }
           response.setHeader("Content-Type", "application/json");
-          response.end(JSON.stringify({ accepted: true, complete }));
+          response.end(JSON.stringify(complete ? { accepted: true, cleanupTask: cleanupTask() } : { accepted: true, complete: false }));
         }
       } catch (error) {
-        if (state.status === "complete") state.status = "claimed";
+        if (state.status === "complete") state.status = "cleanup-claimed";
         await fail(String(error)).catch(() => {});
         response.writeHead(409).end("Protocol rejected; see local evidence");
       }
@@ -177,8 +242,18 @@ export async function createReceiver(options: ReceiverOptions) {
   });
   return {
     url: `http://localhost:${(server.address() as AddressInfo).port}`,
+    rendered,
     finished,
-    async expire(reason: string) { await (queue = queue.then(() => fail(reason))); },
+    async authorizeCleanup() {
+      if (state.status !== "rendered") throw new Error("Rendering is not complete");
+      await journal("cleanup-authorized", { taskId: `${options.identity.runId}:cleanup`, areaId });
+      releaseCleanup(true);
+    },
+    async abortCleanup(reason: string) { await fail(reason, true); },
+    async expire(reason: string) {
+      if (state.status === "rendered") await fail(reason);
+      else await (queue = queue.then(() => fail(reason)));
+    },
     async close() {
       server.closeAllConnections();
       await new Promise<void>((resolve, reject) => server.close(error => error ? reject(error) : resolve()));
