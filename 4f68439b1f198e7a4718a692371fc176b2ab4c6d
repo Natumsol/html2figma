@@ -1,0 +1,167 @@
+e2e/real/vitest.config.ts
+  0bf9681c835f9b66 1-2
+package.json
+  0bf9681c835f9b66 47-52,60
+e2e/real/receiver.test.ts
+  0bf9681c835f9b66 1-256
+e2e/real/EXTENSION_ACCEPTANCE.md
+  0bf9681c835f9b66 1-14
+e2e/real/README.md
+  0bf9681c835f9b66 1-135
+e2e/real/SIX_CASES_ACCEPTANCE.md
+  0bf9681c835f9b66 1-34
+e2e/real/SAFE_CLEANUP_ACCEPTANCE.md
+  0bf9681c835f9b66 1-14
+e2e/real/extension.ts
+  0bf9681c835f9b66 1-117
+e2e/real/ACCEPTANCE.md
+  0bf9681c835f9b66 1-30
+e2e/real/build.ts
+  0bf9681c835f9b66 1-39
+e2e/real/images.ts
+  0bf9681c835f9b66 1-28
+e2e/real/transport.ts
+  0bf9681c835f9b66 1-51
+e2e/real/host.ts
+  0bf9681c835f9b66 1-55
+e2e/real/prepare.ts
+  0bf9681c835f9b66 1-60
+e2e/fixtures/extension-selection.html
+  0bf9681c835f9b66 1-31
+e2e/real/plugin.ts
+  0bf9681c835f9b66 1-164
+e2e/real/report.ts
+  0bf9681c835f9b66 1-36
+e2e/real/protocol.ts
+  0bf9681c835f9b66 1-77
+e2e/real/receiver.ts
+  0bf9681c835f9b66 1-263
+e2e/README.md
+  0bf9681c835f9b66 49-59
+e2e/real/cli.mjs
+  0bf9681c835f9b66 1-10
+e2e/fixtures/extension-page.html
+  0bf9681c835f9b66 1-26
+e2e/real/TWO_RUN_ACCEPTANCE.md
+  0bf9681c835f9b66 1-18
+e2e/real/runner.ts
+  0bf9681c835f9b66 1-165
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8-ntes.9",
+  "base_commit_sha": "4f68439b1f198e7a4718a692371fc176b2ab4c6d",
+  "prompts": {
+    "0bf9681c835f9b66": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0c88e-047a-70f0-8c8a-633d238621b6",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Natumsol",
+      "messages": [],
+      "total_additions": 1646,
+      "total_deletions": 0,
+      "accepted_lines": 1643,
+      "overriden_lines": 0,
+      "per_file_stats": {
+        "e2e/real/report.ts": {
+          "additions": 36,
+          "accepted_lines": 36
+        },
+        "e2e/real/SAFE_CLEANUP_ACCEPTANCE.md": {
+          "additions": 14,
+          "accepted_lines": 14
+        },
+        "e2e/real/build.ts": {
+          "additions": 39,
+          "accepted_lines": 39
+        },
+        "e2e/real/vitest.config.ts": {
+          "additions": 2,
+          "accepted_lines": 2
+        },
+        "package.json": {
+          "additions": 10,
+          "accepted_lines": 7
+        },
+        "e2e/fixtures/extension-page.html": {
+          "additions": 26,
+          "accepted_lines": 26
+        },
+        "e2e/real/EXTENSION_ACCEPTANCE.md": {
+          "additions": 14,
+          "accepted_lines": 14
+        },
+        "e2e/real/receiver.ts": {
+          "additions": 263,
+          "accepted_lines": 263
+        },
+        "e2e/fixtures/extension-selection.html": {
+          "additions": 31,
+          "accepted_lines": 31
+        },
+        "e2e/real/host.ts": {
+          "additions": 55,
+          "accepted_lines": 55
+        },
+        "e2e/real/images.ts": {
+          "additions": 28,
+          "accepted_lines": 28
+        },
+        "e2e/real/cli.mjs": {
+          "additions": 10,
+          "accepted_lines": 10
+        },
+        "e2e/real/SIX_CASES_ACCEPTANCE.md": {
+          "additions": 34,
+          "accepted_lines": 34
+        },
+        "e2e/real/plugin.ts": {
+          "additions": 164,
+          "accepted_lines": 164
+        },
+        "e2e/real/transport.ts": {
+          "additions": 51,
+          "accepted_lines": 51
+        },
+        "e2e/README.md": {
+          "additions": 11,
+          "accepted_lines": 11
+        },
+        "e2e/real/receiver.test.ts": {
+          "additions": 256,
+          "accepted_lines": 256
+        },
+        "e2e/real/protocol.ts": {
+          "additions": 77,
+          "accepted_lines": 77
+        },
+        "e2e/real/prepare.ts": {
+          "additions": 60,
+          "accepted_lines": 60
+        },
+        "e2e/real/runner.ts": {
+          "additions": 165,
+          "accepted_lines": 165
+        },
+        "e2e/real/extension.ts": {
+          "additions": 117,
+          "accepted_lines": 117
+        },
+        "e2e/real/README.md": {
+          "additions": 135,
+          "accepted_lines": 135
+        },
+        "e2e/real/ACCEPTANCE.md": {
+          "additions": 30,
+          "accepted_lines": 30
+        },
+        "e2e/real/TWO_RUN_ACCEPTANCE.md": {
+          "additions": 18,
+          "accepted_lines": 18
+        }
+      }
+    }
+  }
+}
