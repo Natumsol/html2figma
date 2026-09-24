@@ -1,0 +1,132 @@
+e2e/real/vitest.config.ts
+  0bf9681c835f9b66 2-3
+tests/unit/render.test.ts
+  0bf9681c835f9b66 16-17,38-39,50-56,90-93,99-114
+e2e/real/receiver.ts
+  0bf9681c835f9b66 5,48,200-202,263
+ARCHITECTURE.md
+  0bf9681c835f9b66 61-64
+README.md
+  0bf9681c835f9b66 16
+e2e/README.md
+  0bf9681c835f9b66 51,53-55
+e2e/specs/regressions.spec.ts
+  0bf9681c835f9b66 64-92
+e2e/real/images.ts
+  0bf9681c835f9b66 1-14,18-79
+e2e/real/images.test.ts
+  0bf9681c835f9b66 1-23
+example/figma-plugin/src/ui/main.ts
+  0bf9681c835f9b66 83-88
+e2e/real/pixelmatch.cjs
+  0bf9681c835f9b66 1-258
+src/render/figma-adapter.ts
+  0bf9681c835f9b66 14-16
+e2e/real/pixelmatch.d.cts
+  0bf9681c835f9b66 1-10
+e2e/helpers/figma-runtime.ts
+  0bf9681c835f9b66 34-35,39,53-54,58-62,72-75,79,93-95
+src/render/create-node.ts
+  0bf9681c835f9b66 23,36-37,44-61,70
+src/render/adapter.ts
+  0bf9681c835f9b66 42
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8-ntes.9",
+  "base_commit_sha": "4e24bbdc1cb214c76f0b358a41860ee14904bd7e",
+  "prompts": {
+    "0bf9681c835f9b66": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0c88e-047a-70f0-8c8a-633d238621b6",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Natumsol",
+      "messages": [],
+      "total_additions": 523,
+      "total_deletions": 77,
+      "accepted_lines": 499,
+      "overriden_lines": 0,
+      "per_file_stats": {
+        "example/figma-plugin/src/ui/main.ts": {
+          "additions": 6,
+          "accepted_lines": 6
+        },
+        "e2e/README.md": {
+          "additions": 4,
+          "deletions": 2,
+          "accepted_lines": 4
+        },
+        "e2e/real/images.ts": {
+          "additions": 100,
+          "deletions": 48,
+          "accepted_lines": 80
+        },
+        "e2e/real/pixelmatch.cjs": {
+          "additions": 259,
+          "deletions": 1,
+          "accepted_lines": 258
+        },
+        "ARCHITECTURE.md": {
+          "additions": 6,
+          "deletions": 2,
+          "accepted_lines": 4
+        },
+        "e2e/real/images.test.ts": {
+          "additions": 24,
+          "deletions": 1,
+          "accepted_lines": 23
+        },
+        "e2e/specs/regressions.spec.ts": {
+          "additions": 29,
+          "accepted_lines": 29
+        },
+        "src/schema/types.ts": {
+          "deletions": 2
+        },
+        "src/render/figma-adapter.ts": {
+          "additions": 3,
+          "accepted_lines": 3
+        },
+        "src/render/create-node.ts": {
+          "additions": 22,
+          "deletions": 13,
+          "accepted_lines": 22
+        },
+        "e2e/real/pixelmatch.d.cts": {
+          "additions": 10,
+          "accepted_lines": 10
+        },
+        "e2e/real/vitest.config.ts": {
+          "additions": 2,
+          "deletions": 1,
+          "accepted_lines": 2
+        },
+        "README.md": {
+          "additions": 1,
+          "deletions": 1,
+          "accepted_lines": 1
+        },
+        "src/render/adapter.ts": {
+          "additions": 1,
+          "accepted_lines": 1
+        },
+        "tests/unit/render.test.ts": {
+          "additions": 31,
+          "accepted_lines": 31
+        },
+        "e2e/real/receiver.ts": {
+          "additions": 6,
+          "deletions": 3,
+          "accepted_lines": 6
+        },
+        "e2e/helpers/figma-runtime.ts": {
+          "additions": 19,
+          "deletions": 3,
+          "accepted_lines": 19
+        }
+      }
+    }
+  }
+}
