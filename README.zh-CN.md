@@ -167,6 +167,6 @@ npm run test:e2e
 
 ## 发布
 
-`npm run release:dry-run` 预览 Git 标签和 GitHub Release，不执行发布。`npm run release` 先验证库，再通过 `release-it` 更新版本、提交、打标签、推送并创建 GitHub Release。当前**只发布 GitHub Release**；[设置文件](.release-it.json)中的 `npm.publish` 为 `false`，不会上传 npm。请在环境变量中提供 `GITHUB_TOKEN`，不要将令牌写入仓库。
+`npm run release:dry-run` 预览 npm 与 GitHub 发布，不执行发布。`npm run release` 先验证库，再通过 `release-it` 更新版本、发布到 npm、提交、打标签、推送并创建 GitHub Release。请先登录 npm，并在环境变量中提供 `GITHUB_TOKEN`；不要将凭据写入仓库。`publishConfig` 固定使用官方 npm Registry。
 
-如果 `package.json` 已是目标版本但尚未打标签，发布时传入 `--no-increment`。之后正常发布可运行 `npm run release`，交互选择下一个版本。
+`v0.1.0` 已发布到 npm 和 GitHub。下次运行 `npm run release` 时，应交互选择新版本。

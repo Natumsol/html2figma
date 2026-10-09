@@ -226,13 +226,12 @@ generic DOM path does not guarantee full support for every semantic tag.
 
 ## Releases
 
-`npm run release:dry-run` previews the Git tag and GitHub Release without
+`npm run release:dry-run` previews the npm and GitHub release without
 publishing. `npm run release` runs the library verification suite, then uses
-`release-it` to update the package version, commit, tag, push, and create a
-GitHub Release. The repository publishes **GitHub releases only**:
-`npm.publish` is disabled in [`.release-it.json`](.release-it.json). Provide
-`GITHUB_TOKEN` in the environment; do not store it in the repository.
+`release-it` to update the package version, publish to npm, commit, tag,
+push, and create a GitHub Release. Authenticate with npm and provide
+`GITHUB_TOKEN` in the environment; do not store credentials in the repository.
+The official npm registry is pinned in `publishConfig`.
 
-For a version already recorded in `package.json` but not yet tagged, pass
-`--no-increment` to release that exact version. Normal subsequent releases
-can use `npm run release` and select the next version interactively.
+`v0.1.0` is already published on npm and GitHub. For the next release, run
+`npm run release` and select a new version interactively.

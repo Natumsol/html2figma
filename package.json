@@ -4,6 +4,17 @@
   "description": "Convert HTML DOM trees into Figma plugin scene nodes.",
   "license": "MIT",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Natumsol/html2figma.git"
+  },
+  "homepage": "https://github.com/Natumsol/html2figma#readme",
+  "bugs": {
+    "url": "https://github.com/Natumsol/html2figma/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",

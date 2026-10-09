@@ -11,6 +11,6 @@
     "autoGenerate": true
   },
   "npm": {
-    "publish": false
+    "publish": true
   }
 }
