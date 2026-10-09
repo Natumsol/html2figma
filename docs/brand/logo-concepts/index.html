@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>html2figma — logo exploration</title>
+  <meta name="description" content="Six original html2figma logo directions using the Figma color palette.">
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1a1a1c;
+      --muted: #69696d;
+      --paper: #f6f6f3;
+      --line: #dededb;
+      --red: #ff3737;
+      --orange: #ff7237;
+      --purple: #874fff;
+      --blue: #00b6ff;
+      --green: #24cb71;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; color: var(--ink); background: var(--paper); font-family: Inter, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+    body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .16; z-index: 20; background-image: radial-gradient(#777 0.4px, transparent 0.4px); background-size: 5px 5px; }
+    button, a { font: inherit; }
+    a { color: inherit; }
+    .shell { width: min(1440px, calc(100% - 64px)); margin: 0 auto; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 24px 0; border-bottom: 1px solid var(--line); }
+    .brand { font-size: 20px; font-weight: 650; letter-spacing: -.06em; text-decoration: none; }
+    .brand b { color: var(--purple); }
+    .topright { display: flex; align-items: center; gap: 22px; }
+    .eyebrow, .index, .subhead, .category, .chip, .asset-links, .mini-label, .footer { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+    .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); }
+    .theme-button { background: transparent; border: 1px solid var(--line); border-radius: 100px; padding: 9px 14px; cursor: pointer; font-size: 12px; }
+    .theme-button:hover { border-color: var(--ink); }
+    .hero { padding: 88px 0 76px; display: grid; grid-template-columns: minmax(0, 1fr) 325px; gap: 52px; align-items: end; }
+    .hero h1 { font-size: clamp(56px, 7.2vw, 116px); line-height: .93; letter-spacing: -.085em; font-weight: 570; margin: 15px 0 28px; max-width: 870px; }
+    .hero h1 em { font-family: Georgia, serif; color: var(--purple); font-weight: 400; }
+    .lead { font-size: 17px; line-height: 1.65; color: #424246; max-width: 580px; margin: 0; }
+    .palette { border-top: 1px solid var(--ink); padding-top: 18px; }
+    .palette-title { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 18px; }
+    .palette-swatches { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; }
+    .swatch { height: 55px; border-radius: 3px; }
+    .swatch:nth-child(1) { background: var(--red); }
+    .swatch:nth-child(2) { background: var(--orange); }
+    .swatch:nth-child(3) { background: var(--purple); }
+    .swatch:nth-child(4) { background: var(--blue); }
+    .swatch:nth-child(5) { background: var(--green); }
+    .palette a { display: block; margin-top: 14px; font-size: 11px; color: var(--muted); line-height: 1.5; text-underline-offset: 3px; }
+    .section-bar { display: flex; justify-content: space-between; align-items: baseline; padding: 21px 0; border-top: 1px solid var(--ink); gap: 20px; }
+    .section-bar h2 { margin: 0; font-size: 15px; letter-spacing: -.02em; font-weight: 650; }
+    .section-bar p { margin: 0; color: var(--muted); font-size: 12px; }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding-bottom: 82px; }
+    .logo-card { min-width: 0; background: #fff; border: 1px solid #e5e5e2; transition: transform .5s cubic-bezier(.16,1,.3,1), box-shadow .5s cubic-bezier(.16,1,.3,1), border-color .25s; }
+    .logo-card:hover { transform: translateY(-5px); box-shadow: 0 18px 35px rgba(23,23,28,.07); }
+    .logo-card.selected { border-color: var(--purple); box-shadow: inset 0 0 0 1px var(--purple); }
+    .card-top { display: flex; justify-content: space-between; align-items: center; padding: 18px 19px; }
+    .index { font-size: 10px; font-weight: 600; letter-spacing: .12em; color: var(--muted); }
+    .select-button { border: 1px solid #d7d7d7; border-radius: 100px; padding: 7px 11px; background: transparent; font-size: 11px; cursor: pointer; transition: background .2s, border-color .2s, color .2s; }
+    .select-button:hover, .selected .select-button { color: #fff; background: var(--ink); border-color: var(--ink); }
+    .logo-canvas { height: 235px; margin: 0 18px; display: grid; place-items: center; position: relative; overflow: hidden; background: #f8f8f6; transition: background .35s; }
+    .logo-canvas::before { content: ""; position: absolute; width: 184px; height: 184px; background: radial-gradient(circle, rgba(135,79,255,.11), transparent 68%); opacity: 0; transform: scale(.6); transition: transform .7s cubic-bezier(.16,1,.3,1), opacity .7s; }
+    .logo-card:hover .logo-canvas::before { opacity: 1; transform: scale(1.25); }
+    .logo-canvas img { width: 132px; height: 132px; position: relative; transition: transform .7s cubic-bezier(.16,1,.3,1); }
+    .logo-card:hover .logo-canvas img { transform: scale(1.07); }
+    .dark-previews .logo-canvas { background: #161619; }
+    .card-body { padding: 22px 21px 16px; min-height: 168px; }
+    .category { color: var(--purple); font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .11em; }
+    .card-body h3 { font-size: 25px; font-weight: 580; letter-spacing: -.055em; margin: 9px 0 9px; }
+    .card-body p { margin: 0; color: #626267; font-size: 13px; line-height: 1.6; }
+    .card-bottom { border-top: 1px solid #eeeeeb; padding: 14px 21px 17px; }
+    .scale-row { display: flex; align-items: center; gap: 14px; min-height: 34px; }
+    .scale-row img { width: 32px; height: 32px; }
+    .scale-row img.small { width: 16px; height: 16px; }
+    .mini-label { font-size: 9px; color: #99999d; letter-spacing: .09em; text-transform: uppercase; margin-left: auto; }
+    .asset-links { display: flex; gap: 16px; padding-top: 16px; font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+    .asset-links a { text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 2px; }
+    .asset-links a:hover { color: var(--purple); }
+    .compare { position: sticky; bottom: 16px; z-index: 10; background: var(--ink); color: #fff; border-radius: 4px; box-shadow: 0 20px 60px rgba(0,0,0,.25); padding: 14px 18px; margin-bottom: 24px; display: none; grid-template-columns: 150px 1fr 1fr; gap: 12px; align-items: center; }
+    .compare.show { display: grid; }
+    .compare-heading { font-size: 11px; line-height: 1.55; }
+    .compare-heading strong { display: block; font-size: 14px; margin-bottom: 4px; }
+    .compare-slot { display: flex; align-items: center; gap: 16px; background: #2b2b30; min-height: 74px; padding: 9px 14px; }
+    .compare-slot img { width: 56px; height: 56px; }
+    .compare-slot span { font-size: 12px; }
+    .compare-slot.empty { color: #85858b; font-size: 12px; }
+    .foot { display: flex; align-items: flex-start; justify-content: space-between; gap: 40px; padding: 26px 0 50px; border-top: 1px solid var(--line); }
+    .foot p { margin: 0; max-width: 540px; font-size: 12px; line-height: 1.6; color: var(--muted); }
+    .footer { font-size: 10px; letter-spacing: .11em; color: #929296; text-transform: uppercase; white-space: nowrap; }
+    @media (max-width: 1080px) { .hero { grid-template-columns: 1fr; } .palette { max-width: 400px; } .grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+    @media (max-width: 680px) { .shell { width: min(100% - 32px, 520px); } .topright .eyebrow { display: none; } .hero { padding: 60px 0 48px; } .hero h1 { font-size: 56px; } .grid { grid-template-columns: 1fr; } .section-bar p { text-align: right; } .compare { grid-template-columns: 1fr 1fr; } .compare-heading { grid-column: 1 / -1; } .compare-slot { min-width: 0; } .foot { flex-direction: column; } }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="../../../README.md">html<b>2</b>figma</a>
+      <div class="topright"><span class="eyebrow">Independent symbol study · 2026</span><button class="theme-button" id="theme-button" type="button" aria-pressed="false">Dark previews</button></div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div>
+          <div class="eyebrow">Brand exploration / six directions</div>
+          <h1>From markup<br>to <em>matter.</em></h1>
+          <p class="lead">Six original marks for a library that turns a rendered browser DOM into portable JSON and editable layers in Figma. Each concept isolates a different part of that transformation.</p>
+        </div>
+        <div class="palette">
+          <div class="palette-title"><span>COLOR SYSTEM</span><span>05 / 05</span></div>
+          <div class="palette-swatches" aria-label="Figma palette: red, orange, purple, blue, green"><div class="swatch"></div><div class="swatch"></div><div class="swatch"></div><div class="swatch"></div><div class="swatch"></div></div>
+          <a href="https://www.figma.com/using-the-figma-brand/">Color reference: Figma Brand Book. Symbols are original and are not Figma marks.</a>
+        </div>
+      </section>
+
+      <div class="section-bar"><h2>Symbol directions</h2><p>Choose up to two to compare · SVG and transparent PNG exports</p></div>
+      <section class="grid" aria-label="Logo concepts">
+        <article class="logo-card" data-id="01" data-title="Frame Shift" data-file="01-frame-shift.svg">
+          <div class="card-top"><span class="index">01 / PURE GEOMETRY</span><button class="select-button" type="button" aria-pressed="false">Compare +</button></div>
+          <div class="logo-canvas"><img src="01-frame-shift.svg" alt="Frame Shift logo"></div>
+          <div class="card-body"><div class="category">Source meets canvas</div><h3>Frame Shift</h3><p>Two offset frames create a third violet region: the place where browser structure becomes editable design.</p></div>
+          <div class="card-bottom"><div class="scale-row"><img src="01-frame-shift.svg" alt="" class="small"><img src="01-frame-shift.svg" alt=""><span class="mini-label">16 px / 32 px</span></div><div class="asset-links"><a href="01-frame-shift.svg" download>Download SVG ↗</a><a href="01-frame-shift.png" download>PNG ↗</a></div></div>
+        </article>
+        <article class="logo-card" data-id="02" data-title="H Grid" data-file="02-h-grid.svg">
+          <div class="card-top"><span class="index">02 / DOT MATRIX</span><button class="select-button" type="button" aria-pressed="false">Compare +</button></div>
+          <div class="logo-canvas"><img src="02-h-grid.svg" alt="H Grid logo"></div>
+          <div class="card-body"><div class="category">HTML as modules</div><h3>H Grid</h3><p>Seven rounded pixels form an H. The compact grid makes the HTML origin visible without drawing a browser.</p></div>
+          <div class="card-bottom"><div class="scale-row"><img src="02-h-grid.svg" alt="" class="small"><img src="02-h-grid.svg" alt=""><span class="mini-label">16 px / 32 px</span></div><div class="asset-links"><a href="02-h-grid.svg" download>Download SVG ↗</a><a href="02-h-grid.png" download>PNG ↗</a></div></div>
+        </article>
+        <article class="logo-card" data-id="03" data-title="Two Path" data-file="03-two-path.svg">
+          <div class="card-top"><span class="index">03 / LINE SYSTEM</span><button class="select-button" type="button" aria-pressed="false">Compare +</button></div>
+          <div class="logo-canvas"><img src="03-two-path.svg" alt="Two Path logo"></div>
+          <div class="card-body"><div class="category">Selected · the conversion link</div><h3>Two Path</h3><p>A single stroke draws the 2 in html2figma, connecting a warm source point to a blue output node.</p></div>
+          <div class="card-bottom"><div class="scale-row"><img src="03-two-path.svg" alt="" class="small"><img src="03-two-path.svg" alt=""><span class="mini-label">16 px / 32 px</span></div><div class="asset-links"><a href="03-two-path.svg" download>Download SVG ↗</a><a href="03-two-path.png" download>PNG ↗</a></div></div>
+        </article>
+        <article class="logo-card" data-id="04" data-title="Bracket Canvas" data-file="04-bracket-canvas.svg">
+          <div class="card-top"><span class="index">04 / LINE + GEOMETRY</span><button class="select-button" type="button" aria-pressed="false">Compare +</button></div>
+          <div class="logo-canvas"><img src="04-bracket-canvas.svg" alt="Bracket Canvas logo"></div>
+          <div class="card-body"><div class="category">Code to editable layer</div><h3>Bracket Canvas</h3><p>An HTML bracket feeds a blue canvas frame through a short violet bridge; the green handle signals editability.</p></div>
+          <div class="card-bottom"><div class="scale-row"><img src="04-bracket-canvas.svg" alt="" class="small"><img src="04-bracket-canvas.svg" alt=""><span class="mini-label">16 px / 32 px</span></div><div class="asset-links"><a href="04-bracket-canvas.svg" download>Download SVG ↗</a><a href="04-bracket-canvas.png" download>PNG ↗</a></div></div>
+        </article>
+        <article class="logo-card" data-id="05" data-title="Materialize" data-file="05-materialize.svg">
+          <div class="card-top"><span class="index">05 / DOTS + GEOMETRY</span><button class="select-button" type="button" aria-pressed="false">Compare +</button></div>
+          <div class="logo-canvas"><img src="05-materialize.svg" alt="Materialize logo"></div>
+          <div class="card-body"><div class="category">From pixels to object</div><h3>Materialize</h3><p>A growing trail of source pixels resolves into one solid editable object. Best for motion and launch materials.</p></div>
+          <div class="card-bottom"><div class="scale-row"><img src="05-materialize.svg" alt="" class="small"><img src="05-materialize.svg" alt=""><span class="mini-label">16 px / 32 px</span></div><div class="asset-links"><a href="05-materialize.svg" download>Download SVG ↗</a><a href="05-materialize.png" download>PNG ↗</a></div></div>
+        </article>
+        <article class="logo-card" data-id="06" data-title="Node Relay" data-file="06-node-relay.svg">
+          <div class="card-top"><span class="index">06 / NODE NETWORK</span><button class="select-button" type="button" aria-pressed="false">Compare +</button></div>
+          <div class="logo-canvas"><img src="06-node-relay.svg" alt="Node Relay logo"></div>
+          <div class="card-body"><div class="category">DOM hierarchy</div><h3>Node Relay</h3><p>Two DOM nodes converge through a conversion point before becoming a canvas layer. The most technical direction.</p></div>
+          <div class="card-bottom"><div class="scale-row"><img src="06-node-relay.svg" alt="" class="small"><img src="06-node-relay.svg" alt=""><span class="mini-label">16 px / 32 px</span></div><div class="asset-links"><a href="06-node-relay.svg" download>Download SVG ↗</a><a href="06-node-relay.png" download>PNG ↗</a></div></div>
+        </article>
+      </section>
+
+      <aside class="compare" id="compare" aria-live="polite">
+        <div class="compare-heading"><strong>Side by side</strong>Pick up to two marks.</div>
+        <div class="compare-slot empty" id="compare-a">Select a concept</div>
+        <div class="compare-slot empty" id="compare-b">Select another</div>
+      </aside>
+    </main>
+
+    <footer class="foot"><p>All symbols are original html2figma concepts. They borrow only the color palette, not the Figma logo or wordmark. This page is a design exploration; choose a direction before replacing the project's official identity.</p><span class="footer">html2figma / identity study 001</span></footer>
+  </div>
+  <script>
+    const themeButton = document.getElementById('theme-button');
+    const compare = document.getElementById('compare');
+    const selected = [];
+    themeButton.addEventListener('click', function () {
+      const dark = document.body.classList.toggle('dark-previews');
+      themeButton.textContent = dark ? 'Light previews' : 'Dark previews';
+      themeButton.setAttribute('aria-pressed', String(dark));
+    });
+    function renderCompare() {
+      compare.classList.toggle('show', selected.length > 0);
+      ['compare-a', 'compare-b'].forEach(function (slotId, index) {
+        const slot = document.getElementById(slotId);
+        const card = selected[index];
+        slot.replaceChildren();
+        slot.classList.toggle('empty', !card);
+        if (!card) { slot.textContent = index === 0 ? 'Select a concept' : 'Select another'; return; }
+        const image = document.createElement('img');
+        image.src = card.dataset.file;
+        image.alt = '';
+        const label = document.createElement('span');
+        label.textContent = card.dataset.title;
+        slot.append(image, label);
+      });
+      document.querySelectorAll('.logo-card').forEach(function (card) {
+        const active = selected.includes(card);
+        card.classList.toggle('selected', active);
+        const button = card.querySelector('.select-button');
+        button.textContent = active ? 'Selected ✓' : 'Compare +';
+        button.setAttribute('aria-pressed', String(active));
+      });
+    }
+    document.querySelectorAll('.select-button').forEach(function (button) {
+      button.addEventListener('click', function () {
+        const card = button.closest('.logo-card');
+        const current = selected.indexOf(card);
+        if (current >= 0) selected.splice(current, 1);
+        else { if (selected.length === 2) selected.shift(); selected.push(card); }
+        renderCompare();
+      });
+    });
+  </script>
+</body>
+</html>

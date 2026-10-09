@@ -1,5 +1,7 @@
 # html2figma
 
+![html2figma logo](https://raw.githubusercontent.com/Natumsol/html2figma/master/docs/brand/logo.svg)
+
 [English](https://github.com/Natumsol/html2figma/blob/master/README.md) · [简体中文](https://github.com/Natumsol/html2figma/blob/master/README.zh-CN.md)
 
 TypeScript library for converting browser HTML DOM into serializable Figma node data and rendering it inside a Figma plugin.

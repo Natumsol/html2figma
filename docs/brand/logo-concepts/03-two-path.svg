@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" color="#874FFF" role="img" aria-labelledby="title desc">
+  <title id="title">html2figma — Two Path</title>
+  <desc id="desc">A continuous number two connects an orange source point to a blue destination node.</desc>
+  <path d="M25 35 C28 19 49 17 63 26 C78 36 75 52 60 62 L34 76 H77" fill="none" stroke="currentColor" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="25" cy="35" r="7" fill="#FF7237"/>
+  <rect x="69" y="68" width="16" height="16" rx="5" fill="#00B6FF"/>
+</svg>

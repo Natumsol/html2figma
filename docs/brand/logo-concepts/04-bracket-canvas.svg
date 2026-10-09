@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-labelledby="title desc">
+  <title id="title">html2figma — Bracket Canvas</title>
+  <desc id="desc">An HTML bracket points through a violet bridge into a blue Figma canvas frame.</desc>
+  <path d="M40 23 21 50 40 77" fill="none" stroke="#FF7237" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M42 50 H60" fill="none" stroke="#874FFF" stroke-width="8" stroke-linecap="round"/>
+  <rect x="51" y="25" width="29" height="50" rx="8" fill="none" stroke="#00B6FF" stroke-width="8"/>
+  <circle cx="77" cy="75" r="6" fill="#24CB71"/>
+</svg>

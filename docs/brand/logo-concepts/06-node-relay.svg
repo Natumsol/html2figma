@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" color="#FF7237" role="img" aria-labelledby="title desc">
+  <title id="title">html2figma — Node Relay</title>
+  <desc id="desc">Two browser DOM nodes converge through a violet conversion node into a blue Figma layer.</desc>
+  <path d="M25 30 C43 30 42 50 55 50 M25 70 C43 70 42 50 55 50 M63 50 H79" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="24" cy="30" r="8" fill="#FF3737"/>
+  <circle cx="24" cy="70" r="8" fill="#24CB71"/>
+  <circle cx="56" cy="50" r="9" fill="#874FFF"/>
+  <rect x="74" y="37" width="18" height="26" rx="6" fill="#00B6FF"/>
+</svg>

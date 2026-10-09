@@ -1,5 +1,7 @@
 # html2figma
 
+![html2figma Logo](https://raw.githubusercontent.com/Natumsol/html2figma/master/docs/brand/logo.svg)
+
 [English](https://github.com/Natumsol/html2figma/blob/master/README.md) · [简体中文](https://github.com/Natumsol/html2figma/blob/master/README.zh-CN.md)
 
 将浏览器中的 DOM 树转换为可序列化的 Figma 节点数据，再通过 Figma 插件渲染为可编辑图层。浏览器转换、Figma 渲染和公共数据结构分别使用独立入口。
