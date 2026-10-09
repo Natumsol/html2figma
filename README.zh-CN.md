@@ -1,6 +1,6 @@
 # html2figma
 
-![html2figma Logo](https://raw.githubusercontent.com/Natumsol/html2figma/master/docs/brand/logo.svg)
+<img src="https://raw.githubusercontent.com/Natumsol/html2figma/master/docs/brand/logo.svg" alt="html2figma Logo" width="96" height="96">
 
 [English](https://github.com/Natumsol/html2figma/blob/master/README.md) · [简体中文](https://github.com/Natumsol/html2figma/blob/master/README.zh-CN.md)
 
