@@ -1,10 +1,40 @@
-# html2figma
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Natumsol/html2figma/master/docs/brand/logo.svg" alt="html2figma Logo" width="96" height="96">
+</p>
 
-<img src="https://raw.githubusercontent.com/Natumsol/html2figma/master/docs/brand/logo.svg" alt="html2figma Logo" width="96" height="96">
+<h1 align="center">html2figma</h1>
 
-[English](https://github.com/Natumsol/html2figma/blob/master/README.md) · [简体中文](https://github.com/Natumsol/html2figma/blob/master/README.zh-CN.md)
+<p align="center">将浏览器渲染后的 HTML 与 CSS 转换为可移植 JSON，并在 Figma 中创建可编辑图层。</p>
 
-将浏览器中的 DOM 树转换为可序列化的 Figma 节点数据，再通过 Figma 插件渲染为可编辑图层。浏览器转换、Figma 渲染和公共数据结构分别使用独立入口。
+<p align="center">
+  <a href="https://github.com/Natumsol/html2figma/actions/workflows/e2e.yml"><img src="https://github.com/Natumsol/html2figma/actions/workflows/e2e.yml/badge.svg?branch=master" alt="端到端测试状态"></a>
+  <a href="https://www.npmjs.com/package/html2figma"><img src="https://img.shields.io/npm/v/html2figma.svg" alt="npm 版本"></a>
+  <a href="https://github.com/Natumsol/html2figma/blob/master/README.zh-CN.md#全部-37-组真实画布截图"><img src="https://img.shields.io/badge/real%20Figma%20cases-37-874FFF" alt="37 组真实 Figma 视觉测试"></a>
+</p>
+
+<p align="center">
+  <a href="#安装与使用">快速开始</a> ·
+  <a href="#示例">示例</a> ·
+  <a href="#端到端测试">视觉验收</a> ·
+  <a href="#html-与-css-支持范围">特性支持</a> ·
+  <a href="https://github.com/Natumsol/html2figma/releases">发布记录</a> ·
+  <a href="https://github.com/Natumsol/html2figma/blob/master/README.md">English</a> ·
+  简体中文
+</p>
+
+<p align="center">
+  <strong>Chromium 参考图 → 真实 Figma 画布</strong><br>
+  <a href="https://github.com/Natumsol/html2figma/blob/master/README.zh-CN.md#全部-37-组真实画布截图"><img src="https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/media-browser.png" alt="media 用例的 Chromium 参考图" width="320"></a>
+  <a href="https://github.com/Natumsol/html2figma/blob/master/README.zh-CN.md#全部-37-组真实画布截图"><img src="https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/media-figma.png" alt="media 用例的真实 Figma 导出图" width="320"></a><br>
+  <sub>一组已归档的验收用例，下方可查看全部 37 组截图。</sub>
+</p>
+
+## 特点
+
+- 在浏览器中读取渲染后的 DOM 尺寸和受支持的计算样式。
+- 通过可校验的 JSON 在浏览器与 Figma 插件之间传递结果。
+- 创建可编辑文字、图形、图片和受支持的布局，并报告降级警告。
+- 提供 Chrome 扩展与 Figma 插件示例，并附 37 组真实画布验收截图。
 
 ## 安装与使用
 

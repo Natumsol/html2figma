@@ -1,10 +1,40 @@
-# html2figma
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Natumsol/html2figma/master/docs/brand/logo.svg" alt="html2figma logo" width="96" height="96">
+</p>
 
-<img src="https://raw.githubusercontent.com/Natumsol/html2figma/master/docs/brand/logo.svg" alt="html2figma logo" width="96" height="96">
+<h1 align="center">html2figma</h1>
 
-[English](https://github.com/Natumsol/html2figma/blob/master/README.md) · [简体中文](https://github.com/Natumsol/html2figma/blob/master/README.zh-CN.md)
+<p align="center">Convert rendered browser HTML and CSS into portable JSON and editable Figma layers.</p>
 
-TypeScript library for converting browser HTML DOM into serializable Figma node data and rendering it inside a Figma plugin.
+<p align="center">
+  <a href="https://github.com/Natumsol/html2figma/actions/workflows/e2e.yml"><img src="https://github.com/Natumsol/html2figma/actions/workflows/e2e.yml/badge.svg?branch=master" alt="E2E CI status"></a>
+  <a href="https://www.npmjs.com/package/html2figma"><img src="https://img.shields.io/npm/v/html2figma.svg" alt="npm version"></a>
+  <a href="https://github.com/Natumsol/html2figma/blob/master/README.md#all-37-real-canvas-screenshot-pairs"><img src="https://img.shields.io/badge/real%20Figma%20cases-37-874FFF" alt="37 real Figma visual cases"></a>
+</p>
+
+<p align="center">
+  <a href="#install">Get started</a> ·
+  <a href="#examples">Examples</a> ·
+  <a href="#end-to-end-tests">Visual E2E</a> ·
+  <a href="#html-and-css-support">Feature support</a> ·
+  <a href="https://github.com/Natumsol/html2figma/releases">Releases</a> ·
+  English ·
+  <a href="https://github.com/Natumsol/html2figma/blob/master/README.zh-CN.md">简体中文</a>
+</p>
+
+<p align="center">
+  <strong>Chromium reference → Real Figma canvas</strong><br>
+  <a href="https://github.com/Natumsol/html2figma/blob/master/README.md#all-37-real-canvas-screenshot-pairs"><img src="https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/media-browser.png" alt="Chromium reference for the media case" width="320"></a>
+  <a href="https://github.com/Natumsol/html2figma/blob/master/README.md#all-37-real-canvas-screenshot-pairs"><img src="https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/media-figma.png" alt="Real Figma export for the media case" width="320"></a><br>
+  <sub>One archived acceptance case. Explore all 37 screenshot pairs below.</sub>
+</p>
+
+## Features
+
+- Capture rendered DOM geometry and supported computed CSS in the browser.
+- Pass validated, portable JSON from the browser to a Figma plugin.
+- Create editable text, shapes, images, and supported layouts, with warnings for fallbacks.
+- Explore the Chrome extension and Figma plugin examples alongside 37 archived real-canvas screenshot comparisons.
 
 ## Install
 
