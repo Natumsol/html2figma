@@ -168,29 +168,29 @@ npm run test:e2e
 
 ## HTML 与 CSS 支持范围
 
-下表描述当前实现。「部分支持」表示可以抓取，但存在列出的 Figma 表现限制。普通元素使用通用 DOM 路径，不表示所有语义标签都已完整支持。
+下表描述当前实现。✅ 表示在列出的范围内支持，⚠️ 表示存在列出的限制，❌ 表示无法保真转换。每个符号都附有文字说明。普通元素使用通用 DOM 路径，不表示所有语义标签都已完整支持。
 
-| HTML 元素 | 状态 | 当前行为与限制 |
+| HTML 元素 | 支持度 | 当前行为与限制 |
 | --- | --- | --- |
-| `div`、`span`、`p`、`article` 等普通可见元素 | 支持常见结构/样式 | 转换为 Frame 或 Rectangle，保留嵌套元素和可编辑文字；浏览器默认样式可能存在差异。 |
-| 文本节点 | 部分支持 | 测量边界并映射为可编辑文字；空白字符会折叠，复杂行内排版和字体度量可能有差异。 |
-| `img`，包括 `picture` 内的 `img` | 部分支持 | 使用 `currentSrc`；映射 `object-fit: cover` 和 `contain`。其他适配方式和 `object-position` 无法准确还原；`source` 不生成 Figma 节点。 |
-| 内联 `svg` | 部分支持 | 序列化为 SVG，并展开本地 `<use href="#…">`；不保证外部引用和全部 SVG 特性。 |
-| `canvas` | 部分支持 | 导入静态 PNG；导出失败产生 `canvas-export-failed`，图形元素不可单独编辑。 |
-| `video` | 部分支持 | `poster` 变为静态图片；无封面时生成 Frame 并产生 `video-poster-missing`。不支持播放。 |
-| 开放的 Shadow DOM | 部分支持 | 遍历可访问的 `shadowRoot`；closed root 无法访问。 |
-| `iframe`、原生表单控件、媒体播放 | **不支持内容级还原** | 外层元素可能走通用路径，但不转换 iframe 内部、原生控件外观/状态或媒体播放。 |
+| `div`、`span`、`p`、`article` 等普通可见元素 | ✅ 支持常见结构/样式 | 转换为 Frame 或 Rectangle，保留嵌套元素和可编辑文字；浏览器默认样式可能存在差异。 |
+| 文本节点 | ⚠️ 部分支持 | 测量边界并映射为可编辑文字；空白字符会折叠，复杂行内排版和字体度量可能有差异。 |
+| `img`，包括 `picture` 内的 `img` | ⚠️ 部分支持 | 使用 `currentSrc`；映射 `object-fit: cover` 和 `contain`。其他适配方式和 `object-position` 无法准确还原；`source` 不生成 Figma 节点。 |
+| 内联 `svg` | ⚠️ 部分支持 | 序列化为 SVG，并展开本地 `<use href="#…">`；不保证外部引用和全部 SVG 特性。 |
+| `canvas` | ⚠️ 部分支持 | 导入静态 PNG；导出失败产生 `canvas-export-failed`，图形元素不可单独编辑。 |
+| `video` | ⚠️ 部分支持 | `poster` 变为静态图片；无封面时生成 Frame 并产生 `video-poster-missing`。不支持播放。 |
+| 开放的 Shadow DOM | ⚠️ 部分支持 | 遍历可访问的 `shadowRoot`；closed root 无法访问。 |
+| `iframe`、原生表单控件、媒体播放 | ❌ 不支持内容级还原 | 外层元素可能走通用路径，但不转换 iframe 内部、原生控件外观/状态或媒体播放。 |
 
-| CSS 特性 | 状态 | 当前行为与限制 |
+| CSS 特性 | 支持度 | 当前行为与限制 |
 | --- | --- | --- |
-| 测量尺寸/位置、纯色 `background-color`、`opacity`、各角 `border-radius` | 支持 | 根据计算样式和浏览器边界生成固定尺寸快照；不生成响应式 Figma 约束。 |
-| 纯色边框 | 部分支持 | 四边一致时使用 Stroke；不同边使用矩形辅助层。复杂转角拼接，以及图片/SVG/canvas/video 节点上的辅助层无法准确还原；非 `solid` 样式产生 `unsupported-border-style`。 |
-| `background-image` | 部分支持 | 支持单层 `url(...)`；`background-size: contain` 映射为 fit，其余尺寸映射为 fill。渐变或多层背景产生 `unsupported-background-image`；重复和平移无法准确还原。 |
-| `box-shadow` | 部分支持 | 解析符合格式的外阴影，包括多个 `rgb()`/`rgba()` 阴影；内阴影或无法解析的阴影被跳过。 |
-| 文字颜色、字体家族/字号/字重/字形、像素行高/字距、对齐、下划线/删除线、大小写 | 部分支持 | 映射为可编辑文字。Figma 字体缺失时回退 Inter 并产生 `font-load-failed`；复杂文字排版无法完全一致。 |
-| 简单的 `display: flex` / `inline-flex` | 部分支持 | 行/列、不换行布局仅在可重现实测子元素位置时转为固定尺寸 Auto Layout。反向、换行、重排/定位子元素、外边距或坐标不符时保留绝对位置，并产生 `flex-layout-fallback`。 |
-| CSS Grid、`transform` | **不支持** | 无对应 Figma 布局或变换；产生 `unsupported-css-grid` 或 `unsupported-transform`。AST 仍可能保留测量后的边界。 |
-| Filter、混合模式、伪元素、动画、裁剪、Mask、表格布局、原生表单样式、响应式 Figma 约束 | **不支持** | 没有对应的保真实现；不是所有不支持的声明都会产生警告。 |
+| 测量尺寸/位置、纯色 `background-color`、`opacity`、各角 `border-radius` | ✅ 支持 | 根据计算样式和浏览器边界生成固定尺寸快照；不生成响应式 Figma 约束。 |
+| 纯色边框 | ⚠️ 部分支持 | 四边一致时使用 Stroke；不同边使用矩形辅助层。复杂转角拼接，以及图片/SVG/canvas/video 节点上的辅助层无法准确还原；非 `solid` 样式产生 `unsupported-border-style`。 |
+| `background-image` | ⚠️ 部分支持 | 支持单层 `url(...)`；`background-size: contain` 映射为 fit，其余尺寸映射为 fill。渐变或多层背景产生 `unsupported-background-image`；重复和平移无法准确还原。 |
+| `box-shadow` | ⚠️ 部分支持 | 解析符合格式的外阴影，包括多个 `rgb()`/`rgba()` 阴影；内阴影或无法解析的阴影被跳过。 |
+| 文字颜色、字体家族/字号/字重/字形、像素行高/字距、对齐、下划线/删除线、大小写 | ⚠️ 部分支持 | 映射为可编辑文字。Figma 字体缺失时回退 Inter 并产生 `font-load-failed`；复杂文字排版无法完全一致。 |
+| 简单的 `display: flex` / `inline-flex` | ⚠️ 部分支持 | 行/列、不换行布局仅在可重现实测子元素位置时转为固定尺寸 Auto Layout。反向、换行、重排/定位子元素、外边距或坐标不符时保留绝对位置，并产生 `flex-layout-fallback`。 |
+| CSS Grid、`transform` | ❌ 不支持 | 无对应 Figma 布局或变换；产生 `unsupported-css-grid` 或 `unsupported-transform`。AST 仍可能保留测量后的边界。 |
+| Filter、混合模式、伪元素、动画、裁剪、Mask、表格布局、原生表单样式、响应式 Figma 约束 | ❌ 不支持 | 没有对应的保真实现；不是所有不支持的声明都会产生警告。 |
 
 ## 发布
 

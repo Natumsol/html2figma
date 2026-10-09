@@ -223,31 +223,33 @@ The older agent-assisted visual flow remains available through
 
 ## HTML and CSS support
 
-The tables describe the current implementation. **Partial** means the element
-is captured but its Figma appearance or behavior has the stated limit. A
-generic DOM path does not guarantee full support for every semantic tag.
+The tables describe the current implementation. **✅ Supported** applies only
+to the stated scope, **⚠️ Partial** means the result has the listed limits, and
+**❌ Unsupported** means faithful conversion is unavailable. The labels remain
+visible alongside the symbols. A generic DOM path does not guarantee full
+support for every semantic tag.
 
-| HTML element | Status | Current behavior and limits |
+| HTML element | Support | Current behavior and limits |
 | --- | --- | --- |
-| `div`, `span`, `p`, `article`, other visible ordinary elements | Supported for common structure/styles | Converted to frames or rectangles with nested elements and editable text; browser defaults may differ. |
-| Text nodes | Partial | Measured and mapped to editable Figma text; whitespace is collapsed and complex inline flow/font metrics can differ. |
-| `img`, including inside `picture` | Partial | Uses `currentSrc`; `object-fit: cover` and `contain` are mapped. Other fitting and `object-position` are not faithful. `source` is not a Figma node. |
-| Inline `svg` | Partial | Serialized as SVG; local `<use href="#…">` is expanded. External references and all SVG features are not guaranteed. |
-| `canvas` | Partial | Captures a static PNG; export failures emit `canvas-export-failed`. Drawing primitives are not editable. |
-| `video` | Partial | A `poster` becomes a static image; without one it becomes a frame with `video-poster-missing`. Playback is unsupported. |
-| Open Shadow DOM | Partial | Traverses an accessible `shadowRoot`; closed roots are inaccessible. |
-| `iframe`, native form controls, media playback | **Unsupported as faithful content** | Outer elements may use generic conversion, but iframe contents, native control appearance/state, and playback are not converted. |
+| `div`, `span`, `p`, `article`, other visible ordinary elements | ✅ Supported (common structure/styles) | Converted to frames or rectangles with nested elements and editable text; browser defaults may differ. |
+| Text nodes | ⚠️ Partial | Measured and mapped to editable Figma text; whitespace is collapsed and complex inline flow/font metrics can differ. |
+| `img`, including inside `picture` | ⚠️ Partial | Uses `currentSrc`; `object-fit: cover` and `contain` are mapped. Other fitting and `object-position` are not faithful. `source` is not a Figma node. |
+| Inline `svg` | ⚠️ Partial | Serialized as SVG; local `<use href="#…">` is expanded. External references and all SVG features are not guaranteed. |
+| `canvas` | ⚠️ Partial | Captures a static PNG; export failures emit `canvas-export-failed`. Drawing primitives are not editable. |
+| `video` | ⚠️ Partial | A `poster` becomes a static image; without one it becomes a frame with `video-poster-missing`. Playback is unsupported. |
+| Open Shadow DOM | ⚠️ Partial | Traverses an accessible `shadowRoot`; closed roots are inaccessible. |
+| `iframe`, native form controls, media playback | ❌ Unsupported as faithful content | Outer elements may use generic conversion, but iframe contents, native control appearance/state, and playback are not converted. |
 
-| CSS feature | Status | Current behavior and limits |
+| CSS feature | Support | Current behavior and limits |
 | --- | --- | --- |
-| Measured geometry, solid `background-color`, `opacity`, per-corner `border-radius` | Supported | Fixed-size snapshot from computed CSS and browser bounds; no responsive Figma constraints. |
-| Solid borders | Partial | Uniform strokes map directly. Asymmetric sides use rectangle helpers; complex corner joins and helpers on image/SVG/canvas/video nodes are not faithful. Non-solid styles emit `unsupported-border-style`. |
-| `background-image` | Partial | One `url(...)` image; `background-size: contain` maps to fit, other sizes to fill. Gradients/multiple layers emit `unsupported-background-image`; repeat/position are not faithful. |
-| `box-shadow` | Partial | Supported outer `rgb()`/`rgba()` shadows, including multiple shadows; inset/unparseable shadows are skipped. |
-| Text color, family, size, weight, style, pixel line height/letter spacing, alignment, underline/strike, case | Partial | Mapped to editable text. Missing Figma fonts fall back to Inter with `font-load-failed`; richer typography is not equivalent. |
-| Simple `display: flex` / `inline-flex` | Partial | Row/column no-wrap becomes fixed-size Auto Layout only if supported properties reproduce measured child positions. Reverse, wrap, reordered/positioned children, margins, or mismatches fall back to absolute positions with `flex-layout-fallback`. |
-| CSS Grid, `transform` | **Unsupported** | No matching Figma layout/transform; emits `unsupported-css-grid` or `unsupported-transform`. Measured bounds may remain. |
-| Filters, blend modes, pseudo-elements, animations, clipping, masks, table layout, native form appearance, responsive Figma constraints | **Unsupported** | No faithful implementation. Not every unsupported declaration produces a warning. |
+| Measured geometry, solid `background-color`, `opacity`, per-corner `border-radius` | ✅ Supported | Fixed-size snapshot from computed CSS and browser bounds; no responsive Figma constraints. |
+| Solid borders | ⚠️ Partial | Uniform strokes map directly. Asymmetric sides use rectangle helpers; complex corner joins and helpers on image/SVG/canvas/video nodes are not faithful. Non-solid styles emit `unsupported-border-style`. |
+| `background-image` | ⚠️ Partial | One `url(...)` image; `background-size: contain` maps to fit, other sizes to fill. Gradients/multiple layers emit `unsupported-background-image`; repeat/position are not faithful. |
+| `box-shadow` | ⚠️ Partial | Supported outer `rgb()`/`rgba()` shadows, including multiple shadows; inset/unparseable shadows are skipped. |
+| Text color, family, size, weight, style, pixel line height/letter spacing, alignment, underline/strike, case | ⚠️ Partial | Mapped to editable text. Missing Figma fonts fall back to Inter with `font-load-failed`; richer typography is not equivalent. |
+| Simple `display: flex` / `inline-flex` | ⚠️ Partial | Row/column no-wrap becomes fixed-size Auto Layout only if supported properties reproduce measured child positions. Reverse, wrap, reordered/positioned children, margins, or mismatches fall back to absolute positions with `flex-layout-fallback`. |
+| CSS Grid, `transform` | ❌ Unsupported | No matching Figma layout/transform; emits `unsupported-css-grid` or `unsupported-transform`. Measured bounds may remain. |
+| Filters, blend modes, pseudo-elements, animations, clipping, masks, table layout, native form appearance, responsive Figma constraints | ❌ Unsupported | No faithful implementation. Not every unsupported declaration produces a warning. |
 
 ## Releases
 
