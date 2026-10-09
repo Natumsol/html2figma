@@ -1,0 +1,32 @@
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8-ntes.9",
+  "base_commit_sha": "c27486d6312eb7e1bafa516f3b8aabf2743d1dac",
+  "prompts": {
+    "0bf9681c835f9b66": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0c88e-047a-70f0-8c8a-633d238621b6",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Natumsol",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 14,
+      "accepted_lines": 1,
+      "overriden_lines": 0,
+      "per_file_stats": {
+        "e2e/real/host.ts": {
+          "accepted_lines": 1
+        },
+        "README.md": {
+          "deletions": 7
+        },
+        "README.zh-CN.md": {
+          "deletions": 7
+        }
+      }
+    }
+  }
+}
