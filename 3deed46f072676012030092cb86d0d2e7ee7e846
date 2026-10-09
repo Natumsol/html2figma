@@ -1,0 +1,96 @@
+docs/brand/logo-concepts/04-bracket-canvas.svg
+  0bf9681c835f9b66 1-8
+docs/brand/logo-concepts/01-frame-shift.svg
+  0bf9681c835f9b66 1-13
+docs/brand/logo-concepts/02-h-grid.svg
+  0bf9681c835f9b66 1-13
+docs/brand/logo-concepts/06-node-relay.svg
+  0bf9681c835f9b66 1-9
+docs/brand/logo.svg
+  0bf9681c835f9b66 1-7
+docs/brand/logo-concepts/03-two-path.svg
+  0bf9681c835f9b66 1-7
+docs/brand/logo-concepts/index.html
+  0bf9681c835f9b66 1-207
+docs/brand/README.md
+  0bf9681c835f9b66 1-16
+README.md
+  0bf9681c835f9b66 3-4
+README.zh-CN.md
+  0bf9681c835f9b66 3-4
+docs/brand/logo-concepts/05-materialize.svg
+  0bf9681c835f9b66 1-10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8-ntes.9",
+  "base_commit_sha": "3deed46f072676012030092cb86d0d2e7ee7e846",
+  "prompts": {
+    "0bf9681c835f9b66": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0c88e-047a-70f0-8c8a-633d238621b6",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Natumsol",
+      "messages": [],
+      "total_additions": 299,
+      "total_deletions": 5,
+      "accepted_lines": 295,
+      "overriden_lines": 0,
+      "per_file_stats": {
+        "docs/brand/logo-concepts/04-bracket-canvas.svg": {
+          "additions": 8,
+          "accepted_lines": 8
+        },
+        "docs/brand/README.md": {
+          "additions": 17,
+          "deletions": 1,
+          "accepted_lines": 16
+        },
+        "e2e/real/host.ts": {
+          "accepted_lines": 1
+        },
+        "docs/brand/logo-concepts/05-materialize.svg": {
+          "additions": 11,
+          "deletions": 1,
+          "accepted_lines": 10
+        },
+        "docs/brand/logo-concepts/index.html": {
+          "additions": 209,
+          "deletions": 2,
+          "accepted_lines": 207
+        },
+        "docs/brand/logo.svg": {
+          "additions": 7,
+          "accepted_lines": 7
+        },
+        "docs/brand/logo-concepts/03-two-path.svg": {
+          "additions": 7,
+          "accepted_lines": 7
+        },
+        "docs/brand/logo-concepts/01-frame-shift.svg": {
+          "additions": 13,
+          "accepted_lines": 13
+        },
+        "docs/brand/logo-concepts/02-h-grid.svg": {
+          "additions": 13,
+          "accepted_lines": 13
+        },
+        "README.zh-CN.md": {
+          "additions": 2,
+          "accepted_lines": 2
+        },
+        "docs/brand/logo-concepts/06-node-relay.svg": {
+          "additions": 10,
+          "deletions": 1,
+          "accepted_lines": 9
+        },
+        "README.md": {
+          "additions": 2,
+          "accepted_lines": 2
+        }
+      }
+    }
+  }
+}
