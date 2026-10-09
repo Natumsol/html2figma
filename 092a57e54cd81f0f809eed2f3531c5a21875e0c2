@@ -1,0 +1,50 @@
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8-ntes.9",
+  "base_commit_sha": "092a57e54cd81f0f809eed2f3531c5a21875e0c2",
+  "prompts": {
+    "0bf9681c835f9b66": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0c88e-047a-70f0-8c8a-633d238621b6",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Natumsol",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 183,
+      "accepted_lines": 1,
+      "overriden_lines": 0,
+      "per_file_stats": {
+        "e2e/real/EXTENSION_ACCEPTANCE.md": {
+          "deletions": 14
+        },
+        "e2e/visual/ACCEPTANCE.md": {
+          "deletions": 65
+        },
+        "e2e/real/TWO_RUN_ACCEPTANCE.md": {
+          "deletions": 18
+        },
+        "e2e/real/host.ts": {
+          "accepted_lines": 1
+        },
+        "e2e/real/SIX_CASES_ACCEPTANCE.md": {
+          "deletions": 34
+        },
+        "e2e/real/README.md": {
+          "deletions": 6
+        },
+        "e2e/real/SAFE_CLEANUP_ACCEPTANCE.md": {
+          "deletions": 14
+        },
+        "e2e/real/ACCEPTANCE.md": {
+          "deletions": 30
+        },
+        "e2e/README.md": {
+          "deletions": 2
+        }
+      }
+    }
+  }
+}
