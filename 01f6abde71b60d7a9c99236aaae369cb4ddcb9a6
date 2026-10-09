@@ -1,0 +1,33 @@
+package.json
+  0bf9681c835f9b66 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8-ntes.9",
+  "base_commit_sha": "01f6abde71b60d7a9c99236aaae369cb4ddcb9a6",
+  "prompts": {
+    "0bf9681c835f9b66": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0c88e-047a-70f0-8c8a-633d238621b6",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Natumsol",
+      "messages": [],
+      "total_additions": 5,
+      "total_deletions": 5,
+      "accepted_lines": 2,
+      "overriden_lines": 0,
+      "per_file_stats": {
+        "e2e/real/host.ts": {
+          "accepted_lines": 1
+        },
+        "package.json": {
+          "additions": 5,
+          "deletions": 5,
+          "accepted_lines": 1
+        }
+      }
+    }
+  }
+}
