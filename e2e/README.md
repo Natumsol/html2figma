@@ -66,8 +66,6 @@ npm run test:e2e:real -- --manual-plugin --bind --file-key YOUR_FILE_KEY --page-
 
 ## 真实 Figma 画布截图验收
 
-已有 [2026-09-23 验收记录](visual/ACCEPTANCE.md)，包含真实 Figma 节点链接与本次发现的回归问题。
-
 这一步需要可编辑的 Figma Design 文件和已登录的 Figma MCP 连接。
 它执行本仓库构建出的 `dist/render.cjs`，不使用其他 HTML 转 Figma 工具。
 

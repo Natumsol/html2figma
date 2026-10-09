@@ -1,11 +1,5 @@
 # 真实 Figma 后台验收：元素还原度、综合视觉场景与扩展集成
 
-[2026-09-23 实机验收记录](ACCEPTANCE.md)保存了已通过的一轮结果与证据边界。
-[2026-09-23 六场景实机验收记录](SIX_CASES_ACCEPTANCE.md)保存了本入口的六项结果。
-[2026-09-23 扩展下载到真实画布验收记录](EXTENSION_ACCEPTANCE.md)保存了八项同轮结果。
-[2026-09-23 安全清理与失败留痕验收记录](SAFE_CLEANUP_ACCEPTANCE.md)保存了正常清理和受控失败结果。
-[2026-09-24 两轮八项最终验收记录](TWO_RUN_ACCEPTANCE.md)保存了独立双轮与故障证据。
-
 本入口在 [#2](https://github.com/Natumsol/html2figma/issues/2) 单样例切片上实现 [#3](https://github.com/Natumsol/html2figma/issues/3) 与 [#4](https://github.com/Natumsol/html2figma/issues/4)：
 同一轮对 `e2e/visual/cases.json` 中的十二个综合视觉场景和
 `e2e/visual/fidelity-cases.json` 中的二十三个元素 × CSS 场景依次执行当前浏览器 convert →
