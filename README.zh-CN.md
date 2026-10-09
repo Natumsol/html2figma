@@ -1,6 +1,6 @@
 # html2figma
 
-[English](README.md) · [简体中文](README.zh-CN.md)
+[English](https://github.com/Natumsol/html2figma/blob/master/README.md) · [简体中文](https://github.com/Natumsol/html2figma/blob/master/README.zh-CN.md)
 
 将浏览器中的 DOM 树转换为可序列化的 Figma 节点数据，再通过 Figma 插件渲染为可编辑图层。浏览器转换、Figma 渲染和公共数据结构分别使用独立入口。
 
@@ -37,8 +37,8 @@ console.log(result.root, result.warnings);
 
 ## 示例
 
-- [Figma 插件示例](example/figma-plugin)：渲染内置 HTML 区块，或通过 Import JSON 导入。
-- [Chrome 扩展示例](example/chrome-extension)：将当前网页或选区转换为 html2figma JSON。
+- [Figma 插件示例](https://github.com/Natumsol/html2figma/tree/master/example/figma-plugin)：渲染内置 HTML 区块，或通过 Import JSON 导入。
+- [Chrome 扩展示例](https://github.com/Natumsol/html2figma/tree/master/example/chrome-extension)：将当前网页或选区转换为 html2figma JSON。
 
 ```sh
 npm ci
@@ -50,7 +50,7 @@ npm --prefix example run dev:figma
 
 ## 开发与验证
 
-提交前运行 `npm run verify:all`。此命令检查浏览器/Figma 源码边界、库与示例的类型、单测、构建、浏览器测试和构建后的 UI E2E。CI 也使用此命令，但**不运行真实 Figma**。运行环境与调试命令见 [E2E 工程指南](e2e/README.md)。
+提交前运行 `npm run verify:all`。此命令检查浏览器/Figma 源码边界、库与示例的类型、单测、构建、浏览器测试和构建后的 UI E2E。CI 也使用此命令，但**不运行真实 Figma**。运行环境与调试命令见 [E2E 工程指南](https://github.com/Natumsol/html2figma/blob/master/e2e/README.md)。
 
 渲染警告会保留节点诊断；JSON 导入校验检查数值范围、唯一 ID 和资源引用。图片加载失败会产生渲染警告。嵌入的 Base64 图片通过 Figma API 解码；HTTP 图片通过网络获取。
 
@@ -65,7 +65,7 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-`npm run test:e2e:real` 在绑定的可编辑 Figma Design 文件中运行 **37 个场景**：**23 个元素 × CSS 还原度用例**、**12 个综合视觉用例**、**2 个扩展到真实画布用例**。每项检查预期警告、PNG 尺寸，以及浏览器和真实 Figma 图像的像素差异。23 个元素用例还检查目标标签、计算后的 CSS 和 AST 类型；文字/图片用例额外检查文字属性或图片填充。此命令需要 macOS、已登录的 Figma 与绑定的测试文件；正常运行不依赖 Agent。首次绑定与报告路径见[真实 Figma 指南](e2e/real/README.md)。
+`npm run test:e2e:real` 在绑定的可编辑 Figma Design 文件中运行 **37 个场景**：**23 个元素 × CSS 还原度用例**、**12 个综合视觉用例**、**2 个扩展到真实画布用例**。每项检查预期警告、PNG 尺寸，以及浏览器和真实 Figma 图像的像素差异。23 个元素用例还检查目标标签、计算后的 CSS 和 AST 类型；文字/图片用例额外检查文字属性或图片填充。此命令需要 macOS、已登录的 Figma 与绑定的测试文件；正常运行不依赖 Agent。首次绑定与报告路径见[真实 Figma 指南](https://github.com/Natumsol/html2figma/blob/master/e2e/real/README.md)。
 
 | 类别 | 真实 Figma 用例 | 验收点 |
 | --- | --- | --- |
@@ -83,61 +83,63 @@ npm run test:e2e
 
 下图是**同一轮 37/37 通过**的原始 PNG 导出（`f6eba5e2-d5c8-4668-aef1-61d00d749f07`，2026 年 9 月 24 日）。每行的两张图使用同一个 HTML 样例和相同的输出尺寸。百分比是该轮报告中的实测差异像素比例，**不是**允许上限。原始运行产物位于未跟踪的 `test-results/`，下图是纳入仓库的原样副本。
 
+图片使用 `v0.1.0` 标签的绝对地址，以便在 npm 页面加载，并固定这轮测试的截图。
+
 #### 综合视觉场景（12）
 
 | 用例 · 实测差异像素 | Chromium 参考图 | 真实 Figma 导出图 |
 | --- | --- | --- |
-| `geometry` · 0.000% | ![浏览器参考图：geometry](docs/images/e2e/geometry-browser.png) | ![真实 Figma 导出图：geometry](docs/images/e2e/geometry-figma.png) |
-| `flex-border` · 0.000% | ![浏览器参考图：flex-border](docs/images/e2e/flex-border-browser.png) | ![真实 Figma 导出图：flex-border](docs/images/e2e/flex-border-figma.png) |
-| `typography` · 1.055% | ![浏览器参考图：typography](docs/images/e2e/typography-browser.png) | ![真实 Figma 导出图：typography](docs/images/e2e/typography-figma.png) |
-| `flex-reverse` · 0.000% | ![浏览器参考图：flex-reverse](docs/images/e2e/flex-reverse-browser.png) | ![真实 Figma 导出图：flex-reverse](docs/images/e2e/flex-reverse-figma.png) |
-| `flex-absolute` · 0.000% | ![浏览器参考图：flex-absolute](docs/images/e2e/flex-absolute-browser.png) | ![真实 Figma 导出图：flex-absolute](docs/images/e2e/flex-absolute-figma.png) |
-| `media` · 0.000% | ![浏览器参考图：media](docs/images/e2e/media-browser.png) | ![真实 Figma 导出图：media](docs/images/e2e/media-figma.png) |
-| `edge-borders` · 0.000% | ![浏览器参考图：edge-borders](docs/images/e2e/edge-borders-browser.png) | ![真实 Figma 导出图：edge-borders](docs/images/e2e/edge-borders-figma.png) |
-| `text-transform` · 0.025% | ![浏览器参考图：text-transform](docs/images/e2e/text-transform-browser.png) | ![真实 Figma 导出图：text-transform](docs/images/e2e/text-transform-figma.png) |
-| `background-image` · 0.031% | ![浏览器参考图：background-image](docs/images/e2e/background-image-browser.png) | ![真实 Figma 导出图：background-image](docs/images/e2e/background-image-figma.png) |
-| `video-poster` · 0.000% | ![浏览器参考图：video-poster](docs/images/e2e/video-poster-browser.png) | ![真实 Figma 导出图：video-poster](docs/images/e2e/video-poster-figma.png) |
-| `flex-wrap` · 0.000% | ![浏览器参考图：flex-wrap](docs/images/e2e/flex-wrap-browser.png) | ![真实 Figma 导出图：flex-wrap](docs/images/e2e/flex-wrap-figma.png) |
-| `shadow-dom` · 0.000% | ![浏览器参考图：shadow-dom](docs/images/e2e/shadow-dom-browser.png) | ![真实 Figma 导出图：shadow-dom](docs/images/e2e/shadow-dom-figma.png) |
+| `geometry` · 0.000% | ![浏览器参考图：geometry](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/geometry-browser.png) | ![真实 Figma 导出图：geometry](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/geometry-figma.png) |
+| `flex-border` · 0.000% | ![浏览器参考图：flex-border](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/flex-border-browser.png) | ![真实 Figma 导出图：flex-border](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/flex-border-figma.png) |
+| `typography` · 1.055% | ![浏览器参考图：typography](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/typography-browser.png) | ![真实 Figma 导出图：typography](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/typography-figma.png) |
+| `flex-reverse` · 0.000% | ![浏览器参考图：flex-reverse](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/flex-reverse-browser.png) | ![真实 Figma 导出图：flex-reverse](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/flex-reverse-figma.png) |
+| `flex-absolute` · 0.000% | ![浏览器参考图：flex-absolute](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/flex-absolute-browser.png) | ![真实 Figma 导出图：flex-absolute](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/flex-absolute-figma.png) |
+| `media` · 0.000% | ![浏览器参考图：media](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/media-browser.png) | ![真实 Figma 导出图：media](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/media-figma.png) |
+| `edge-borders` · 0.000% | ![浏览器参考图：edge-borders](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/edge-borders-browser.png) | ![真实 Figma 导出图：edge-borders](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/edge-borders-figma.png) |
+| `text-transform` · 0.025% | ![浏览器参考图：text-transform](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/text-transform-browser.png) | ![真实 Figma 导出图：text-transform](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/text-transform-figma.png) |
+| `background-image` · 0.031% | ![浏览器参考图：background-image](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/background-image-browser.png) | ![真实 Figma 导出图：background-image](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/background-image-figma.png) |
+| `video-poster` · 0.000% | ![浏览器参考图：video-poster](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/video-poster-browser.png) | ![真实 Figma 导出图：video-poster](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/video-poster-figma.png) |
+| `flex-wrap` · 0.000% | ![浏览器参考图：flex-wrap](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/flex-wrap-browser.png) | ![真实 Figma 导出图：flex-wrap](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/flex-wrap-figma.png) |
+| `shadow-dom` · 0.000% | ![浏览器参考图：shadow-dom](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/shadow-dom-browser.png) | ![真实 Figma 导出图：shadow-dom](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/shadow-dom-figma.png) |
 
 #### HTML 元素 × CSS 场景（23）
 
 | 用例 · 实测差异像素 | Chromium 参考图 | 真实 Figma 导出图 |
 | --- | --- | --- |
-| `div-radius-opacity` · 0.000% | ![浏览器参考图：div-radius-opacity](docs/images/e2e/div-radius-opacity-browser.png) | ![真实 Figma 导出图：div-radius-opacity](docs/images/e2e/div-radius-opacity-figma.png) |
-| `div-shadow` · 0.000% | ![浏览器参考图：div-shadow](docs/images/e2e/div-shadow-browser.png) | ![真实 Figma 导出图：div-shadow](docs/images/e2e/div-shadow-figma.png) |
-| `div-flex` · 0.000% | ![浏览器参考图：div-flex](docs/images/e2e/div-flex-browser.png) | ![真实 Figma 导出图：div-flex](docs/images/e2e/div-flex-figma.png) |
-| `article-card` · 0.025% | ![浏览器参考图：article-card](docs/images/e2e/article-card-browser.png) | ![真实 Figma 导出图：article-card](docs/images/e2e/article-card-figma.png) |
-| `article-flex` · 0.000% | ![浏览器参考图：article-flex](docs/images/e2e/article-flex-browser.png) | ![真实 Figma 导出图：article-flex](docs/images/e2e/article-flex-figma.png) |
-| `span-badge` · 0.064% | ![浏览器参考图：span-badge](docs/images/e2e/span-badge-browser.png) | ![真实 Figma 导出图：span-badge](docs/images/e2e/span-badge-figma.png) |
-| `span-inline` · 0.619% | ![浏览器参考图：span-inline](docs/images/e2e/span-inline-browser.png) | ![真实 Figma 导出图：span-inline](docs/images/e2e/span-inline-figma.png) |
-| `p-line-height` · 0.037% | ![浏览器参考图：p-line-height](docs/images/e2e/p-line-height-browser.png) | ![真实 Figma 导出图：p-line-height](docs/images/e2e/p-line-height-figma.png) |
-| `p-centered` · 0.201% | ![浏览器参考图：p-centered](docs/images/e2e/p-centered-browser.png) | ![真实 Figma 导出图：p-centered](docs/images/e2e/p-centered-figma.png) |
-| `p-bold` · 0.020% | ![浏览器参考图：p-bold](docs/images/e2e/p-bold-browser.png) | ![真实 Figma 导出图：p-bold](docs/images/e2e/p-bold-figma.png) |
-| `p-italic` · 0.641% | ![浏览器参考图：p-italic](docs/images/e2e/p-italic-browser.png) | ![真实 Figma 导出图：p-italic](docs/images/e2e/p-italic-figma.png) |
-| `p-wrap` · 0.133% | ![浏览器参考图：p-wrap](docs/images/e2e/p-wrap-browser.png) | ![真实 Figma 导出图：p-wrap](docs/images/e2e/p-wrap-figma.png) |
-| `p-right` · 0.043% | ![浏览器参考图：p-right](docs/images/e2e/p-right-browser.png) | ![真实 Figma 导出图：p-right](docs/images/e2e/p-right-figma.png) |
-| `span-strike` · 0.105% | ![浏览器参考图：span-strike](docs/images/e2e/span-strike-browser.png) | ![真实 Figma 导出图：span-strike](docs/images/e2e/span-strike-figma.png) |
-| `p-lowercase` · 0.055% | ![浏览器参考图：p-lowercase](docs/images/e2e/p-lowercase-browser.png) | ![真实 Figma 导出图：p-lowercase](docs/images/e2e/p-lowercase-figma.png) |
-| `p-capitalize` · 0.039% | ![浏览器参考图：p-capitalize](docs/images/e2e/p-capitalize-browser.png) | ![真实 Figma 导出图：p-capitalize](docs/images/e2e/p-capitalize-figma.png) |
-| `p-font-fallback` · 0.016% | ![浏览器参考图：p-font-fallback](docs/images/e2e/p-font-fallback-browser.png) | ![真实 Figma 导出图：p-font-fallback](docs/images/e2e/p-font-fallback-figma.png) |
-| `svg-fill` · 0.000% | ![浏览器参考图：svg-fill](docs/images/e2e/svg-fill-browser.png) | ![真实 Figma 导出图：svg-fill](docs/images/e2e/svg-fill-figma.png) |
-| `svg-stroke` · 0.000% | ![浏览器参考图：svg-stroke](docs/images/e2e/svg-stroke-browser.png) | ![真实 Figma 导出图：svg-stroke](docs/images/e2e/svg-stroke-figma.png) |
-| `img-cover` · 0.000% | ![浏览器参考图：img-cover](docs/images/e2e/img-cover-browser.png) | ![真实 Figma 导出图：img-cover](docs/images/e2e/img-cover-figma.png) |
-| `img-contain` · 0.000% | ![浏览器参考图：img-contain](docs/images/e2e/img-contain-browser.png) | ![真实 Figma 导出图：img-contain](docs/images/e2e/img-contain-figma.png) |
-| `canvas-pixels` · 0.000% | ![浏览器参考图：canvas-pixels](docs/images/e2e/canvas-pixels-browser.png) | ![真实 Figma 导出图：canvas-pixels](docs/images/e2e/canvas-pixels-figma.png) |
-| `canvas-opacity` · 0.000% | ![浏览器参考图：canvas-opacity](docs/images/e2e/canvas-opacity-browser.png) | ![真实 Figma 导出图：canvas-opacity](docs/images/e2e/canvas-opacity-figma.png) |
+| `div-radius-opacity` · 0.000% | ![浏览器参考图：div-radius-opacity](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/div-radius-opacity-browser.png) | ![真实 Figma 导出图：div-radius-opacity](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/div-radius-opacity-figma.png) |
+| `div-shadow` · 0.000% | ![浏览器参考图：div-shadow](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/div-shadow-browser.png) | ![真实 Figma 导出图：div-shadow](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/div-shadow-figma.png) |
+| `div-flex` · 0.000% | ![浏览器参考图：div-flex](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/div-flex-browser.png) | ![真实 Figma 导出图：div-flex](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/div-flex-figma.png) |
+| `article-card` · 0.025% | ![浏览器参考图：article-card](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/article-card-browser.png) | ![真实 Figma 导出图：article-card](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/article-card-figma.png) |
+| `article-flex` · 0.000% | ![浏览器参考图：article-flex](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/article-flex-browser.png) | ![真实 Figma 导出图：article-flex](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/article-flex-figma.png) |
+| `span-badge` · 0.064% | ![浏览器参考图：span-badge](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/span-badge-browser.png) | ![真实 Figma 导出图：span-badge](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/span-badge-figma.png) |
+| `span-inline` · 0.619% | ![浏览器参考图：span-inline](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/span-inline-browser.png) | ![真实 Figma 导出图：span-inline](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/span-inline-figma.png) |
+| `p-line-height` · 0.037% | ![浏览器参考图：p-line-height](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-line-height-browser.png) | ![真实 Figma 导出图：p-line-height](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-line-height-figma.png) |
+| `p-centered` · 0.201% | ![浏览器参考图：p-centered](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-centered-browser.png) | ![真实 Figma 导出图：p-centered](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-centered-figma.png) |
+| `p-bold` · 0.020% | ![浏览器参考图：p-bold](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-bold-browser.png) | ![真实 Figma 导出图：p-bold](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-bold-figma.png) |
+| `p-italic` · 0.641% | ![浏览器参考图：p-italic](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-italic-browser.png) | ![真实 Figma 导出图：p-italic](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-italic-figma.png) |
+| `p-wrap` · 0.133% | ![浏览器参考图：p-wrap](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-wrap-browser.png) | ![真实 Figma 导出图：p-wrap](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-wrap-figma.png) |
+| `p-right` · 0.043% | ![浏览器参考图：p-right](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-right-browser.png) | ![真实 Figma 导出图：p-right](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-right-figma.png) |
+| `span-strike` · 0.105% | ![浏览器参考图：span-strike](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/span-strike-browser.png) | ![真实 Figma 导出图：span-strike](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/span-strike-figma.png) |
+| `p-lowercase` · 0.055% | ![浏览器参考图：p-lowercase](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-lowercase-browser.png) | ![真实 Figma 导出图：p-lowercase](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-lowercase-figma.png) |
+| `p-capitalize` · 0.039% | ![浏览器参考图：p-capitalize](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-capitalize-browser.png) | ![真实 Figma 导出图：p-capitalize](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-capitalize-figma.png) |
+| `p-font-fallback` · 0.016% | ![浏览器参考图：p-font-fallback](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-font-fallback-browser.png) | ![真实 Figma 导出图：p-font-fallback](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-font-fallback-figma.png) |
+| `svg-fill` · 0.000% | ![浏览器参考图：svg-fill](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/svg-fill-browser.png) | ![真实 Figma 导出图：svg-fill](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/svg-fill-figma.png) |
+| `svg-stroke` · 0.000% | ![浏览器参考图：svg-stroke](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/svg-stroke-browser.png) | ![真实 Figma 导出图：svg-stroke](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/svg-stroke-figma.png) |
+| `img-cover` · 0.000% | ![浏览器参考图：img-cover](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/img-cover-browser.png) | ![真实 Figma 导出图：img-cover](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/img-cover-figma.png) |
+| `img-contain` · 0.000% | ![浏览器参考图：img-contain](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/img-contain-browser.png) | ![真实 Figma 导出图：img-contain](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/img-contain-figma.png) |
+| `canvas-pixels` · 0.000% | ![浏览器参考图：canvas-pixels](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/canvas-pixels-browser.png) | ![真实 Figma 导出图：canvas-pixels](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/canvas-pixels-figma.png) |
+| `canvas-opacity` · 0.000% | ![浏览器参考图：canvas-opacity](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/canvas-opacity-browser.png) | ![真实 Figma 导出图：canvas-opacity](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/canvas-opacity-figma.png) |
 
 #### 扩展到真实画布（2）
 
 | 用例 · 实测差异像素 | Chromium 参考图 | 真实 Figma 导出图 |
 | --- | --- | --- |
-| `extension-page` · 0.710% | ![浏览器参考图：extension-page](docs/images/e2e/extension-page-browser.png) | ![真实 Figma 导出图：extension-page](docs/images/e2e/extension-page-figma.png) |
-| `extension-selection` · 0.655% | ![浏览器参考图：extension-selection](docs/images/e2e/extension-selection-browser.png) | ![真实 Figma 导出图：extension-selection](docs/images/e2e/extension-selection-figma.png) |
+| `extension-page` · 0.710% | ![浏览器参考图：extension-page](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/extension-page-browser.png) | ![真实 Figma 导出图：extension-page](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/extension-page-figma.png) |
+| `extension-selection` · 0.655% | ![浏览器参考图：extension-selection](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/extension-selection-browser.png) | ![真实 Figma 导出图：extension-selection](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/extension-selection-figma.png) |
 
-大多数非文字用例最多允许 **0.1%** 差异像素；普通文字用例整图最多 **2%**，文字区域最多 **12%**。`span-strike` 更严格：整图 **0.2%**、文字区域 **2%**。单像素颜色阈值为 **0.2**，用于容忍栅格化差异。这些阈值不等于完全一致，也不代表所有 HTML/CSS 组合已经覆盖。用例定义见[元素清单](e2e/visual/fidelity-cases.json)和[综合清单](e2e/visual/cases.json)；已知缺口见[覆盖矩阵](e2e/COVERAGE.md)。
+大多数非文字用例最多允许 **0.1%** 差异像素；普通文字用例整图最多 **2%**，文字区域最多 **12%**。`span-strike` 更严格：整图 **0.2%**、文字区域 **2%**。单像素颜色阈值为 **0.2**，用于容忍栅格化差异。这些阈值不等于完全一致，也不代表所有 HTML/CSS 组合已经覆盖。用例定义见[元素清单](https://github.com/Natumsol/html2figma/blob/master/e2e/visual/fidelity-cases.json)和[综合清单](https://github.com/Natumsol/html2figma/blob/master/e2e/visual/cases.json)；已知缺口见[覆盖矩阵](https://github.com/Natumsol/html2figma/blob/master/e2e/COVERAGE.md)。
 
-日常运行 `npm run test:e2e:real`；单项定位使用 `npm run test:e2e:real -- --case img-contain`。旧的 Agent 辅助视觉流程仍可通过 `npm run e2e:visual:prepare` 和 `npm run test:e2e:visual` 执行，参见[E2E 指南](e2e/README.md#真实-figma-画布截图验收)。
+日常运行 `npm run test:e2e:real`；单项定位使用 `npm run test:e2e:real -- --case img-contain`。旧的 Agent 辅助视觉流程仍可通过 `npm run e2e:visual:prepare` 和 `npm run test:e2e:visual` 执行，参见[E2E 指南](https://github.com/Natumsol/html2figma/blob/master/e2e/README.md#真实-figma-画布截图验收)。
 
 ## HTML 与 CSS 支持范围
 
@@ -169,4 +171,4 @@ npm run test:e2e
 
 `npm run release:dry-run` 预览 npm 与 GitHub 发布，不执行发布。`npm run release` 先验证库，再通过 `release-it` 更新版本、发布到 npm、提交、打标签、推送并创建 GitHub Release。请先登录 npm，并在环境变量中提供 `GITHUB_TOKEN`；不要将凭据写入仓库。`publishConfig` 固定使用官方 npm Registry。
 
-`v0.1.0` 已发布到 npm 和 GitHub。下次运行 `npm run release` 时，应交互选择新版本。
+该包已发布到 npm 和 GitHub。下次运行 `npm run release` 时，应交互选择新版本。

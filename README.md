@@ -1,6 +1,6 @@
 # html2figma
 
-[English](README.md) · [简体中文](README.zh-CN.md)
+[English](https://github.com/Natumsol/html2figma/blob/master/README.md) · [简体中文](https://github.com/Natumsol/html2figma/blob/master/README.zh-CN.md)
 
 TypeScript library for converting browser HTML DOM into serializable Figma node data and rendering it inside a Figma plugin.
 
@@ -95,7 +95,7 @@ unrepresentable layouts retain measured absolute positions with a
 
 ## End-to-end Tests
 
-The [E2E test project](e2e/README.md) exercises the built Chrome extension,
+The [E2E test project](https://github.com/Natumsol/html2figma/blob/master/e2e/README.md) exercises the built Chrome extension,
 JSON export/import, and Figma plugin UI and rendering pipeline. The plugin
 shell in `npm run test:e2e` uses a Figma API test double; it does not compare
 pixels from a real Figma canvas.
@@ -114,7 +114,7 @@ exports with Chromium reference screenshots and checks dimensions and warnings.
 The 23 element cases also check target tags, computed CSS, and AST types;
 image/text cases check paints and text properties where applicable. This run needs
 macOS and signed-in Figma; it is not part of `npm run verify:all` or CI.
-See the [real Figma setup and report guide](e2e/real/README.md).
+See the [real Figma setup and report guide](https://github.com/Natumsol/html2figma/blob/master/e2e/real/README.md).
 
 | Area | Real Figma cases | Visual checks |
 | --- | --- | --- |
@@ -130,71 +130,71 @@ See the [real Figma setup and report guide](e2e/real/README.md).
 
 ### All 37 real-canvas screenshot pairs
 
-These unedited PNG exports come from the **same passing 37/37 run** (`f6eba5e2-d5c8-4668-aef1-61d00d749f07`, September 24, 2026). Each row compares the same HTML fixture at the same output size. The percentage is the measured different-pixel ratio in that run's report, **not** the allowed threshold. The original run artifacts remain under the ignored `test-results/` directory; these are repository copies.
+These unedited PNG exports come from the **same passing 37/37 run** (`f6eba5e2-d5c8-4668-aef1-61d00d749f07`, September 24, 2026). Each row compares the same HTML fixture at the same output size. The percentage is the measured different-pixel ratio in that run's report, **not** the allowed threshold. The original run artifacts remain under the ignored `test-results/` directory; these are repository copies. Image URLs point to the `v0.1.0` tag so they also load on npm and remain tied to this run.
 
 #### Combined visual cases (12)
 
 | Case · measured different pixels | Chromium reference | Real Figma export |
 | --- | --- | --- |
-| `geometry` · 0.000% | ![Chromium reference: geometry](docs/images/e2e/geometry-browser.png) | ![Real Figma export: geometry](docs/images/e2e/geometry-figma.png) |
-| `flex-border` · 0.000% | ![Chromium reference: flex-border](docs/images/e2e/flex-border-browser.png) | ![Real Figma export: flex-border](docs/images/e2e/flex-border-figma.png) |
-| `typography` · 1.055% | ![Chromium reference: typography](docs/images/e2e/typography-browser.png) | ![Real Figma export: typography](docs/images/e2e/typography-figma.png) |
-| `flex-reverse` · 0.000% | ![Chromium reference: flex-reverse](docs/images/e2e/flex-reverse-browser.png) | ![Real Figma export: flex-reverse](docs/images/e2e/flex-reverse-figma.png) |
-| `flex-absolute` · 0.000% | ![Chromium reference: flex-absolute](docs/images/e2e/flex-absolute-browser.png) | ![Real Figma export: flex-absolute](docs/images/e2e/flex-absolute-figma.png) |
-| `media` · 0.000% | ![Chromium reference: media](docs/images/e2e/media-browser.png) | ![Real Figma export: media](docs/images/e2e/media-figma.png) |
-| `edge-borders` · 0.000% | ![Chromium reference: edge-borders](docs/images/e2e/edge-borders-browser.png) | ![Real Figma export: edge-borders](docs/images/e2e/edge-borders-figma.png) |
-| `text-transform` · 0.025% | ![Chromium reference: text-transform](docs/images/e2e/text-transform-browser.png) | ![Real Figma export: text-transform](docs/images/e2e/text-transform-figma.png) |
-| `background-image` · 0.031% | ![Chromium reference: background-image](docs/images/e2e/background-image-browser.png) | ![Real Figma export: background-image](docs/images/e2e/background-image-figma.png) |
-| `video-poster` · 0.000% | ![Chromium reference: video-poster](docs/images/e2e/video-poster-browser.png) | ![Real Figma export: video-poster](docs/images/e2e/video-poster-figma.png) |
-| `flex-wrap` · 0.000% | ![Chromium reference: flex-wrap](docs/images/e2e/flex-wrap-browser.png) | ![Real Figma export: flex-wrap](docs/images/e2e/flex-wrap-figma.png) |
-| `shadow-dom` · 0.000% | ![Chromium reference: shadow-dom](docs/images/e2e/shadow-dom-browser.png) | ![Real Figma export: shadow-dom](docs/images/e2e/shadow-dom-figma.png) |
+| `geometry` · 0.000% | ![Chromium reference: geometry](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/geometry-browser.png) | ![Real Figma export: geometry](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/geometry-figma.png) |
+| `flex-border` · 0.000% | ![Chromium reference: flex-border](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/flex-border-browser.png) | ![Real Figma export: flex-border](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/flex-border-figma.png) |
+| `typography` · 1.055% | ![Chromium reference: typography](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/typography-browser.png) | ![Real Figma export: typography](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/typography-figma.png) |
+| `flex-reverse` · 0.000% | ![Chromium reference: flex-reverse](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/flex-reverse-browser.png) | ![Real Figma export: flex-reverse](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/flex-reverse-figma.png) |
+| `flex-absolute` · 0.000% | ![Chromium reference: flex-absolute](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/flex-absolute-browser.png) | ![Real Figma export: flex-absolute](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/flex-absolute-figma.png) |
+| `media` · 0.000% | ![Chromium reference: media](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/media-browser.png) | ![Real Figma export: media](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/media-figma.png) |
+| `edge-borders` · 0.000% | ![Chromium reference: edge-borders](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/edge-borders-browser.png) | ![Real Figma export: edge-borders](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/edge-borders-figma.png) |
+| `text-transform` · 0.025% | ![Chromium reference: text-transform](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/text-transform-browser.png) | ![Real Figma export: text-transform](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/text-transform-figma.png) |
+| `background-image` · 0.031% | ![Chromium reference: background-image](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/background-image-browser.png) | ![Real Figma export: background-image](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/background-image-figma.png) |
+| `video-poster` · 0.000% | ![Chromium reference: video-poster](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/video-poster-browser.png) | ![Real Figma export: video-poster](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/video-poster-figma.png) |
+| `flex-wrap` · 0.000% | ![Chromium reference: flex-wrap](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/flex-wrap-browser.png) | ![Real Figma export: flex-wrap](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/flex-wrap-figma.png) |
+| `shadow-dom` · 0.000% | ![Chromium reference: shadow-dom](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/shadow-dom-browser.png) | ![Real Figma export: shadow-dom](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/shadow-dom-figma.png) |
 
 #### HTML element × CSS cases (23)
 
 | Case · measured different pixels | Chromium reference | Real Figma export |
 | --- | --- | --- |
-| `div-radius-opacity` · 0.000% | ![Chromium reference: div-radius-opacity](docs/images/e2e/div-radius-opacity-browser.png) | ![Real Figma export: div-radius-opacity](docs/images/e2e/div-radius-opacity-figma.png) |
-| `div-shadow` · 0.000% | ![Chromium reference: div-shadow](docs/images/e2e/div-shadow-browser.png) | ![Real Figma export: div-shadow](docs/images/e2e/div-shadow-figma.png) |
-| `div-flex` · 0.000% | ![Chromium reference: div-flex](docs/images/e2e/div-flex-browser.png) | ![Real Figma export: div-flex](docs/images/e2e/div-flex-figma.png) |
-| `article-card` · 0.025% | ![Chromium reference: article-card](docs/images/e2e/article-card-browser.png) | ![Real Figma export: article-card](docs/images/e2e/article-card-figma.png) |
-| `article-flex` · 0.000% | ![Chromium reference: article-flex](docs/images/e2e/article-flex-browser.png) | ![Real Figma export: article-flex](docs/images/e2e/article-flex-figma.png) |
-| `span-badge` · 0.064% | ![Chromium reference: span-badge](docs/images/e2e/span-badge-browser.png) | ![Real Figma export: span-badge](docs/images/e2e/span-badge-figma.png) |
-| `span-inline` · 0.619% | ![Chromium reference: span-inline](docs/images/e2e/span-inline-browser.png) | ![Real Figma export: span-inline](docs/images/e2e/span-inline-figma.png) |
-| `p-line-height` · 0.037% | ![Chromium reference: p-line-height](docs/images/e2e/p-line-height-browser.png) | ![Real Figma export: p-line-height](docs/images/e2e/p-line-height-figma.png) |
-| `p-centered` · 0.201% | ![Chromium reference: p-centered](docs/images/e2e/p-centered-browser.png) | ![Real Figma export: p-centered](docs/images/e2e/p-centered-figma.png) |
-| `p-bold` · 0.020% | ![Chromium reference: p-bold](docs/images/e2e/p-bold-browser.png) | ![Real Figma export: p-bold](docs/images/e2e/p-bold-figma.png) |
-| `p-italic` · 0.641% | ![Chromium reference: p-italic](docs/images/e2e/p-italic-browser.png) | ![Real Figma export: p-italic](docs/images/e2e/p-italic-figma.png) |
-| `p-wrap` · 0.133% | ![Chromium reference: p-wrap](docs/images/e2e/p-wrap-browser.png) | ![Real Figma export: p-wrap](docs/images/e2e/p-wrap-figma.png) |
-| `p-right` · 0.043% | ![Chromium reference: p-right](docs/images/e2e/p-right-browser.png) | ![Real Figma export: p-right](docs/images/e2e/p-right-figma.png) |
-| `span-strike` · 0.105% | ![Chromium reference: span-strike](docs/images/e2e/span-strike-browser.png) | ![Real Figma export: span-strike](docs/images/e2e/span-strike-figma.png) |
-| `p-lowercase` · 0.055% | ![Chromium reference: p-lowercase](docs/images/e2e/p-lowercase-browser.png) | ![Real Figma export: p-lowercase](docs/images/e2e/p-lowercase-figma.png) |
-| `p-capitalize` · 0.039% | ![Chromium reference: p-capitalize](docs/images/e2e/p-capitalize-browser.png) | ![Real Figma export: p-capitalize](docs/images/e2e/p-capitalize-figma.png) |
-| `p-font-fallback` · 0.016% | ![Chromium reference: p-font-fallback](docs/images/e2e/p-font-fallback-browser.png) | ![Real Figma export: p-font-fallback](docs/images/e2e/p-font-fallback-figma.png) |
-| `svg-fill` · 0.000% | ![Chromium reference: svg-fill](docs/images/e2e/svg-fill-browser.png) | ![Real Figma export: svg-fill](docs/images/e2e/svg-fill-figma.png) |
-| `svg-stroke` · 0.000% | ![Chromium reference: svg-stroke](docs/images/e2e/svg-stroke-browser.png) | ![Real Figma export: svg-stroke](docs/images/e2e/svg-stroke-figma.png) |
-| `img-cover` · 0.000% | ![Chromium reference: img-cover](docs/images/e2e/img-cover-browser.png) | ![Real Figma export: img-cover](docs/images/e2e/img-cover-figma.png) |
-| `img-contain` · 0.000% | ![Chromium reference: img-contain](docs/images/e2e/img-contain-browser.png) | ![Real Figma export: img-contain](docs/images/e2e/img-contain-figma.png) |
-| `canvas-pixels` · 0.000% | ![Chromium reference: canvas-pixels](docs/images/e2e/canvas-pixels-browser.png) | ![Real Figma export: canvas-pixels](docs/images/e2e/canvas-pixels-figma.png) |
-| `canvas-opacity` · 0.000% | ![Chromium reference: canvas-opacity](docs/images/e2e/canvas-opacity-browser.png) | ![Real Figma export: canvas-opacity](docs/images/e2e/canvas-opacity-figma.png) |
+| `div-radius-opacity` · 0.000% | ![Chromium reference: div-radius-opacity](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/div-radius-opacity-browser.png) | ![Real Figma export: div-radius-opacity](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/div-radius-opacity-figma.png) |
+| `div-shadow` · 0.000% | ![Chromium reference: div-shadow](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/div-shadow-browser.png) | ![Real Figma export: div-shadow](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/div-shadow-figma.png) |
+| `div-flex` · 0.000% | ![Chromium reference: div-flex](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/div-flex-browser.png) | ![Real Figma export: div-flex](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/div-flex-figma.png) |
+| `article-card` · 0.025% | ![Chromium reference: article-card](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/article-card-browser.png) | ![Real Figma export: article-card](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/article-card-figma.png) |
+| `article-flex` · 0.000% | ![Chromium reference: article-flex](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/article-flex-browser.png) | ![Real Figma export: article-flex](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/article-flex-figma.png) |
+| `span-badge` · 0.064% | ![Chromium reference: span-badge](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/span-badge-browser.png) | ![Real Figma export: span-badge](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/span-badge-figma.png) |
+| `span-inline` · 0.619% | ![Chromium reference: span-inline](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/span-inline-browser.png) | ![Real Figma export: span-inline](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/span-inline-figma.png) |
+| `p-line-height` · 0.037% | ![Chromium reference: p-line-height](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-line-height-browser.png) | ![Real Figma export: p-line-height](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-line-height-figma.png) |
+| `p-centered` · 0.201% | ![Chromium reference: p-centered](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-centered-browser.png) | ![Real Figma export: p-centered](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-centered-figma.png) |
+| `p-bold` · 0.020% | ![Chromium reference: p-bold](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-bold-browser.png) | ![Real Figma export: p-bold](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-bold-figma.png) |
+| `p-italic` · 0.641% | ![Chromium reference: p-italic](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-italic-browser.png) | ![Real Figma export: p-italic](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-italic-figma.png) |
+| `p-wrap` · 0.133% | ![Chromium reference: p-wrap](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-wrap-browser.png) | ![Real Figma export: p-wrap](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-wrap-figma.png) |
+| `p-right` · 0.043% | ![Chromium reference: p-right](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-right-browser.png) | ![Real Figma export: p-right](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-right-figma.png) |
+| `span-strike` · 0.105% | ![Chromium reference: span-strike](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/span-strike-browser.png) | ![Real Figma export: span-strike](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/span-strike-figma.png) |
+| `p-lowercase` · 0.055% | ![Chromium reference: p-lowercase](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-lowercase-browser.png) | ![Real Figma export: p-lowercase](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-lowercase-figma.png) |
+| `p-capitalize` · 0.039% | ![Chromium reference: p-capitalize](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-capitalize-browser.png) | ![Real Figma export: p-capitalize](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-capitalize-figma.png) |
+| `p-font-fallback` · 0.016% | ![Chromium reference: p-font-fallback](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-font-fallback-browser.png) | ![Real Figma export: p-font-fallback](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/p-font-fallback-figma.png) |
+| `svg-fill` · 0.000% | ![Chromium reference: svg-fill](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/svg-fill-browser.png) | ![Real Figma export: svg-fill](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/svg-fill-figma.png) |
+| `svg-stroke` · 0.000% | ![Chromium reference: svg-stroke](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/svg-stroke-browser.png) | ![Real Figma export: svg-stroke](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/svg-stroke-figma.png) |
+| `img-cover` · 0.000% | ![Chromium reference: img-cover](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/img-cover-browser.png) | ![Real Figma export: img-cover](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/img-cover-figma.png) |
+| `img-contain` · 0.000% | ![Chromium reference: img-contain](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/img-contain-browser.png) | ![Real Figma export: img-contain](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/img-contain-figma.png) |
+| `canvas-pixels` · 0.000% | ![Chromium reference: canvas-pixels](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/canvas-pixels-browser.png) | ![Real Figma export: canvas-pixels](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/canvas-pixels-figma.png) |
+| `canvas-opacity` · 0.000% | ![Chromium reference: canvas-opacity](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/canvas-opacity-browser.png) | ![Real Figma export: canvas-opacity](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/canvas-opacity-figma.png) |
 
 #### Extension to real canvas (2)
 
 | Case · measured different pixels | Chromium reference | Real Figma export |
 | --- | --- | --- |
-| `extension-page` · 0.710% | ![Chromium reference: extension-page](docs/images/e2e/extension-page-browser.png) | ![Real Figma export: extension-page](docs/images/e2e/extension-page-figma.png) |
-| `extension-selection` · 0.655% | ![Chromium reference: extension-selection](docs/images/e2e/extension-selection-browser.png) | ![Real Figma export: extension-selection](docs/images/e2e/extension-selection-figma.png) |
+| `extension-page` · 0.710% | ![Chromium reference: extension-page](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/extension-page-browser.png) | ![Real Figma export: extension-page](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/extension-page-figma.png) |
+| `extension-selection` · 0.655% | ![Chromium reference: extension-selection](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/extension-selection-browser.png) | ![Real Figma export: extension-selection](https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/extension-selection-figma.png) |
 
 Most non-text cases allow at most **0.1%** different pixels. General text cases
 allow **2%** overall and **12%** in the text region; `span-strike` uses **0.2%**
 overall and **2%** in the text region. The per-pixel color threshold is **0.2**.
 These are acceptance thresholds, not a claim of perfect fidelity or exhaustive
-HTML/CSS coverage. See the [case definitions](e2e/visual/fidelity-cases.json),
-[combined case definitions](e2e/visual/cases.json), and [known gaps](e2e/COVERAGE.md).
+HTML/CSS coverage. See the [case definitions](https://github.com/Natumsol/html2figma/blob/master/e2e/visual/fidelity-cases.json),
+[combined case definitions](https://github.com/Natumsol/html2figma/blob/master/e2e/visual/cases.json), and [known gaps](https://github.com/Natumsol/html2figma/blob/master/e2e/COVERAGE.md).
 Run one real case with `npm run test:e2e:real -- --case img-contain`.
 
 The older agent-assisted visual flow remains available through
 `npm run e2e:visual:prepare` and `npm run test:e2e:visual`; see the
-[E2E guide](e2e/README.md#真实-figma-画布截图验收).
+[E2E guide](https://github.com/Natumsol/html2figma/blob/master/e2e/README.md#真实-figma-画布截图验收).
 
 ## HTML and CSS support
 
@@ -233,5 +233,5 @@ push, and create a GitHub Release. Authenticate with npm and provide
 `GITHUB_TOKEN` in the environment; do not store credentials in the repository.
 The official npm registry is pinned in `publishConfig`.
 
-`v0.1.0` is already published on npm and GitHub. For the next release, run
+The package is available on npm and GitHub. For the next release, run
 `npm run release` and select a new version interactively.
