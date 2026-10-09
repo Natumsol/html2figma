@@ -1,6 +1,6 @@
 {
   "name": "html2figma",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Convert HTML DOM trees into Figma plugin scene nodes.",
   "license": "MIT",
   "type": "module",
