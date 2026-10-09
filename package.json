@@ -1,6 +1,6 @@
 {
   "name": "html2figma",
-  "version": "0.1.2",
+  "version": "1.0.0",
   "description": "Convert rendered browser HTML and CSS into portable JSON and editable Figma layers.",
   "keywords": [
     "html-to-figma",
