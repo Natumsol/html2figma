@@ -1,0 +1,54 @@
+package.json
+  0bf9681c835f9b66 7-17
+README.md
+  0bf9681c835f9b66 229,231-234,236-237
+README.zh-CN.md
+  0bf9681c835f9b66 170,172
+.release-it.json
+  0bf9681c835f9b66 14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8-ntes.9",
+  "base_commit_sha": "261e4bdf4f667ee998eeb678923fd5194b7d0317",
+  "prompts": {
+    "0bf9681c835f9b66": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0c88e-047a-70f0-8c8a-633d238621b6",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Natumsol",
+      "messages": [],
+      "total_additions": 28,
+      "total_deletions": 18,
+      "accepted_lines": 27,
+      "overriden_lines": 0,
+      "per_file_stats": {
+        "README.md": {
+          "additions": 7,
+          "deletions": 8,
+          "accepted_lines": 7
+        },
+        ".release-it.json": {
+          "additions": 1,
+          "deletions": 1,
+          "accepted_lines": 1
+        },
+        "e2e/real/host.ts": {
+          "accepted_lines": 1
+        },
+        "package.json": {
+          "additions": 18,
+          "deletions": 7,
+          "accepted_lines": 16
+        },
+        "README.zh-CN.md": {
+          "additions": 2,
+          "deletions": 2,
+          "accepted_lines": 2
+        }
+      }
+    }
+  }
+}
