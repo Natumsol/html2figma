@@ -22,13 +22,6 @@
   简体中文
 </p>
 
-<p align="center">
-  <strong>Chromium 参考图 → 真实 Figma 画布</strong><br>
-  <a href="https://github.com/Natumsol/html2figma/blob/master/README.zh-CN.md#全部-37-组真实画布截图"><img src="https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/media-browser.png" alt="media 用例的 Chromium 参考图" width="320"></a>
-  <a href="https://github.com/Natumsol/html2figma/blob/master/README.zh-CN.md#全部-37-组真实画布截图"><img src="https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/media-figma.png" alt="media 用例的真实 Figma 导出图" width="320"></a><br>
-  <sub>一组已归档的验收用例，下方可查看全部 37 组截图。</sub>
-</p>
-
 ## 特点
 
 - 在浏览器中读取渲染后的 DOM 尺寸和受支持的计算样式。

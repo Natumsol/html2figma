@@ -22,13 +22,6 @@
   <a href="https://github.com/Natumsol/html2figma/blob/master/README.zh-CN.md">简体中文</a>
 </p>
 
-<p align="center">
-  <strong>Chromium reference → Real Figma canvas</strong><br>
-  <a href="https://github.com/Natumsol/html2figma/blob/master/README.md#all-37-real-canvas-screenshot-pairs"><img src="https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/media-browser.png" alt="Chromium reference for the media case" width="320"></a>
-  <a href="https://github.com/Natumsol/html2figma/blob/master/README.md#all-37-real-canvas-screenshot-pairs"><img src="https://raw.githubusercontent.com/Natumsol/html2figma/v0.1.0/docs/images/e2e/media-figma.png" alt="Real Figma export for the media case" width="320"></a><br>
-  <sub>One archived acceptance case. Explore all 37 screenshot pairs below.</sub>
-</p>
-
 ## Features
 
 - Capture rendered DOM geometry and supported computed CSS in the browser.
