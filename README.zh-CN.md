@@ -164,3 +164,9 @@ npm run test:e2e
 | 简单的 `display: flex` / `inline-flex` | 部分支持 | 行/列、不换行布局仅在可重现实测子元素位置时转为固定尺寸 Auto Layout。反向、换行、重排/定位子元素、外边距或坐标不符时保留绝对位置，并产生 `flex-layout-fallback`。 |
 | CSS Grid、`transform` | **不支持** | 无对应 Figma 布局或变换；产生 `unsupported-css-grid` 或 `unsupported-transform`。AST 仍可能保留测量后的边界。 |
 | Filter、混合模式、伪元素、动画、裁剪、Mask、表格布局、原生表单样式、响应式 Figma 约束 | **不支持** | 没有对应的保真实现；不是所有不支持的声明都会产生警告。 |
+
+## 发布
+
+`npm run release:dry-run` 预览 Git 标签和 GitHub Release，不执行发布。`npm run release` 先验证库，再通过 `release-it` 更新版本、提交、打标签、推送并创建 GitHub Release。当前**只发布 GitHub Release**；[设置文件](.release-it.json)中的 `npm.publish` 为 `false`，不会上传 npm。请在环境变量中提供 `GITHUB_TOKEN`，不要将令牌写入仓库。
+
+如果 `package.json` 已是目标版本但尚未打标签，发布时传入 `--no-increment`。之后正常发布可运行 `npm run release`，交互选择下一个版本。

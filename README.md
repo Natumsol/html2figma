@@ -223,3 +223,16 @@ generic DOM path does not guarantee full support for every semantic tag.
 | Simple `display: flex` / `inline-flex` | Partial | Row/column no-wrap becomes fixed-size Auto Layout only if supported properties reproduce measured child positions. Reverse, wrap, reordered/positioned children, margins, or mismatches fall back to absolute positions with `flex-layout-fallback`. |
 | CSS Grid, `transform` | **Unsupported** | No matching Figma layout/transform; emits `unsupported-css-grid` or `unsupported-transform`. Measured bounds may remain. |
 | Filters, blend modes, pseudo-elements, animations, clipping, masks, table layout, native form appearance, responsive Figma constraints | **Unsupported** | No faithful implementation. Not every unsupported declaration produces a warning. |
+
+## Releases
+
+`npm run release:dry-run` previews the Git tag and GitHub Release without
+publishing. `npm run release` runs the library verification suite, then uses
+`release-it` to update the package version, commit, tag, push, and create a
+GitHub Release. The repository publishes **GitHub releases only**:
+`npm.publish` is disabled in [`.release-it.json`](.release-it.json). Provide
+`GITHUB_TOKEN` in the environment; do not store it in the repository.
+
+For a version already recorded in `package.json` but not yet tagged, pass
+`--no-increment` to release that exact version. Normal subsequent releases
+can use `npm run release` and select the next version interactively.
