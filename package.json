@@ -1,7 +1,17 @@
 {
   "name": "html2figma",
   "version": "0.1.1",
-  "description": "Convert HTML DOM trees into Figma plugin scene nodes.",
+  "description": "Convert rendered browser HTML and CSS into portable JSON and editable Figma layers.",
+  "keywords": [
+    "html-to-figma",
+    "dom-to-figma",
+    "figma",
+    "figma-plugin",
+    "html",
+    "css",
+    "dom",
+    "browser-dom"
+  ],
   "license": "MIT",
   "type": "module",
   "repository": {
