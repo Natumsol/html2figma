@@ -1,0 +1,757 @@
+website/.npmrc
+  e5f0f71d994681b7 1-2
+website/src/components/ui/README.md
+  e5f0f71d994681b7 1-8
+website/src/content/docs/en/getting-started.md
+  e5f0f71d994681b7 1-62
+website/astro.config.mjs
+  e5f0f71d994681b7 1-15
+website/plugin/ui.ts
+  e5f0f71d994681b7 1-25
+website/src/components/ui/card.tsx
+  e5f0f71d994681b7 1-91
+website/src/components/ui/navigation-menu.tsx
+  e5f0f71d994681b7 1-167
+website/src/layouts/Shell.astro
+  e5f0f71d994681b7 1-44
+website/src/content/docs/en/render.md
+  e5f0f71d994681b7 1-59
+website/src/components/ui/accordion.tsx
+  e5f0f71d994681b7 1-63
+website/src/lib/utils.ts
+  e5f0f71d994681b7 1-5
+website/src/components/site/Workbench.tsx
+  e5f0f71d994681b7 1-363
+website/src/styles/preview.css
+  e5f0f71d994681b7 1-198
+website/package.json
+  e5f0f71d994681b7 1-57
+website/src/components/site/ExpandedPreview.tsx
+  e5f0f71d994681b7 1-118
+website/plugin/ui.html
+  e5f0f71d994681b7 1-3
+website/src/pages/404.astro
+  e5f0f71d994681b7 1-5
+website/plugin/tsconfig.json
+  e5f0f71d994681b7 1-8
+website/tests/website.spec.ts
+  e5f0f71d994681b7 1-373
+website/src/data/examples/image-product-card.css
+  e5f0f71d994681b7 1-38
+website/src/content/docs/zh-cn/getting-started.md
+  e5f0f71d994681b7 1-62
+website/src/content/docs/en/troubleshooting.md
+  e5f0f71d994681b7 1-37
+website/src/components/site/CodeCopy.tsx
+  e5f0f71d994681b7 1-36
+website/src/components/site/SchemaDisclosure.tsx
+  e5f0f71d994681b7 1-38
+website/src/content/docs/zh-cn/troubleshooting.md
+  e5f0f71d994681b7 1-37
+website/src/lib/i18n.ts
+  e5f0f71d994681b7 1-25
+website/scripts/capture.mjs
+  e5f0f71d994681b7 1-74
+website/src/styles/workbench.css
+  e5f0f71d994681b7 1-346
+website/src/styles/shadcn.css
+  e5f0f71d994681b7 1-55
+website/src/components/ui/tabs.tsx
+  e5f0f71d994681b7 1-88
+website/vercel.json
+  e5f0f71d994681b7 1-17
+website/src/content/docs/zh-cn/render.md
+  e5f0f71d994681b7 1-59
+website/src/client/gallery.ts
+  e5f0f71d994681b7 1-88
+website/src/content/docs/zh-cn/convert.md
+  e5f0f71d994681b7 1-57
+website/src/lib/diagnostics.ts
+  e5f0f71d994681b7 1-42
+website/src/styles/home.css
+  e5f0f71d994681b7 1-596
+website/src/components/ui/button.tsx
+  e5f0f71d994681b7 1-63
+website/scripts/prepare-vercel.mjs
+  e5f0f71d994681b7 1-24
+website/src/client/playground.ts
+  e5f0f71d994681b7 1-220
+website/src/components/site/LayerList.tsx
+  e5f0f71d994681b7 1-60
+.github/workflows/website.yml
+  e5f0f71d994681b7 1-27
+website/src/data/examples/Examples.tsx
+  e5f0f71d994681b7 1-298
+website/src/components/ui/alert.tsx
+  e5f0f71d994681b7 1-65
+website/src/components/site/ConversionStory.tsx
+  e5f0f71d994681b7 1-335
+website/src/components/site/SiteHeader.tsx
+  e5f0f71d994681b7 1-182
+website/src/content/docs/en/json.md
+  e5f0f71d994681b7 1-55
+docs/superpowers/specs/2026-10-10-documentation-site-design.md
+  e5f0f71d994681b7 1-128
+website/tests/design-regressions.spec.ts
+  e5f0f71d994681b7 1-217
+website/tsconfig.json
+  e5f0f71d994681b7 1-14
+website/src/pages/[...path].astro
+  e5f0f71d994681b7 1-46
+website/src/content/docs/zh-cn/json.md
+  e5f0f71d994681b7 1-55
+website/src/content.config.ts
+  e5f0f71d994681b7 1-10
+website/README.md
+  e5f0f71d994681b7 1-93
+website/src/data/examples/stats-panel.css
+  e5f0f71d994681b7 1-50
+website/scripts/generate-case-art.mjs
+  e5f0f71d994681b7 1-27
+website/src/components/site/DocumentToc.tsx
+  e5f0f71d994681b7 1-28
+docs/adr/0001-published-version-site-experiences.md
+  e5f0f71d994681b7 1-3
+website/src/client/code-editor.ts
+  e5f0f71d994681b7 1-102
+website/src/data/examples/hero-section.css
+  e5f0f71d994681b7 1-53
+website/src/content/docs/en/plugin.md
+  e5f0f71d994681b7 1-39
+website/src/styles/studio.css
+  e5f0f71d994681b7 1-258
+website/src/components/ui/native-select.tsx
+  e5f0f71d994681b7 1-61
+README.md
+  e5f0f71d994681b7 34-37
+website/src/client/preview-runner.ts
+  e5f0f71d994681b7 1-223
+website/src/content/docs/zh-cn/support.md
+  e5f0f71d994681b7 1-43
+website/src/styles/global.css
+  e5f0f71d994681b7 1-712
+website/src/components/site/ExampleSelect.tsx
+  e5f0f71d994681b7 1-21
+website/scripts/check-doc-examples.mjs
+  e5f0f71d994681b7 1-26
+website/src/data/cases.ts
+  e5f0f71d994681b7 1-59
+website/src/client/site.ts
+  e5f0f71d994681b7 1-41
+website/playwright.config.ts
+  e5f0f71d994681b7 1-10
+website/src/styles/story.css
+  e5f0f71d994681b7 1-357
+website/.gitignore
+  e5f0f71d994681b7 1-8
+website/src/content/docs/en/support.md
+  e5f0f71d994681b7 1-43
+website/src/components/Gallery.astro
+  e5f0f71d994681b7 1-8
+website/src/data/examples/pricing-card.css
+  e5f0f71d994681b7 1-54
+website/src/components/Home.astro
+  e5f0f71d994681b7 1-51
+CONTEXT.md
+  e5f0f71d994681b7 1-23
+website/src/components/Playground.astro
+  e5f0f71d994681b7 1-7
+website/src/components/site/PreviewCanvas.tsx
+  e5f0f71d994681b7 1-87
+website/src/client/home.ts
+  e5f0f71d994681b7 1-127
+README.zh-CN.md
+  e5f0f71d994681b7 34-35
+website/src/lib/preview.ts
+  e5f0f71d994681b7 1-135
+website/src/data/examples/icon-feature-card.css
+  e5f0f71d994681b7 1-42
+website/src/styles/content.css
+  e5f0f71d994681b7 1-363
+website/src/content/docs/en/convert.md
+  e5f0f71d994681b7 1-57
+website/src/data/examples/media/canvas.svg
+  e5f0f71d994681b7 1-29
+website/src/components/ui/badge.tsx
+  e5f0f71d994681b7 1-47
+website/components.json
+  e5f0f71d994681b7 1-21
+website/src/components/site/BrandButton.tsx
+  e5f0f71d994681b7 1-62
+website/src/data/examples/shared.css
+  e5f0f71d994681b7 1-131
+website/src/components/site/Diagnostics.tsx
+  e5f0f71d994681b7 1-91
+website/plugin/main.ts
+  e5f0f71d994681b7 1-25
+website/scripts/prepare-assets.mjs
+  e5f0f71d994681b7 1-179
+website/src/content/docs/zh-cn/plugin.md
+  e5f0f71d994681b7 1-39
+website/src/components/ui/textarea.tsx
+  e5f0f71d994681b7 1-17
+website/tests/home-story.spec.ts
+  e5f0f71d994681b7 1-268
+website/src/components/site/ExampleThumbnail.tsx
+  e5f0f71d994681b7 1-48
+website/.nvmrc
+  e5f0f71d994681b7 1
+website/src/components/ui/sheet.tsx
+  e5f0f71d994681b7 1-142
+website/src/data/examples/media/portrait.svg
+  e5f0f71d994681b7 1-12
+website/src/data/examples/profile-media-card.css
+  e5f0f71d994681b7 1-65
+website/src/components/site/GalleryGrid.tsx
+  e5f0f71d994681b7 1-109
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8-ntes.9",
+  "base_commit_sha": "ce838704b5ea5271af3a533ba20ccfe1ac1213b7",
+  "prompts": {
+    "0bf9681c835f9b66": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0c88e-047a-70f0-8c8a-633d238621b6",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Natumsol",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 1,
+      "overriden_lines": 0,
+      "per_file_stats": {
+        "e2e/real/host.ts": {
+          "accepted_lines": 1
+        }
+      }
+    },
+    "e5f0f71d994681b7": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a123da-3d48-7711-9e19-7b399e8595ea",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Natumsol",
+      "messages": [],
+      "total_additions": 13296,
+      "total_deletions": 3425,
+      "accepted_lines": 9663,
+      "overriden_lines": 0,
+      "per_file_stats": {
+        "website/src/styles/global.css": {
+          "additions": 810,
+          "deletions": 98,
+          "accepted_lines": 712
+        },
+        "website/src/components/site/ExpandedPreview.tsx": {
+          "additions": 142,
+          "deletions": 24,
+          "accepted_lines": 118
+        },
+        "website/src/components/site/SchemaDisclosure.tsx": {
+          "additions": 42,
+          "deletions": 4,
+          "accepted_lines": 38
+        },
+        "README.md": {
+          "additions": 4,
+          "accepted_lines": 4
+        },
+        "website/src/data/examples/profile-media-card.css": {
+          "additions": 142,
+          "deletions": 77,
+          "accepted_lines": 65
+        },
+        "website/src/content/docs/zh-cn/troubleshooting.md": {
+          "additions": 37,
+          "accepted_lines": 37
+        },
+        "website/src/styles/studio.css": {
+          "additions": 320,
+          "deletions": 62,
+          "accepted_lines": 258
+        },
+        "website/src/components/site/ExampleSelect.tsx": {
+          "additions": 24,
+          "deletions": 3,
+          "accepted_lines": 21
+        },
+        "website/plugin/tsconfig.json": {
+          "additions": 8,
+          "accepted_lines": 8
+        },
+        "website/plugin/main.ts": {
+          "additions": 25,
+          "accepted_lines": 25
+        },
+        "website/playwright.config.ts": {
+          "additions": 11,
+          "deletions": 1,
+          "accepted_lines": 10
+        },
+        "website/src/data/examples/pricing-card.css": {
+          "additions": 114,
+          "deletions": 60,
+          "accepted_lines": 54
+        },
+        "website/src/client/tabs.ts": {
+          "additions": 47,
+          "deletions": 8
+        },
+        "website/src/lib/diagnostics.ts": {
+          "additions": 147,
+          "deletions": 105,
+          "accepted_lines": 42
+        },
+        "website/scripts/capture.mjs": {
+          "additions": 112,
+          "deletions": 38,
+          "accepted_lines": 74
+        },
+        "website/src/components/site/SiteHeader.tsx": {
+          "additions": 219,
+          "deletions": 37,
+          "accepted_lines": 182
+        },
+        "website/vercel.json": {
+          "additions": 17,
+          "accepted_lines": 17
+        },
+        "website/src/components/site/BrandButton.tsx": {
+          "additions": 81,
+          "deletions": 19,
+          "accepted_lines": 62
+        },
+        "website/src/components/site/DocumentToc.tsx": {
+          "additions": 31,
+          "deletions": 3,
+          "accepted_lines": 28
+        },
+        "website/src/styles/story.css": {
+          "additions": 357,
+          "accepted_lines": 357
+        },
+        "website/src/data/examples/hero-section.html": {
+          "additions": 18
+        },
+        "website/astro.config.mjs": {
+          "additions": 26,
+          "deletions": 11,
+          "accepted_lines": 15
+        },
+        "website/src/components/site/CodeCopy.tsx": {
+          "additions": 42,
+          "deletions": 6,
+          "accepted_lines": 36
+        },
+        "website/scripts/prepare-assets.mjs": {
+          "additions": 237,
+          "deletions": 58,
+          "accepted_lines": 179
+        },
+        "website/src/styles/shadcn.css": {
+          "additions": 63,
+          "deletions": 8,
+          "accepted_lines": 55
+        },
+        "website/src/pages/[...path].astro": {
+          "additions": 50,
+          "deletions": 4,
+          "accepted_lines": 46
+        },
+        "website/src/pages/404.astro": {
+          "additions": 6,
+          "deletions": 1,
+          "accepted_lines": 5
+        },
+        "website/scripts/generate-case-art.mjs": {
+          "additions": 38,
+          "deletions": 11,
+          "accepted_lines": 27
+        },
+        "website/.nvmrc": {
+          "additions": 1,
+          "accepted_lines": 1
+        },
+        "website/src/data/examples/pricing-card.html": {
+          "additions": 24
+        },
+        "website/src/client/preview-runner.ts": {
+          "additions": 277,
+          "deletions": 54,
+          "accepted_lines": 223
+        },
+        "website/src/content/docs/zh-cn/support.md": {
+          "additions": 43,
+          "accepted_lines": 43
+        },
+        "website/src/components/site/LayerList.tsx": {
+          "additions": 80,
+          "deletions": 20,
+          "accepted_lines": 60
+        },
+        "website/.gitignore": {
+          "additions": 9,
+          "deletions": 1,
+          "accepted_lines": 8
+        },
+        "website/src/components/Home.astro": {
+          "additions": 134,
+          "deletions": 83,
+          "accepted_lines": 51
+        },
+        "website/src/data/examples/icon-feature-card.html": {
+          "additions": 19
+        },
+        "website/src/components/ui/textarea.tsx": {
+          "additions": 23,
+          "deletions": 6,
+          "accepted_lines": 17
+        },
+        "website/src/data/examples/Examples.tsx": {
+          "additions": 347,
+          "deletions": 49,
+          "accepted_lines": 298
+        },
+        "website/src/components/site/GalleryGrid.tsx": {
+          "additions": 251,
+          "deletions": 142,
+          "accepted_lines": 109
+        },
+        "website/src/lib/utils.ts": {
+          "additions": 6,
+          "deletions": 1,
+          "accepted_lines": 5
+        },
+        ".github/workflows/website.yml": {
+          "additions": 29,
+          "deletions": 2,
+          "accepted_lines": 27
+        },
+        "website/src/client/code-editor.ts": {
+          "additions": 143,
+          "deletions": 41,
+          "accepted_lines": 102
+        },
+        "website/src/content/docs/en/support.md": {
+          "additions": 43,
+          "accepted_lines": 43
+        },
+        "website/src/components/Gallery.astro": {
+          "additions": 31,
+          "deletions": 23,
+          "accepted_lines": 8
+        },
+        "website/src/components/ui/navigation-menu.tsx": {
+          "additions": 194,
+          "deletions": 27,
+          "accepted_lines": 167
+        },
+        "website/src/content/docs/en/plugin.md": {
+          "additions": 39,
+          "accepted_lines": 39
+        },
+        "website/src/data/examples/icon-feature-card.css": {
+          "additions": 93,
+          "deletions": 51,
+          "accepted_lines": 42
+        },
+        "website/src/styles/home.css": {
+          "additions": 1226,
+          "deletions": 630,
+          "accepted_lines": 596
+        },
+        "website/src/content.config.ts": {
+          "additions": 10,
+          "accepted_lines": 10
+        },
+        "website/tests/website.spec.ts": {
+          "additions": 533,
+          "deletions": 160,
+          "accepted_lines": 373
+        },
+        "website/src/components/site/ConversionStory.tsx": {
+          "additions": 409,
+          "deletions": 74,
+          "accepted_lines": 335
+        },
+        "website/src/client/home.ts": {
+          "additions": 253,
+          "deletions": 126,
+          "accepted_lines": 127
+        },
+        "website/package.json": {
+          "additions": 62,
+          "deletions": 5,
+          "accepted_lines": 57
+        },
+        "website/src/data/examples/media/canvas.svg": {
+          "additions": 29,
+          "accepted_lines": 29
+        },
+        "website/src/components/ui/README.md": {
+          "additions": 8,
+          "accepted_lines": 8
+        },
+        "website/src/layouts/Shell.astro": {
+          "additions": 57,
+          "deletions": 13,
+          "accepted_lines": 44
+        },
+        "website/src/content/docs/zh-cn/getting-started.md": {
+          "additions": 62,
+          "accepted_lines": 62
+        },
+        "website/src/data/examples/image-product-card.html": {
+          "additions": 15
+        },
+        "website/src/client/site.ts": {
+          "additions": 183,
+          "deletions": 142,
+          "accepted_lines": 41
+        },
+        "website/src/content/docs/zh-cn/json.md": {
+          "additions": 55,
+          "accepted_lines": 55
+        },
+        "website/src/components/ui/badge.tsx": {
+          "additions": 57,
+          "deletions": 10,
+          "accepted_lines": 47
+        },
+        "website/src/components/ui/native-select.tsx": {
+          "additions": 70,
+          "deletions": 9,
+          "accepted_lines": 61
+        },
+        "website/src/content/docs/zh-cn/convert.md": {
+          "additions": 57,
+          "accepted_lines": 57
+        },
+        "website/src/content/docs/en/troubleshooting.md": {
+          "additions": 37,
+          "accepted_lines": 37
+        },
+        "website/plugin/ui.html": {
+          "additions": 3,
+          "accepted_lines": 3
+        },
+        "website/src/components/Playground.astro": {
+          "additions": 46,
+          "deletions": 39,
+          "accepted_lines": 7
+        },
+        "website/src/components/ui/accordion.tsx": {
+          "additions": 76,
+          "deletions": 13,
+          "accepted_lines": 63
+        },
+        "website/tests/home-story.spec.ts": {
+          "additions": 307,
+          "deletions": 39,
+          "accepted_lines": 268
+        },
+        "README.zh-CN.md": {
+          "additions": 2,
+          "accepted_lines": 2
+        },
+        "website/src/components/site/PreviewCanvas.tsx": {
+          "additions": 103,
+          "deletions": 16,
+          "accepted_lines": 87
+        },
+        "docs/superpowers/specs/2026-10-10-documentation-site-design.md": {
+          "additions": 142,
+          "deletions": 14,
+          "accepted_lines": 128
+        },
+        "website/src/data/examples/variants.css": {
+          "additions": 57
+        },
+        "website/README.md": {
+          "additions": 104,
+          "deletions": 11,
+          "accepted_lines": 93
+        },
+        "website/src/content/docs/zh-cn/plugin.md": {
+          "additions": 39,
+          "accepted_lines": 39
+        },
+        "website/src/data/examples/profile-media-card.html": {
+          "additions": 18
+        },
+        "website/src/components/site/ExampleThumbnail.tsx": {
+          "additions": 60,
+          "deletions": 12,
+          "accepted_lines": 48
+        },
+        "website/src/content/docs/en/convert.md": {
+          "additions": 57,
+          "accepted_lines": 57
+        },
+        "website/src/content/docs/en/json.md": {
+          "additions": 55,
+          "accepted_lines": 55
+        },
+        "website/src/components/site/Diagnostics.tsx": {
+          "additions": 103,
+          "deletions": 12,
+          "accepted_lines": 91
+        },
+        "website/scripts/prepare-vercel.mjs": {
+          "additions": 25,
+          "deletions": 1,
+          "accepted_lines": 24
+        },
+        "website/components.json": {
+          "additions": 23,
+          "deletions": 2,
+          "accepted_lines": 21
+        },
+        "website/src/styles/workbench.css": {
+          "additions": 354,
+          "deletions": 8,
+          "accepted_lines": 346
+        },
+        "website/src/components/ui/alert.tsx": {
+          "additions": 77,
+          "deletions": 12,
+          "accepted_lines": 65
+        },
+        "website/src/components/ui/sheet.tsx": {
+          "additions": 166,
+          "deletions": 24,
+          "accepted_lines": 142
+        },
+        "docs/adr/0001-published-version-site-experiences.md": {
+          "additions": 3,
+          "accepted_lines": 3
+        },
+        "website/src/data/examples/hero-section.css": {
+          "additions": 113,
+          "deletions": 60,
+          "accepted_lines": 53
+        },
+        "website/src/components/ui/button.tsx": {
+          "additions": 75,
+          "deletions": 12,
+          "accepted_lines": 63
+        },
+        "website/src/styles/preview.css": {
+          "additions": 242,
+          "deletions": 44,
+          "accepted_lines": 198
+        },
+        "website/src/lib/i18n.ts": {
+          "additions": 25,
+          "accepted_lines": 25
+        },
+        "website/src/components/ui/tabs.tsx": {
+          "additions": 103,
+          "deletions": 15,
+          "accepted_lines": 88
+        },
+        "website/.npmrc": {
+          "additions": 2,
+          "accepted_lines": 2
+        },
+        "website/plugin/ui.ts": {
+          "additions": 25,
+          "accepted_lines": 25
+        },
+        "website/src/styles/content.css": {
+          "additions": 375,
+          "deletions": 12,
+          "accepted_lines": 363
+        },
+        "website/src/data/examples/stats-panel.css": {
+          "additions": 113,
+          "deletions": 63,
+          "accepted_lines": 50
+        },
+        "website/src/data/examples/shared.css": {
+          "additions": 307,
+          "deletions": 176,
+          "accepted_lines": 131
+        },
+        "website/src/content/docs/en/render.md": {
+          "additions": 62,
+          "deletions": 3,
+          "accepted_lines": 59
+        },
+        "website/src/data/examples/stats-panel.html": {
+          "additions": 18
+        },
+        "website/src/lib/preview.ts": {
+          "additions": 164,
+          "deletions": 29,
+          "accepted_lines": 135
+        },
+        "website/scripts/check-doc-examples.mjs": {
+          "additions": 26,
+          "accepted_lines": 26
+        },
+        "website/src/components/site/Workbench.tsx": {
+          "additions": 504,
+          "deletions": 141,
+          "accepted_lines": 363
+        },
+        "website/src/content/docs/zh-cn/render.md": {
+          "additions": 62,
+          "deletions": 3,
+          "accepted_lines": 59
+        },
+        "website/src/content/docs/en/getting-started.md": {
+          "additions": 62,
+          "accepted_lines": 62
+        },
+        "website/src/data/cases.ts": {
+          "additions": 80,
+          "deletions": 21,
+          "accepted_lines": 59
+        },
+        "website/src/client/playground.ts": {
+          "additions": 315,
+          "deletions": 95,
+          "accepted_lines": 220
+        },
+        "website/tsconfig.json": {
+          "additions": 34,
+          "deletions": 20,
+          "accepted_lines": 14
+        },
+        "website/src/client/gallery.ts": {
+          "additions": 208,
+          "deletions": 120,
+          "accepted_lines": 88
+        },
+        "website/src/components/ui/card.tsx": {
+          "additions": 105,
+          "deletions": 14,
+          "accepted_lines": 91
+        },
+        "CONTEXT.md": {
+          "additions": 23,
+          "accepted_lines": 23
+        },
+        "website/src/data/examples/image-product-card.css": {
+          "additions": 87,
+          "deletions": 49,
+          "accepted_lines": 38
+        },
+        "website/src/data/examples/media/portrait.svg": {
+          "additions": 12,
+          "accepted_lines": 12
+        },
+        "website/tests/design-regressions.spec.ts": {
+          "additions": 255,
+          "deletions": 38,
+          "accepted_lines": 217
+        }
+      }
+    }
+  }
+}
