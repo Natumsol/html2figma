@@ -1,0 +1,8 @@
+---
+import { t, type Language, link } from '../lib/i18n';
+import { GalleryGrid } from './site/GalleryGrid';
+interface Props { language: Language }
+const { language } = Astro.props;
+---
+<section class="page-heading gallery-heading wrap reveal"><div><p class="eyebrow">{t(language,'THE COLLECTION · 06 EXAMPLES','案例集 · 06 个起点')}</p><h1>{t(language,'A starting point.', '为下一次设计，')}<br/>{t(language,'Made for your canvas.', '找一个起点。')}</h1></div><div><p>{t(language,'Typography, imagery and small compositions. Choose an example, inspect its structure, then keep creating.', '排版、图像与不同构图。选择一个案例，检查转换结构，然后继续创作。')}</p><p class="gallery-note">{t(language,'Browser input previews · illustrative content and values · inspect output in Figma.','网页输入预览 · 内容与数值均为示例 · 在 Figma 中检查输出。')}</p><a class="text-link gallery-guide" href={link(language,'docs/plugin')}>{t(language,'How to bring JSON into Figma','如何把 JSON 带进 Figma')} →</a></div></section>
+<GalleryGrid language={language} client:load />

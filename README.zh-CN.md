@@ -31,6 +31,8 @@
 
 ## 安装与使用
 
+访问[官方文档站点](https://html2figma-one.vercel.app/zh-cn/)，查看 API 指南、HTML/CSS Playground 和可复制 JSON 的案例集。Astro 站点源码与开发说明位于 [website/](website/README.md)。
+
 ```sh
 npm install html2figma
 ```

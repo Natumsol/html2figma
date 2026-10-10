@@ -1,0 +1,8 @@
+.astro/
+.vercel/
+.artifacts/
+public/preview/
+public/downloads/
+public/brand/
+public/media/
+src/data/generated/

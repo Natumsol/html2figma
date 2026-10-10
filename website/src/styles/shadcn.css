@@ -1,0 +1,55 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@custom-variant dark (&:is(.dark *));
+@theme inline {
+  --default-transition-duration: 400ms;
+  --default-transition-timing-function: var(--ease);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--ui-muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --font-sans: Geist, "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-mono: "Geist Mono", monospace;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+:root {
+  --shell-radius: 24px;
+  --shell-surface: #e7e9ee;
+  --shell-inset: 4px;
+  --radius: 0.75rem;
+  --background: #f5f6f8;
+  --foreground: #242933;
+  --card: #ffffff;
+  --card-foreground: #242933;
+  --popover: #ffffff;
+  --popover-foreground: #242933;
+  --primary: #874fff;
+  --primary-foreground: #ffffff;
+  --secondary: #e9ebef;
+  --secondary-foreground: #242933;
+  --ui-muted: #f3f1f8;
+  --muted-foreground: #77727f;
+  --accent: #f0e9ff;
+  --accent-foreground: #7550b0;
+  --destructive: #ff3737;
+  --border: #efedf4;
+  --input: #efedf4;
+  --ring: #00b6ff;
+}

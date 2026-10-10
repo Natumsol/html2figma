@@ -1,0 +1,44 @@
+---
+import '@fontsource/geist/400.css';
+import '@fontsource/geist/500.css';
+import '@fontsource/geist/600.css';
+import '@fontsource/geist-mono/400.css';
+import '../styles/global.css';
+import { SiteHeader } from '../components/site/SiteHeader';
+import { labels, link, t, type Language } from '../lib/i18n';
+import release from '../data/generated/release.json';
+interface Props { language: Language; title: string; description: string; route?: string }
+const { language, title, description, route = '' } = Astro.props;
+const l = labels(language);
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang={language === 'en' ? 'en' : 'zh-CN'}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f6f6f2" />
+    <title>{title} · html2figma</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo.svg" />
+    <link rel="canonical" href={canonical} />
+    {(['en', 'zh-cn'] as const).map(lang => <link rel="alternate" hreflang={lang === 'en' ? 'en' : 'zh-CN'} href={new URL(link(lang, route), Astro.site)} />)}
+    <meta property="og:title" content={`${title} · html2figma`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={new URL('/brand/logo.png', Astro.site)} />
+  </head>
+  <body data-language={language}>
+    <a href="#main" class="skip-link">{t(language, 'Skip to content', '跳到正文')}</a>
+    <SiteHeader language={language} route={route} version={release.version} client:load />
+    <main id="main"><slot /></main>
+    <footer class="footer">
+      <a class="wordmark" href={link(language)}><img src="/brand/logo.svg" alt="" width="30" height="30" />html2figma</a>
+      <p>{t(language, 'Built for the space between code and canvas.', '连接代码与设计画布。')}</p>
+      <div><a href={link(language, 'docs/plugin')}>{l.plugin}</a><a href="https://github.com/Natumsol/html2figma/blob/v1.0.2/package.json">MIT</a><a href="https://github.com/Natumsol/html2figma/releases">v{release.version} ↗</a></div>
+    </footer>
+    <script>
+      import '../client/site';
+    </script>
+  </body>
+</html>

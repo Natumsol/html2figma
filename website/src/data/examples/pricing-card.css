@@ -1,0 +1,54 @@
+.h2f-pricing {
+  background: #e7e4ed;
+}
+.h2f-pricing .example-core {
+  background: #f8f6fc;
+  padding: 32px 36px;
+}
+.h2f-pricing h2 {
+  font-size: 24px;
+  line-height: 30px;
+  margin-top: 26px;
+  max-width: 260px;
+  color: #696276;
+}
+.h2f-pricing-price {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  margin: 16px 0 12px;
+}
+.h2f-pricing-price strong {
+  font-size: 80px;
+  line-height: 88px;
+  letter-spacing: -4px;
+  font-weight: 500;
+}
+.h2f-pricing-price span {
+  color: #948c9f;
+  font-size: 13px;
+  padding-bottom: 12px;
+}
+.h2f-pricing .copy {
+  font-size: 13px;
+}
+.h2f-pricing-list {
+  margin: 26px 0;
+}
+.h2f-pricing-list p {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  line-height: 24px;
+  color: #746d7e;
+  margin-top: 6px;
+}
+.h2f-pricing-list svg {
+  width: 16px;
+  height: 16px;
+}
+.h2f-pricing .action {
+  background: #282431;
+  width: 100%;
+}

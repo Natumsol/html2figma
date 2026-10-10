@@ -1,0 +1,53 @@
+.h2f-hero {
+  background: #343944;
+}
+.h2f-hero .example-core {
+  background: #242933;
+  padding: 36px;
+  color: #f8f9fc;
+}
+.h2f-hero .kicker {
+  color: #929caa;
+}
+.h2f-hero h1 {
+  font-size: 60px;
+  line-height: 62px;
+  letter-spacing: -3px;
+  margin: 32px 0 22px;
+}
+.h2f-hero h1 span {
+  color: #cab8ff;
+}
+.h2f-hero .copy {
+  max-width: 360px;
+  color: #a4adbb;
+}
+.h2f-hero-footer {
+  margin-top: 32px;
+}
+.h2f-hero .badge {
+  padding: 0;
+  background: transparent;
+  color: #7e899b;
+  font-size: 9px;
+  letter-spacing: 0.5px;
+}
+.h2f-hero-mark {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+@media (max-width: 480px) {
+  .h2f-hero .example-core {
+    padding: 26px;
+  }
+  .h2f-hero h1 {
+    font-size: 42px;
+    line-height: 46px;
+    letter-spacing: -2px;
+  }
+  .h2f-hero-footer {
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+}

@@ -1,0 +1,198 @@
+@layer components {
+  .preview-canvas {
+    min-width: 0;
+  }
+  .preview-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    background: white;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .preview-controls [role="group"] {
+    display: flex;
+    gap: 4px;
+  }
+  .preview-controls button {
+    font-size: 12px;
+  }
+  .preview-controls button[aria-pressed="true"] {
+    background: var(--accent);
+    color: var(--accent-foreground);
+  }
+  .preview-stage {
+    position: relative;
+    margin-inline: auto;
+  }
+  .preview-stage iframe {
+    position: absolute;
+    inset: 0 auto auto 0;
+    transform-origin: top left;
+  }
+  .expanded-preview {
+    min-width: 0;
+    gap: 20px;
+  }
+  .expanded-preview-heading {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .expanded-preview-heading h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  .expanded-preview-heading p {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .expanded-preview .preview-canvas {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    border-radius: calc(var(--shell-radius) - var(--shell-inset));
+  }
+  .expanded-preview .preview-scroll {
+    flex: 1;
+    height: auto;
+    min-height: 0;
+  }
+  .expanded-preview .preview-note {
+    background: transparent;
+    padding: 0;
+    min-height: 22px;
+  }
+  .gallery-preview {
+    position: relative;
+    background: #fcfbfd;
+    padding-top: 48px;
+  }
+  .gallery-preview .preview-expand {
+    position: absolute;
+    right: 12px;
+    top: 8px;
+    z-index: 1;
+    font-size: 12px;
+  }
+  .gallery-card:first-child,
+  .gallery-card:last-child {
+    grid-column: 1 / -1;
+  }
+  .gallery-card:first-child > .core,
+  .gallery-card:last-child > .core {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+  }
+  .gallery-card:first-child .gallery-meta,
+  .gallery-card:last-child .gallery-meta {
+    grid-column: 1 / -1;
+  }
+  .gallery-card:first-child .gallery-body,
+  .gallery-card:last-child .gallery-body {
+    align-self: center;
+  }
+  .copy-next-step {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 12px;
+    margin: 0 0 16px;
+  }
+  .copy-next-step a {
+    color: var(--accent-foreground);
+    font-size: inherit;
+  }
+  .gallery-body .copy-next-step {
+    margin: 14px 0 0;
+    font-size: 12px;
+  }
+  .mobile-workspace-tabs {
+    display: none;
+  }
+  .source-workspace {
+    display: block;
+  }
+  .source-workspace > .editor-panel {
+    height: 100%;
+  }
+  .workspace-grid[data-view="source"] #preview-panel {
+    display: block;
+  }
+}
+@layer responsive {
+  @media (max-width: 767px) {
+    .toolbar-actions .button-icon {
+      display: none;
+    }
+    .mobile-workspace-tabs {
+      display: flex;
+      margin-bottom: 16px;
+      gap: 4px;
+      border-radius: 14px;
+    }
+    .mobile-workspace-tabs button {
+      min-height: 40px;
+      font-size: 12px;
+      border-radius: 10px;
+    }
+    .mobile-workspace-tabs button[data-state="active"] {
+      box-shadow: none;
+      background: var(--accent);
+      color: var(--accent-foreground);
+    }
+    .source-workspace[data-state="inactive"],
+    .output-panel[data-mobile-active="false"] {
+      display: none;
+    }
+    .workspace-grid[data-view="source"] #preview-panel {
+      display: none;
+    }
+    .desktop-output-tabs {
+      display: none;
+    }
+    .workbench-toolbar {
+      position: relative;
+      top: auto;
+      backdrop-filter: none;
+      padding-block: 4px 12px;
+      gap: 8px;
+    }
+    .workspace-heading {
+      padding-top: 28px;
+      padding-bottom: 14px;
+    }
+    .workspace-heading > p {
+      margin-top: 8px;
+    }
+    .workbench-status {
+      font-size: 11px;
+      min-height: 18px;
+    }
+    #result-summary {
+      width: auto;
+      margin-left: auto;
+    }
+    .copy-next-step {
+      font-size: 11px;
+      margin-bottom: 14px;
+    }
+    .gallery-card:first-child > .core,
+    .gallery-card:last-child > .core {
+      display: block;
+    }
+    .expanded-preview-heading h2 {
+      font-size: 20px;
+    }
+    .preview-controls {
+      gap: 6px;
+    }
+  }
+}

@@ -31,6 +31,10 @@
 
 ## Install
 
+Explore the [documentation site](https://html2figma-one.vercel.app), including
+API guides, the HTML/CSS Playground and copyable Gallery cases. The Astro source
+and development instructions live in [website/](website/README.md).
+
 ```sh
 npm install html2figma
 ```

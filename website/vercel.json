@@ -1,0 +1,17 @@
+{
+  "framework": "astro",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "headers": [
+    { "source": "/(.*)", "headers": [
+      { "key": "X-Content-Type-Options", "value": "nosniff" },
+      { "key": "Referrer-Policy", "value": "no-referrer" }
+    ] },
+    { "source": "/brand/(.*)", "headers": [
+      { "key": "Access-Control-Allow-Origin", "value": "*" }
+    ] },
+    { "source": "/downloads/(.*)", "headers": [
+      { "key": "Content-Disposition", "value": "attachment" }
+    ] }
+  ]
+}

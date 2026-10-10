@@ -1,0 +1,42 @@
+.h2f-feature .example-core {
+  padding: 36px;
+}
+.h2f-feature-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  background: #edf8f2;
+}
+.h2f-feature-icon svg {
+  width: 34px;
+  height: 34px;
+}
+.h2f-feature .example-core > .row {
+  margin-bottom: 30px;
+}
+.h2f-feature .kicker {
+  font-size: 9px;
+  letter-spacing: 2px;
+}
+.h2f-feature h2 {
+  font-size: 38px;
+  line-height: 42px;
+  margin: 12px 0 18px;
+  max-width: 330px;
+}
+.h2f-feature .copy {
+  max-width: 390px;
+}
+.h2f-feature .tags {
+  margin-top: 24px;
+}
+.h2f-feature-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #869187;
+}

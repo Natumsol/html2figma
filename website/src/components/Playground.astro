@@ -1,0 +1,7 @@
+---
+import { Workbench } from './site/Workbench';
+import type { Language } from '../lib/i18n';
+interface Props { language: Language }
+const { language } = Astro.props;
+---
+<Workbench language={language} client:load />

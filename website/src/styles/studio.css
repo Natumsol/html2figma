@@ -1,0 +1,258 @@
+@layer components {
+  .showcase-preview iframe,
+  .gallery-preview iframe,
+  .example-thumbnail iframe {
+    clip-path: inset(1px);
+  }
+  .eyebrow {
+    background: #e8ebf180;
+    color: #78818f;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+  }
+  .section-heading h2 {
+    font-size: 42px;
+    line-height: 1.12;
+  }
+  :lang(zh-CN) .section-heading h2,
+  :lang(zh-CN) .integration-section h2,
+  :lang(zh-CN) .capability-section h2 {
+    font-size: 40px;
+    line-height: 1.3;
+    letter-spacing: -0.025em;
+  }
+  .gallery-heading {
+    grid-template-columns: 1.15fr 1fr;
+    gap: 96px;
+    padding-top: 88px;
+    padding-bottom: 52px;
+  }
+  .gallery-heading h1 {
+    font-size: 56px;
+    line-height: 1.1;
+  }
+  :lang(zh-CN) .gallery-heading h1 {
+    font-size: 50px;
+    line-height: 1.3;
+    letter-spacing: -0.035em;
+  }
+  .gallery-heading > div > p:not(.eyebrow) {
+    font-size: 15px;
+    line-height: 1.9;
+  }
+  .gallery-heading .gallery-note {
+    font-size: 10px !important;
+    line-height: 1.8;
+    margin-top: 20px;
+  }
+  .gallery-guide {
+    display: inline-block;
+    margin-top: 18px;
+    font-size: 12px;
+  }
+  .gallery-grid {
+    gap: 28px;
+  }
+  .gallery-card {
+    background: var(--shell-surface);
+  }
+  .gallery-preview {
+    background: #edeff3;
+    padding-top: 48px;
+  }
+  .gallery-title {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .gallery-title h2 {
+    font-size: 24px;
+    margin-bottom: 0;
+    letter-spacing: -0.025em;
+  }
+  .gallery-number {
+    font-size: 10px;
+    color: #9ba1ad;
+  }
+  .gallery-body {
+    padding: 32px;
+  }
+  .gallery-body > p {
+    font-size: 13px;
+    line-height: 1.8;
+    max-width: 350px;
+  }
+  .gallery-body .feature-tags {
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .gallery-actions {
+    gap: 20px;
+    margin: 24px 0 14px;
+    flex-wrap: wrap;
+  }
+  .gallery-actions .text-link {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+  }
+  .gallery-actions .text-link svg {
+    width: 15px;
+    height: 15px;
+  }
+  .gallery-body .gallery-status {
+    font-size: 10px !important;
+    color: #8e9c96;
+  }
+  .gallery-body .copy-next-step {
+    font-size: 10px;
+    margin-top: 10px;
+  }
+  .workspace-heading {
+    padding-top: 32px;
+    padding-bottom: 22px;
+  }
+  .workspace-heading h1 {
+    font-size: 32px;
+  }
+  .workspace-heading .eyebrow {
+    margin-bottom: 10px;
+  }
+  .workbench-toolbar {
+    background: #f5f6f8f0;
+    padding: 10px 0;
+    gap: 10px;
+  }
+  .workbench .copy-next-step {
+    justify-content: flex-end;
+    margin: 0 0 12px;
+    font-size: 10px;
+  }
+  .workbench .copy-next-step > span {
+    display: none;
+  }
+  .workbench-status {
+    font-size: 11px;
+    min-height: 18px;
+  }
+  .source-options select {
+    font-size: 12px;
+  }
+  .workspace-grid {
+    gap: 12px;
+  }
+  .workspace-grid .shell {
+    --shell-radius: 20px;
+    --shell-inset: 4px;
+  }
+  .workspace-grid .core {
+    border-radius: calc(var(--shell-radius) - var(--shell-inset));
+  }
+  .panel-bar {
+    height: 54px;
+  }
+  .workbench .plugin-handoff {
+    margin-top: 32px;
+    padding-block: 24px;
+  }
+  .plugin-handoff h2 {
+    font-size: 24px;
+  }
+  .docs-grid {
+    padding-top: 48px;
+  }
+  .docs-title {
+    font-size: 38px;
+  }
+  .prose h2 {
+    font-size: 26px;
+  }
+  .prose h3 {
+    font-size: 21px;
+  }
+  .footer {
+    margin-top: 48px;
+  }
+}
+@layer responsive {
+  @media (max-width: 1100px) {
+    .gallery-heading {
+      gap: 40px;
+    }
+    .gallery-heading h1,
+    :lang(zh-CN) .gallery-heading h1 {
+      font-size: 44px;
+    }
+  }
+  @media (max-width: 767px) {
+    .section-heading h2,
+    :lang(zh-CN) .section-heading h2,
+    :lang(zh-CN) .integration-section h2,
+    :lang(zh-CN) .capability-section h2 {
+      font-size: 30px;
+      line-height: 1.3;
+    }
+    .integration-section h2,
+    .capability-section h2 {
+      font-size: 32px;
+    }
+    .gallery-heading {
+      grid-template-columns: 1fr;
+      gap: 24px;
+      padding-top: 44px;
+      padding-bottom: 36px;
+    }
+    .gallery-heading h1,
+    :lang(zh-CN) .gallery-heading h1 {
+      font-size: 38px;
+      line-height: 1.3;
+    }
+    .gallery-heading > div > p:not(.eyebrow) {
+      font-size: 14px;
+    }
+    .gallery-body {
+      padding: 24px;
+    }
+    .gallery-title h2 {
+      font-size: 21px;
+    }
+    .gallery-grid {
+      gap: 24px;
+    }
+    .workspace-heading {
+      padding-top: 26px;
+      padding-bottom: 16px;
+    }
+    .workspace-heading h1 {
+      font-size: 30px;
+    }
+    .workspace-heading > p {
+      font-size: 12px;
+      margin-top: 6px;
+    }
+    .workbench-toolbar {
+      position: relative;
+      backdrop-filter: none;
+      gap: 8px;
+      padding: 4px 0 10px;
+    }
+    .workbench .copy-next-step {
+      margin-bottom: 12px;
+    }
+    .docs-grid {
+      padding-top: 36px;
+    }
+    .docs-title {
+      font-size: 32px;
+    }
+    .prose h2 {
+      font-size: 25px;
+    }
+    .shell {
+      --shell-radius: 20px;
+      --shell-inset: 4px;
+    }
+  }
+}

@@ -1,0 +1,38 @@
+.h2f-image-card .example-core {
+  padding: 14px;
+}
+.h2f-image-card-preview {
+  display: block;
+  width: 100%;
+  height: 268px;
+  border-radius: 14px;
+  object-fit: cover;
+}
+.h2f-image-card-body {
+  padding: 26px 20px 20px;
+}
+.h2f-image-card h2 {
+  font-size: 34px;
+  line-height: 38px;
+  margin: 12px 0;
+  max-width: 340px;
+}
+.h2f-image-card .copy {
+  font-size: 13px;
+  line-height: 22px;
+}
+.h2f-image-card .tags {
+  margin-top: 22px;
+}
+@media (max-width: 480px) {
+  .h2f-image-card-preview {
+    height: 200px;
+  }
+  .h2f-image-card-body {
+    padding: 20px 10px 12px;
+  }
+  .h2f-image-card h2 {
+    font-size: 28px;
+    line-height: 32px;
+  }
+}

@@ -1,0 +1,46 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { BrandButton } from '../components/site/BrandButton';
+import { DocumentToc } from '../components/site/DocumentToc';
+import { SchemaDisclosure } from '../components/site/SchemaDisclosure';
+import Shell from '../layouts/Shell.astro';
+import Home from '../components/Home.astro';
+import Gallery from '../components/Gallery.astro';
+import Playground from '../components/Playground.astro';
+import { labels, languages, link, t, type Language } from '../lib/i18n';
+import release from '../data/generated/release.json';
+import schema from '../data/generated/schema.json';
+
+interface Props { language: Language; kind: string; route: string; entry?: CollectionEntry<'docs'> }
+export async function getStaticPaths() {
+  const docs = await getCollection('docs');
+  const paths = languages.flatMap(language => ['', 'gallery', 'playground'].map(route => ({ params: { path: link(language, route).slice(1, -1) || undefined }, props: { language, route, kind: route || 'home' } })));
+  return [...paths, ...docs.map(entry => {
+    const [language, ...slug] = entry.id.split('/');
+    const route = `docs/${slug.join('/')}`;
+    return { params: { path: link(language as Language, route).slice(1, -1) }, props: { language: language as Language, kind: 'docs', route, entry } };
+  })];
+}
+const { language, kind, route, entry } = Astro.props;
+const l = labels(language);
+const docs = (await getCollection('docs')).filter(item => item.id.startsWith(`${language}/`)).sort((a, b) => a.data.order - b.data.order);
+const rendered = entry ? await render(entry) : undefined;
+const Content = rendered?.Content;
+const title = entry?.data.title || (kind === 'home' ? t(language, 'From HTML to editable Figma layers', '从 HTML 到可编辑 Figma 图层') : kind === 'gallery' ? l.gallery : l.playground);
+const description = entry?.data.description || t(language, 'Convert rendered HTML and CSS into portable JSON and editable Figma layers. Explore the open-source library, API, Playground and examples.', '把浏览器中的 HTML 与 CSS 转换为 JSON 和可编辑 Figma 图层。探索开源库、API、Playground 与案例。');
+---
+<Shell language={language} title={title} description={description} route={route}>
+  {kind === 'home' && <Home language={language} />}
+  {kind === 'gallery' && <Gallery language={language} />}
+  {kind === 'playground' && <Playground language={language} />}
+  {kind === 'docs' && entry && Content && <div class="docs-grid wrap">
+    <aside class="docs-sidebar" aria-label={l.docs}><p>{l.docs}</p>{docs.map(item => <a href={link(language, `docs/${item.id.split('/').slice(1).join('/')}`)} aria-current={item.id === entry.id ? 'page' : undefined}>{item.data.title}</a>)}</aside>
+    <article><span class="docs-version">html2figma v{release.version}</span><h1 class="docs-title">{entry.data.title}</h1><p class="docs-description">{entry.data.description}</p>
+      {route === 'docs/plugin' && <BrandButton className="doc-download" href={release.plugin} download label={`${t(language, 'Download plugin', '下载插件')} · v${release.version}`} arrow/>}
+      <DocumentToc title={t(language, 'On this page', '本页目录')} headings={rendered?.headings.filter(item => item.depth === 2) || []} client:load />
+      <div class="prose"><Content />{route === 'docs/json' && <SchemaDisclosure title={t(language, 'Complete schema declarations · generated from the published package', '完整格式声明 · 从发布包生成')} declarations={schema.declarations} chinese={language !== 'en'} client:load />}</div>
+      <div class="doc-nav"><a href={link(language, 'playground')}>{t(language, 'Try in Playground', '在 Playground 中体验')} ↗</a><a href="https://github.com/Natumsol/html2figma/issues">{t(language, 'Report a documentation issue', '反馈文档问题')} ↗</a></div>
+    </article>
+    <aside class="toc"><p>{t(language, 'On this page', '本页目录')}</p>{rendered?.headings.filter(item => item.depth === 2).map(item => <a href={`#${item.slug}`}>{item.text}</a>)}</aside>
+  </div>}
+</Shell>
