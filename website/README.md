@@ -111,9 +111,9 @@ npm run deploy                  # Rebuild and upload Preview
 npm run deploy:production       # Rebuild and upload Production explicitly
 ```
 
-The helpers use pinned Vercel CLI 63.1.2 through `npm exec`, keeping deployment tooling out of the site's CI dependency install. Login is stored by the CLI, not in this repository. [Vercel recommends `pull` before `build`](https://vercel.com/docs/cli/build); the helper follows that sequence on every build. Vercel's `.vercel/.env.<target>.local` files serve `vercel build`, whereas the dotenv pull commands above serve plain Astro commands. Both stay ignored. A failed pull or build stops the upload.
+The helpers use pinned Vercel CLI 63.1.2 through `npm exec`, keeping deployment tooling out of the site's CI dependency install. Login is stored by the CLI, not in this repository. [Vercel recommends `pull` before `build`](https://vercel.com/docs/cli/build); the helper follows that sequence on every build. Build/deploy helpers run the CLI from the repository root so Vercel's `website` Root Directory is applied once. They mirror the existing project identity into an ignored root `.vercel/` cache, preserve links to other projects, and stop if the remote Root Directory is incorrect. Vercel's root `.vercel/.env.<target>.local` files serve `vercel build`, whereas the website dotenv pull commands above serve plain Astro commands. Both stay ignored. A failed pull or build stops the upload.
 
-`vercel.json` defines `npm ci`, the Astro build, `dist/` output and static headers. The older `scripts/prepare-vercel.mjs` remains an offline Build Output API helper; prefer the commands above so Vercel records the matching target environment. All remote deployments require an already linked project. Local QA does not need a Vercel account.
+`vercel.json` defines `npm ci`, the Astro build, `dist/` output and static headers. After the CLI build, `scripts/prepare-vercel.mjs` packages the Astro static pages and extensionless routes into the root Build Output API directory, preserving CLI project/target metadata. This also handles local monorepo builders that finish without collecting static files. A missing homepage stops deployment. All remote deployments require an already linked project. Local QA does not need a Vercel account.
 
 ## Adopt a new library release
 

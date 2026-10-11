@@ -13,6 +13,7 @@
 </p>
 
 <p align="center">
+  <a href="https://html2figma-one.vercel.app/zh-cn/">官方网站</a> ·
   <a href="#安装与使用">快速开始</a> ·
   <a href="#示例">示例</a> ·
   <a href="#端到端测试">视觉验收</a> ·
@@ -29,9 +30,23 @@
 - 创建可编辑文字、图形、图片和受支持的布局，并报告降级警告。
 - 提供 Chrome 扩展与 Figma 插件示例，并附 37 组真实画布验收截图。
 
-## 安装与使用
+## 官方网站
 
-访问[官方文档站点](https://html2figma-one.vercel.app/zh-cn/)，查看 API 指南、HTML/CSS Playground 和可复制 JSON 的案例集。Astro 站点源码与开发说明位于 [website/](website/README.md)。
+访问[中文站点](https://html2figma-one.vercel.app/zh-cn/)或 [English](https://html2figma-one.vercel.app/)，在浏览器中体验转换，再将 JSON 带入 Figma。
+
+| 入口 | 用途 |
+| --- | --- |
+| [文档](https://html2figma-one.vercel.app/zh-cn/docs/getting-started/) | 安装与集成指南，以及 convert、render 和 JSON API 文档。 |
+| [Playground](https://html2figma-one.vercel.app/zh-cn/playground/) | 编辑 HTML/CSS、检查转换诊断，复制或下载 JSON。 |
+| [案例集](https://html2figma-one.vercel.app/zh-cn/gallery/) | 浏览六个转换案例，并在 Playground 中继续编辑。 |
+| [配套 Figma 插件](https://html2figma-one.vercel.app/zh-cn/docs/plugin/) | 下载独立开发版插件，将 JSON 导入 Figma 并生成图层。 |
+| [支持范围与限制](https://html2figma-one.vercel.app/zh-cn/docs/support/) | 查看受支持的 HTML/CSS 行为及已知转换限制。 |
+
+使用流程为 **HTML/CSS → JSON → 可编辑 Figma 图层**。浏览器预览展示网页输入，生成的图层需在 Figma 中检查。站点与可下载插件使用同一个已发布 npm 库版本。
+
+站点源码、本地开发和部署说明见 [website/README.md](website/README.md)。
+
+## 安装与使用
 
 ```sh
 npm install html2figma

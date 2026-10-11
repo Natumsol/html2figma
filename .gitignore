@@ -1,5 +1,6 @@
 .worktrees/
 .superpowers/
+.vercel/
 node_modules/
 dist/
 test-results/
