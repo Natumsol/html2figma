@@ -13,6 +13,7 @@
 </p>
 
 <p align="center">
+  <a href="https://html2figma-one.vercel.app/">Website</a> ·
   <a href="#install">Get started</a> ·
   <a href="#examples">Examples</a> ·
   <a href="#end-to-end-tests">Visual E2E</a> ·
@@ -29,11 +30,23 @@
 - Create editable text, shapes, images, and supported layouts, with warnings for fallbacks.
 - Explore the Chrome extension and Figma plugin examples alongside 37 archived real-canvas screenshot comparisons.
 
-## Install
+## Website
 
-Explore the [documentation site](https://html2figma-one.vercel.app), including
-API guides, the HTML/CSS Playground and copyable Gallery cases. The Astro source
-and development instructions live in [website/](website/README.md).
+Explore the [official website](https://html2figma-one.vercel.app/) in English or [简体中文](https://html2figma-one.vercel.app/zh-cn/). Try the library in your browser, then bring the converted JSON into Figma.
+
+| Entry | What you can do |
+| --- | --- |
+| [Documentation](https://html2figma-one.vercel.app/docs/getting-started/) | Install the library and follow the convert, render and JSON API guides. |
+| [Playground](https://html2figma-one.vercel.app/playground/) | Edit HTML/CSS, inspect conversion diagnostics, and copy or download JSON. |
+| [Gallery](https://html2figma-one.vercel.app/gallery/) | Explore six conversion examples and open them in Playground. |
+| [Figma plugin](https://html2figma-one.vercel.app/docs/plugin/) | Download the standalone development plugin and import your JSON into Figma. |
+| [Support and limitations](https://html2figma-one.vercel.app/docs/support/) | Check supported HTML/CSS behavior and known conversion limits. |
+
+The workflow is **HTML/CSS → JSON → editable Figma layers**. Browser previews show the webpage input; inspect the generated layers in Figma. The site and downloadable plugin use the same published npm library version.
+
+For website source, local development and deployment instructions, see [website/README.md](website/README.md).
+
+## Install
 
 ```sh
 npm install html2figma
