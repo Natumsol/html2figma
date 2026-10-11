@@ -25,7 +25,7 @@ if (isHtml2FigmaDocument(unknownValue)) console.log(unknownValue.root);
 
 | 字段 | 含义 |
 | --- | --- |
-| `version` | AST 格式版本，目前为字面量 `1`，与库版本 `1.0.2` 不同。 |
+| `version` | AST 格式版本，目前为字面量 `1`，与库版本 `1.0.3` 不同。 |
 | `root` | 根 `Html2FigmaNode`。 |
 | `resources` | 图片或 SVG 资源。 |
 | `warnings` | 汇总的转换诊断。 |

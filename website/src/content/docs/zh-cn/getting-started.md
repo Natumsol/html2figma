@@ -7,10 +7,10 @@ order: 1
 ## 安装
 
 ```sh
-npm install html2figma@1.0.2
+npm install html2figma@1.0.3
 ```
 
-本站文档、Playground 和下载插件统一使用 **html2figma 1.0.2**，采用 MIT 许可证。你可以接入浏览器转换、Figma 渲染，或完整流程。
+本站文档、Playground 和下载插件统一使用 **html2figma 1.0.3**，采用 MIT 许可证。你可以接入浏览器转换、Figma 渲染，或完整流程。
 
 ## 理解两个运行环境
 

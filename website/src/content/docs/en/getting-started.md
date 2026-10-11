@@ -7,10 +7,10 @@ order: 1
 ## Install
 
 ```sh
-npm install html2figma@1.0.2
+npm install html2figma@1.0.3
 ```
 
-This site, its Playground and the downloadable plugin use **html2figma 1.0.2**. The package is MIT licensed. You can integrate the browser converter, the Figma renderer, or both.
+This site, its Playground and the downloadable plugin use **html2figma 1.0.3**. The package is MIT licensed. You can integrate the browser converter, the Figma renderer, or both.
 
 ## Understand the two environments
 

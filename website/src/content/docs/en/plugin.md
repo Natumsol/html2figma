@@ -11,7 +11,7 @@ Download the plugin ZIP above. It includes `manifest.json`, `main.js`, a readme 
 1. Unzip the package into a permanent local folder.
 2. Open a Figma Design file in the Figma desktop application.
 3. Use **Plugins → Development → Import plugin from manifest** and select `manifest.json`.
-4. Run **html2figma 1.0.2** from the Development plugin list.
+4. Run **html2figma 1.0.3** from the Development plugin list.
 
 Menu names can vary by Figma language or application version. This is a development plugin, not a published Community plugin. You need development-plugin access in your Figma environment.
 

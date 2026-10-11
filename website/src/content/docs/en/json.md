@@ -25,7 +25,7 @@ The validator checks typed fields, finite numbers, numeric ranges, unique node/r
 
 | Field | Meaning |
 | --- | --- |
-| `version` | AST schema version, currently literal `1`; distinct from library version `1.0.2`. |
+| `version` | AST schema version, currently literal `1`; distinct from library version `1.0.3`. |
 | `root` | Root `Html2FigmaNode`. |
 | `resources` | Image or SVG resource records. |
 | `warnings` | Aggregate conversion diagnostics. |
