@@ -13,7 +13,7 @@
     "verify": "npm run test:config && npm run check && npm run build:preview && npm run test",
     "build:preview": "node scripts/run-astro.mjs build preview",
     "build:production": "node scripts/run-astro.mjs build production",
-    "test:config": "node --test scripts/environment.test.mjs",
+    "test:config": "node --test scripts/environment.test.mjs scripts/vercel-workspace.test.mjs",
     "env:development": "node scripts/vercel.mjs env development",
     "env:preview": "node scripts/vercel.mjs env preview",
     "env:production": "node scripts/vercel.mjs env production",

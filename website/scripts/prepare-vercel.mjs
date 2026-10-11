@@ -3,8 +3,10 @@ import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const output = resolve(root, '.vercel/output');
-await rm(output, { recursive: true, force: true });
+const output = resolve(root, process.argv[2] || '.vercel/output');
+// A CLI build owns builds.json (project/target metadata); retain it when packaging
+// into that build's output. Standalone invocations continue to start fresh.
+await rm(process.argv[2] ? resolve(output, 'static') : output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
 await cp(resolve(root, 'dist'), resolve(output, 'static'), { recursive: true, force: true });
 const routes = [

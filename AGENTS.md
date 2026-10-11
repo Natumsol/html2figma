@@ -50,6 +50,20 @@ Pull requests should include a short summary, test results, and any known limita
 
 Do not commit generated `dist/`, `node_modules/`, or `test-results/`. Preserve the package entrypoint separation in `package.json`: root schema exports, `./convert`, and `./render`.
 
+## Website Synchronization and Deployment
+
+Treat website synchronization and deployment as part of tasks that affect the public API, JSON schema, supported behavior or warnings, installation instructions, the companion plugin, a published library release, or website content, UI, branding and assets. Read `website/README.md` for the current commands and environment configuration, and `docs/adr/0001-published-version-site-experiences.md` for the published-version boundary.
+
+- Synchronize affected English and Chinese documentation, Playground/Gallery cases and plugin downloads in the same task. Keep documentation claims, conversion output and plugin rendering aligned.
+- Keep Production on the latest published npm library version. Prepare unreleased API or behavior changes as drafts for Preview; after the library release is available, pin the exact website dependency and lockfile version, update both languages and rebuild the plugin downloads. A source merge alone does not release the library.
+- Use Preview for draft or feature-branch validation. When public-ready site changes reach `master`, or the site adopts a published library release, complete the Production deployment. If Git integration already deployed the expected revision, verify that deployment instead of uploading it again.
+- An unqualified user request to "publish" or "deploy the site" means **Production**. Use `npm run deploy:production` from `website/`; use `npm run deploy` when Preview is intended. Report the environment clearly.
+- Before deployment, run `npm run verify` in `website/` and the root checks required by the Testing Guidelines. Resolve failures before publishing; rebuild for the chosen environment rather than promoting artifacts with Preview metadata or Analytics settings.
+- Verify the remote Vercel Root Directory is `website` and source files outside it are included. Validate a Git-source deployment builds the Astro pages; local prebuilt validation alone does not verify Git automation. Run Vercel builds from the repository root so its Root Directory is applied once.
+- Completion requires a READY deployment of the expected revision and target. For Production, verify the actual production domain, affected pages, required assets/downloads and production metadata/Analytics settings. Include the verified public URL in the handoff; a local build or successful Preview alone does not complete a Production request.
+- Keep credentials, real dotenv files, personal paths and private logs/screenshots out of commits and public artifacts. Report validation conclusions and public links.
+- Changes limited to agent instructions, internal plans, tests or refactors without public effects do not trigger site synchronization or deployment.
+
 ## Agent skills
 
 ### Issue tracker
