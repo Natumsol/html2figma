@@ -1,9 +1,9 @@
 ---
 import { labels, link, t, type Language } from '../lib/i18n';
 import { cases, caseText } from '../data/cases';
-import release from '../data/generated/release.json';
 import { BrandButton } from './site/BrandButton';
 import { ExampleSelect } from './site/ExampleSelect';
+import { InstallCommand } from './site/InstallCommand';
 import { ExampleThumbnail } from './site/ExampleThumbnail';
 import { ConversionStory } from './site/ConversionStory';
 import { Card } from './ui/card';
@@ -16,28 +16,41 @@ const frame = 'shell block gap-0 rounded-[var(--shell-radius)] border-0 bg-[var(
 ---
 <section class="hero wrap">
   <div class="hero-copy reveal">
-    <p class="eyebrow"><span class="signal"></span>{t(language, 'OPEN SOURCE · HTML TO FIGMA', '开源 · HTML TO FIGMA')}</p>
-    <h1>{t(language, 'Your web.', '把网页，')}<br/>{t(language, 'Your canvas.', '带进 Figma。')}</h1>
-    <p class="hero-description">{t(language, 'Rendered HTML & CSS. Portable JSON. Editable layers. Keep building on both sides of the canvas.', '将 HTML 与 CSS 转为 JSON，在 Figma 中继续编辑。让代码与设计，接上同一条工作流。')}</p>
-    <div class="actions"><BrandButton href={link(language, 'playground')} label={t(language, 'Run an example', '运行一个案例')} arrow /><a class="text-link" href={link(language, 'docs/getting-started')}>{t(language, 'Integrate the library', '接入项目')} →</a></div>
-    <div class="install-line"><code>npm install html2figma</code><span>v{release.version} · MIT</span></div>
+    <p class="hero-kicker">HTML & CSS → Figma</p>
+    <h1>
+      <span class="hero-line">{t(language, 'Web content.', '网页内容，')}</span>
+      <span class="hero-line">
+        {t(language, 'Figma ', '在 Figma ')}<span class="hero-emphasis"><span class="violet-text">{t(language, 'lay', '编')}</span><span class="blue-text">{t(language, 'ers', '辑')}</span><svg class="hero-underline" viewBox="0 0 120 12" aria-hidden="true" focusable="false" preserveAspectRatio="none"><path class="violet-text" d="M3 8 Q28 7 63 6"/><path class="blue-text" d="M59 6 Q88 4 117 5"/></svg></span>{t(language, '.', '。')}
+      </span>
+    </h1>
+    <p class="hero-description">{t(language, 'Convert HTML & CSS into editable text, images, and vectors.', '将网页转换为可编辑图层。支持文字、图片和 SVG。')}</p>
+    <div class="actions"><BrandButton href={link(language, 'playground')} label={t(language, 'Try conversion', '试用转换')} arrow /><a class="text-link" href={link(language, 'docs/getting-started')}>{t(language, 'Integration guide', '集成文档')} →</a></div>
+    <div class="install-line"><InstallCommand chinese={language !== 'en'} client:load/></div>
   </div>
   <Card className={`${frame} live-showcase reveal`} data-home-showcase>
     <div class="core">
-      <div class="showcase-bar"><span class="showcase-title"><span class="color-dot green"></span>{t(language, 'LIVE CONVERSION', '实时转换')}</span><label for="home-case" class="sr-only">{t(language, 'Preview example', '预览案例')}</label><ExampleSelect id="home-case" options={featured.map(item => ({value:item.id,label:caseText(item.id,language).title}))}/></div>
-      <div class="showcase-input"><div class="showcase-preview"><iframe id="home-preview" title={l.preview} sandbox="allow-scripts"></iframe></div><span class="canvas-caption">{t(language, 'BROWSER INPUT', '网页输入')}</span></div>
-      <div class="showcase-document"><div class="showcase-stage-label"><span><Layers strokeWidth={1.2} />{t(language, 'Editable structure', '可编辑结构')}</span></div><div class="document-tree" id="home-tree"><p>{l.loading}</p></div><p class="layer-hint">{t(language, 'Select a layer to locate it in the preview.', '选择图层，在网页预览中定位。')}</p><div class="showcase-bottom"><p id="home-status" class="sr-only" role="status">{l.loading}</p><div class="actions"><BrandButton tone="dark" id="home-copy" disabled label={l.copy} className="min-h-10 px-4 py-2 text-xs" /><a class="text-link" id="home-edit" href={`${link(language,'playground')}?case=hero-section`}>{t(language,'Edit & inspect','编辑与检查')} ↗</a></div></div><div class="showcase-handoff"><span>{t(language, 'Copy JSON. Continue in Figma.', '复制 JSON，在 Figma 中继续。')}</span><a href={link(language,'docs/plugin')}>{l.plugin} →</a></div></div>
+      <div class="showcase-bar"><span class="showcase-title">{t(language, 'Conversion example', '转换示例')}</span><ExampleSelect id="home-case" label={t(language, 'Preview example', '预览案例')} options={featured.map(item => ({value:item.id,label:caseText(item.id,language).title}))} client:load/></div>
+      <div class="showcase-input">
+        <div class="showcase-source-heading"><span class="stage-number">01</span><strong>{t(language, 'Webpage', '网页')}</strong><span class="stage-format">HTML + CSS</span></div>
+        <div class="showcase-preview"><iframe id="home-preview" title={l.preview} sandbox="allow-scripts"></iframe></div>
+      </div>
+      <div class="showcase-document">
+        <div class="showcase-stage-label"><span class="stage-number">02</span><strong>{t(language, 'Convert to JSON', '转为 JSON')}</strong><span class="stage-format">{t(language, 'Captured layers', '捕获的图层')}</span></div>
+        <div class="document-tree" id="home-tree"><p>{l.loading}</p></div>
+        <p class="layer-hint">{t(language, 'Select a layer to locate it in the webpage.', '点击图层，在网页中定位。')}</p>
+        <div class="showcase-bottom"><p id="home-status" class="sr-only" role="status">{l.loading}</p><div class="actions"><BrandButton tone="dark" id="home-copy" disabled label={l.copy} className="min-h-10 px-4 py-2 text-xs" /><a class="text-link" id="home-edit" href={`${link(language,'playground')}?case=hero-section`}>{t(language,'Edit example','编辑案例')} ↗</a></div></div>
+        <div class="showcase-handoff"><span class="stage-number">03</span><div><strong>{t(language, 'Create layers in Figma', '在 Figma 生成图层')}</strong><p>{t(language, 'Paste the JSON into the plugin.', '在插件中粘贴 JSON。')}</p></div><a href={link(language,'docs/plugin')}>{t(language,'Plugin guide','插件指引')} ↗</a></div>
+      </div>
     </div>
   </Card>
 </section>
-<p class="showcase-disclaimer wrap">{t(language, 'Live browser input. Inspect the resulting layers in Figma.', '这里展示真实网页输入，请在 Figma 中检查最终图层。')}</p>
 <section class="section wrap home-cases">
-  <div class="section-heading inline-heading reveal"><div><p class="eyebrow">{t(language,'THE COLLECTION','案例精选')}</p><h2>{t(language,'Small pieces.', '从一个组件，')}<br/>{t(language,'Real possibilities.','看见更多可能。')}</h2></div><div><p>{t(language,'Different compositions. One editable starting point.', '不同构图，同样可以继续编辑。')}</p><a class="text-link" href={link(language,'gallery')}>{t(language,'Explore all six examples','探索全部六个案例')} →</a></div></div>
-  <div class="featured-grid">{featured.map((item,index) => <Card className={`${frame} featured-case ${index === 0 ? 'featured-case--primary' : 'featured-case--secondary'} reveal`}><a class="core" href={`${link(language,'playground')}?case=${item.id}`}><ExampleThumbnail id={item.id} title={caseText(item.id,language).title} client:visible/><div class="featured-caption"><span class="mono">0{index+1}</span><div><h3>{caseText(item.id,language).title}</h3><p>{caseText(item.id,language).description}</p></div><ArrowUpRight strokeWidth={1.2}/></div></a></Card>)}</div>
+  <div class="section-heading inline-heading reveal"><h2>{t(language,'Examples','转换案例')}</h2><a class="text-link" href={link(language,'gallery')}>{t(language,'View all 6 examples','查看全部 6 个案例')} →</a></div>
+  <div class="featured-grid">{featured.map((item,index) => <Card className={`${frame} featured-case ${index === 0 ? 'featured-case--primary' : 'featured-case--secondary'} reveal`}><a class="core" href={`${link(language,'playground')}?case=${item.id}`}><ExampleThumbnail id={item.id} title={caseText(item.id,language).title} client:visible/><div class="featured-caption"><span class="mono">0{index+1}</span><div><h3>{caseText(item.id,language).title}</h3><p>{item.id === 'hero-section' ? t(language, 'Text & buttons', '文字与按钮') : item.id === 'icon-feature-card' ? t(language, 'Icons & layout', '图标与布局') : t(language, 'Images & text', '图片与图文排版')}</p></div><ArrowUpRight strokeWidth={1.2}/></div></a></Card>)}</div>
 </section>
 <ConversionStory language={language} client:visible />
 <section class="section wrap integration-section">
-  <div class="integration-copy reveal"><p class="eyebrow">{t(language,'BUILT FOR DEVELOPERS','为开发者而建')}</p><h2>{t(language,'Two environments.', '两个环境，')}<br/>{t(language,'One document.', '一份文档。')}</h2><p>{t(language,'Capture in the browser. Render in a plugin. A small, typed API for the workflow you choose.', '浏览器负责测量，插件负责创建图层。用小巧、清晰的类型化 API，构建你的工作流。')}</p><div class="pipeline"><span><Braces strokeWidth={1.2}/> Browser</span><span>→</span><span class="pipeline-json">JSON</span><span>→</span><span><Layers strokeWidth={1.2}/> Figma</span></div><a class="text-link" href={link(language,'docs/getting-started')}>{t(language,'Read the integration guide','阅读集成指引')} →</a></div>
+  <div class="integration-copy reveal"><h2>{t(language,'Add it to your project.','接入你的项目。')}</h2><p>{t(language,'Call convert in the browser, then render in a Figma plugin.', '浏览器调用 convert，Figma 插件调用 render。')}</p><div class="pipeline"><span><Braces strokeWidth={1.2}/> Browser</span><span>→</span><span class="pipeline-json">JSON</span><span>→</span><span><Layers strokeWidth={1.2}/> Figma</span></div><a class="text-link" href={link(language,'docs/getting-started')}>{t(language,'Read the integration guide','阅读集成指引')} →</a></div>
   <Card className={`${frame} integration-code reveal`}><div class="core"><div class="integration-code-title"><span class="mono">01 / BROWSER</span><a href={link(language,'docs/convert')}>convert API ↗</a></div><pre><code>{`import { convert } from 'html2figma/convert';
 
 await document.fonts.ready;
@@ -47,5 +60,5 @@ await render(documentAst, {
   parent: figma.currentPage
 });`}</code></pre><a class="schema-link" href={link(language,'docs/json')}>{t(language,'Explore the document schema','查看文档格式与公共类型')} →</a></div></Card>
 </section>
-<section class="closing-section wrap reveal" aria-labelledby="closing-heading"><div class="closing-stage"><Layers className="closing-symbol" strokeWidth={1} aria-hidden="true"/><h2 id="closing-heading">{t(language,'Keep your next idea editable.','让设计，继续向前。')}</h2><p>{t(language,'Copy your document. Open the plugin. Make it yours on the canvas.','复制转换文档，打开插件，在你的画布上继续创作。')}</p><div class="closing-actions"><BrandButton href={link(language,'docs/plugin')} tone="secondary" label={t(language,'Get the Figma plugin','获取 Figma 插件')} arrow /><a class="closing-guide" href={link(language,'docs/getting-started')}>{t(language,'Integrate the library','接入你的项目')}<ArrowUpRight strokeWidth={1.5}/></a></div><nav class="closing-links" aria-label={t(language,'Before you start','开始之前')}><a href={link(language,'docs/support')}>{t(language,'Materials & support','素材与支持范围')}<ArrowUpRight strokeWidth={1.2}/></a><a href={link(language,'docs/support')}>{t(language,'Known fallbacks','已知回退行为')}<ArrowUpRight strokeWidth={1.2}/></a><a href={link(language,'docs/troubleshooting')}>{t(language,'Troubleshooting','故障排查')}<ArrowUpRight strokeWidth={1.2}/></a></nav></div></section>
+<section class="closing-section wrap reveal" aria-labelledby="closing-heading"><div class="shell closing-shell"><div class="core closing-stage"><Layers className="closing-symbol" strokeWidth={1} aria-hidden="true"/><h2 id="closing-heading">{t(language,'Open the result in Figma.','把结果带进 Figma。')}</h2><p>{t(language,'Copy JSON and paste it into the plugin to create layers.','复制 JSON，粘贴到插件，即可生成图层。')}</p><div class="closing-actions"><BrandButton href={link(language,'docs/plugin')} tone="secondary" label={t(language,'Get the Figma plugin','获取 Figma 插件')} arrow /><a class="closing-guide" href={link(language,'docs/getting-started')}>{t(language,'Integrate the library','接入你的项目')}<ArrowUpRight strokeWidth={1.5}/></a></div><nav class="closing-links" aria-label={t(language,'Before you start','开始之前')}><a href={link(language,'docs/support')}>{t(language,'Materials & support','素材与支持范围')}<ArrowUpRight strokeWidth={1.2}/></a><a href={link(language,'docs/support')}>{t(language,'Known fallbacks','已知回退行为')}<ArrowUpRight strokeWidth={1.2}/></a><a href={link(language,'docs/troubleshooting')}>{t(language,'Troubleshooting','故障排查')}<ArrowUpRight strokeWidth={1.2}/></a></nav></div></div></section>
 <script>import '../client/home';</script>

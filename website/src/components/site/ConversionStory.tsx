@@ -34,7 +34,7 @@ export function ConversionStory({ language }: { language: Language }) {
     {
       icon: MousePointer2,
       label: t(language, "The webpage", "网页输入"),
-      title: t(language, "Start with what you see.", "从看得见的页面开始。"),
+      title: t(language, "Render HTML & CSS.", "渲染 HTML 与 CSS。"),
       description: t(
         language,
         "A real HTML and CSS example, rendered in the browser.",
@@ -44,7 +44,7 @@ export function ConversionStory({ language }: { language: Language }) {
     {
       icon: Layers,
       label: t(language, "Captured layers", "捕获图层"),
-      title: t(language, "Every detail has a place.", "让每个细节都有位置。"),
+      title: t(language, "Locate each captured layer.", "查看图层的位置。"),
       description: t(
         language,
         "Select a captured node to locate its measured bounds in the webpage.",
@@ -54,11 +54,7 @@ export function ConversionStory({ language }: { language: Language }) {
     {
       icon: Braces,
       label: t(language, "Portable JSON", "传递 JSON"),
-      title: t(
-        language,
-        "A structure you can take with you.",
-        "把结构带到下一步。",
-      ),
+      title: t(language, "Inspect the node JSON.", "查看节点的 JSON。"),
       description: t(
         language,
         "The selected node is part of the document your Figma plugin receives.",
@@ -140,17 +136,7 @@ export function ConversionStory({ language }: { language: Language }) {
               id: "conversion-story",
               trigger: container.current,
               pin: true,
-              start: () => {
-                const section = container.current!;
-                const reference = section.parentElement?.classList.contains(
-                  "pin-spacer",
-                )
-                  ? section.parentElement
-                  : section;
-                return (
-                  reference.getBoundingClientRect().top + window.scrollY - 110
-                );
-              },
+              start: "top 110px",
               end: "+=1000",
               scrub: 0.4,
               invalidateOnRefresh: true,
@@ -215,15 +201,18 @@ export function ConversionStory({ language }: { language: Language }) {
       data-story
       data-state={state}
     >
-      <div className="story-heading">
+      <div className="story-heading reveal">
+        <p className="eyebrow">
+          {t(language, "Conversion details", "转换细节")}
+        </p>
         <h2 id="story-heading">
-          {t(language, "There’s more to a webpage.", "看见网页的另一面。")}
+          {t(language, "How a webpage becomes layers.", "网页如何变成图层。")}
         </h2>
         <p>
           {t(
             language,
-            "From rendered pixels to a document you can keep building on.",
-            "从渲染的页面，到可以继续创作的结构。",
+            "Inspect the webpage, captured layers, and their JSON.",
+            "查看网页、图层与对应的 JSON。",
           )}
         </p>
       </div>
@@ -237,75 +226,80 @@ export function ConversionStory({ language }: { language: Language }) {
               key={step.label}
               value={String(index)}
               disabled={state !== "ready" && index > 0}
-              className="story-step h-auto gap-2 rounded-full border-[#dce0e7] px-5 py-3 data-[state=active]:bg-[#242933] data-[state=active]:text-white"
+              className="story-step h-auto gap-2 rounded-full border-0 px-5 py-3 data-[state=active]:bg-[#242933] data-[state=active]:text-white"
             >
               <step.icon size={16} strokeWidth={1.5} />
               {step.label}
             </TabsTrigger>
           ))}
         </TabsList>
-        <Card className="story-stage grid gap-0 rounded-3xl border-0 p-0 shadow-none">
-          <div className="story-preview" ref={viewport}>
-            <div className="story-preview-motion">
-              <iframe
-                ref={frame}
-                title={t(
-                  language,
-                  "Walkthrough browser input",
-                  "转换演示的网页输入",
-                )}
-                tabIndex={-1}
-                sandbox="allow-scripts"
-              />
+        <Card className="shell story-shell block gap-0 rounded-[var(--shell-radius)] border-0 bg-[var(--shell-surface)] p-[var(--shell-inset)] shadow-none">
+          <div className="core story-stage">
+            <div className="story-preview" ref={viewport}>
+              <div className="story-preview-motion">
+                <iframe
+                  ref={frame}
+                  title={t(
+                    language,
+                    "Walkthrough browser input",
+                    "转换演示的网页输入",
+                  )}
+                  tabIndex={-1}
+                  sandbox="allow-scripts"
+                />
+              </div>
+              <span className="story-input-label">
+                {t(language, "Browser input", "网页输入")}
+              </span>
             </div>
-            <span className="story-input-label">
-              {t(language, "Browser input", "网页输入")}
-            </span>
-          </div>
-          <div className="story-inspector">
-            <span className="story-inspector-label">{current.label}</span>
-            <h3>{current.title}</h3>
-            <p className="story-description">{current.description}</p>
-            <TabsContent value="0" className="story-detail">
-              <pre className="story-source" aria-label="HTML" tabIndex={0}>
-                {sourceFragment}
-              </pre>
-            </TabsContent>
-            <TabsContent value="1" className="story-detail">
-              <LayerList
-                nodes={nodes}
-                language={language}
-                selectedId={selected?.id || null}
-                compact
-                onSelect={(node) => {
-                  if (node) setSelected(node);
-                }}
-              />
-            </TabsContent>
-            <TabsContent value="2" className="story-detail">
-              <pre
-                className="story-json"
-                tabIndex={0}
-                aria-label={t(
-                  language,
-                  "Selected node JSON fragment",
-                  "选中节点的 JSON 片段",
-                )}
-              >
-                {snippet}
-              </pre>
-              <a className="story-handoff" href={link(language, "docs/plugin")}>
-                {t(
-                  language,
-                  "Continue in the Figma plugin",
-                  "在 Figma 插件中继续",
-                )}
-                <ArrowUpRight size={16} />
-              </a>
-            </TabsContent>
-          </div>
-          <div className="story-progress" aria-hidden="true">
-            <span className="story-progress-fill" />
+            <div className="story-inspector">
+              <span className="story-inspector-label">{current.label}</span>
+              <h3>{current.title}</h3>
+              <p className="story-description">{current.description}</p>
+              <TabsContent value="0" className="story-detail">
+                <pre className="story-source" aria-label="HTML" tabIndex={0}>
+                  {sourceFragment}
+                </pre>
+              </TabsContent>
+              <TabsContent value="1" className="story-detail">
+                <LayerList
+                  nodes={nodes}
+                  language={language}
+                  selectedId={selected?.id || null}
+                  compact
+                  onSelect={(node) => {
+                    if (node) setSelected(node);
+                  }}
+                />
+              </TabsContent>
+              <TabsContent value="2" className="story-detail">
+                <pre
+                  className="story-json"
+                  tabIndex={0}
+                  aria-label={t(
+                    language,
+                    "Selected node JSON fragment",
+                    "选中节点的 JSON 片段",
+                  )}
+                >
+                  {snippet}
+                </pre>
+                <a
+                  className="story-handoff"
+                  href={link(language, "docs/plugin")}
+                >
+                  {t(
+                    language,
+                    "Continue in the Figma plugin",
+                    "在 Figma 插件中继续",
+                  )}
+                  <ArrowUpRight size={16} />
+                </a>
+              </TabsContent>
+            </div>
+            <div className="story-progress" aria-hidden="true">
+              <span className="story-progress-fill" />
+            </div>
           </div>
         </Card>
       </Tabs>

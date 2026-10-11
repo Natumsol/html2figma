@@ -6,3 +6,6 @@ public/downloads/
 public/brand/
 public/media/
 src/data/generated/
+.env
+.env.*
+!.env.example

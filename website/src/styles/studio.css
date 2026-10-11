@@ -6,7 +6,7 @@
   }
   .eyebrow {
     background: #e8ebf180;
-    color: #78818f;
+    color: #606977;
     font-size: 10px;
     letter-spacing: 0.12em;
   }
@@ -20,35 +20,6 @@
     font-size: 40px;
     line-height: 1.3;
     letter-spacing: -0.025em;
-  }
-  .gallery-heading {
-    grid-template-columns: 1.15fr 1fr;
-    gap: 96px;
-    padding-top: 88px;
-    padding-bottom: 52px;
-  }
-  .gallery-heading h1 {
-    font-size: 56px;
-    line-height: 1.1;
-  }
-  :lang(zh-CN) .gallery-heading h1 {
-    font-size: 50px;
-    line-height: 1.3;
-    letter-spacing: -0.035em;
-  }
-  .gallery-heading > div > p:not(.eyebrow) {
-    font-size: 15px;
-    line-height: 1.9;
-  }
-  .gallery-heading .gallery-note {
-    font-size: 10px !important;
-    line-height: 1.8;
-    margin-top: 20px;
-  }
-  .gallery-guide {
-    display: inline-block;
-    margin-top: 18px;
-    font-size: 12px;
   }
   .gallery-grid {
     gap: 28px;
@@ -72,8 +43,8 @@
     letter-spacing: -0.025em;
   }
   .gallery-number {
-    font-size: 10px;
-    color: #9ba1ad;
+    font-size: 12px;
+    color: #606977;
   }
   .gallery-body {
     padding: 32px;
@@ -103,42 +74,34 @@
     height: 15px;
   }
   .gallery-body .gallery-status {
-    font-size: 10px !important;
-    color: #8e9c96;
+    font-size: 12px !important;
+    color: #526b60;
   }
   .gallery-body .copy-next-step {
-    font-size: 10px;
+    font-size: 12px;
     margin-top: 10px;
   }
   .workspace-heading {
-    padding-top: 32px;
-    padding-bottom: 22px;
+    padding-top: 52px;
+    padding-bottom: 28px;
   }
   .workspace-heading h1 {
-    font-size: 32px;
+    font-size: 44px;
   }
   .workspace-heading .eyebrow {
     margin-bottom: 10px;
   }
   .workbench-toolbar {
-    background: #f5f6f8f0;
-    padding: 10px 0;
+    padding: 8px 0;
     gap: 10px;
   }
   .workbench .copy-next-step {
     justify-content: flex-end;
     margin: 0 0 12px;
-    font-size: 10px;
+    font-size: 12px;
   }
   .workbench .copy-next-step > span {
     display: none;
-  }
-  .workbench-status {
-    font-size: 11px;
-    min-height: 18px;
-  }
-  .source-options select {
-    font-size: 12px;
   }
   .workspace-grid {
     gap: 12px;
@@ -177,15 +140,6 @@
   }
 }
 @layer responsive {
-  @media (max-width: 1100px) {
-    .gallery-heading {
-      gap: 40px;
-    }
-    .gallery-heading h1,
-    :lang(zh-CN) .gallery-heading h1 {
-      font-size: 44px;
-    }
-  }
   @media (max-width: 767px) {
     .section-heading h2,
     :lang(zh-CN) .section-heading h2,
@@ -197,20 +151,6 @@
     .integration-section h2,
     .capability-section h2 {
       font-size: 32px;
-    }
-    .gallery-heading {
-      grid-template-columns: 1fr;
-      gap: 24px;
-      padding-top: 44px;
-      padding-bottom: 36px;
-    }
-    .gallery-heading h1,
-    :lang(zh-CN) .gallery-heading h1 {
-      font-size: 38px;
-      line-height: 1.3;
-    }
-    .gallery-heading > div > p:not(.eyebrow) {
-      font-size: 14px;
     }
     .gallery-body {
       padding: 24px;
@@ -251,8 +191,8 @@
       font-size: 25px;
     }
     .shell {
-      --shell-radius: 20px;
-      --shell-inset: 4px;
+      --shell-radius: 24px;
+      --shell-inset: 5px;
     }
   }
 }

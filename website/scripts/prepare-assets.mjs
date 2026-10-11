@@ -116,6 +116,12 @@ await build({
   target: "es2022",
   minify: true,
 });
+// Bundle the trusted runner into srcdoc. Sandboxed frames have an opaque
+// origin, so the dev server correctly rejects their cross-origin script loads.
+await copyFile(
+  at("public/preview/runner.js"),
+  at("src/data/generated/runner.txt"),
+);
 const uiBundle = await build({
   entryPoints: [at("plugin/ui.ts")],
   write: false,

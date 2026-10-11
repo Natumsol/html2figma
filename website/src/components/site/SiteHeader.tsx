@@ -15,16 +15,13 @@ import {
   SheetTrigger,
 } from "../ui/sheet";
 import { Button } from "../ui/button";
-import { X } from "lucide-react";
 
 export function SiteHeader({
   language,
   route,
-  version,
 }: {
   language: Language;
   route: string;
-  version: string;
 }) {
   const [open, setOpen] = useState(false);
   const [ready, setReady] = useState(false);
@@ -89,7 +86,7 @@ export function SiteHeader({
         aria-label="html2figma home"
       >
         <img src="/brand/logo.svg" alt="" width="32" height="32" />
-        html2figma<span className="release-tag">v{version}</span>
+        html2figma
       </a>
       <NavigationMenu
         id="navigation"
@@ -151,10 +148,12 @@ export function SiteHeader({
             <Button
               variant="secondary"
               size="icon"
-              className="absolute right-8 top-8 size-10 rounded-full"
+              className="menu-close absolute right-8 top-8 size-10 rounded-full"
+              aria-expanded={open}
               aria-label={t(language, "Close navigation", "关闭导航")}
             >
-              <X strokeWidth={1.2} />
+              <span />
+              <span />
             </Button>
           </SheetClose>
           <nav

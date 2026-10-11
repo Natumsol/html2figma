@@ -5,17 +5,28 @@
   "type": "module",
   "scripts": {
     "prepare:assets": "node scripts/prepare-assets.mjs",
-    "dev": "npm run prepare:assets && astro dev --host 127.0.0.1",
-    "build": "npm run prepare:assets && astro build",
+    "dev": "node scripts/run-astro.mjs dev development",
+    "build": "node scripts/run-astro.mjs build",
     "check": "npm run prepare:assets && astro check && tsc --noEmit -p plugin/tsconfig.json && node scripts/check-doc-examples.mjs",
-    "preview": "astro preview --host 127.0.0.1",
+    "preview": "astro preview --host 127.0.0.1 --port 4322 --ignore-lock",
     "test": "playwright test",
-    "verify": "npm run check && npm run build && npm run test"
+    "verify": "npm run test:config && npm run check && npm run build:preview && npm run test",
+    "build:preview": "node scripts/run-astro.mjs build preview",
+    "build:production": "node scripts/run-astro.mjs build production",
+    "test:config": "node --test scripts/environment.test.mjs",
+    "env:development": "node scripts/vercel.mjs env development",
+    "env:preview": "node scripts/vercel.mjs env preview",
+    "env:production": "node scripts/vercel.mjs env production",
+    "vercel:build": "node scripts/vercel.mjs build preview",
+    "vercel:build:production": "node scripts/vercel.mjs build production",
+    "deploy": "node scripts/vercel.mjs deploy preview",
+    "deploy:production": "node scripts/vercel.mjs deploy production"
   },
   "engines": {
-    "node": ">=22.19.0"
+    "node": "24.x"
   },
   "dependencies": {
+    "@astrojs/markdown-satteri": "0.4.3",
     "@astrojs/react": "7.0.1",
     "@codemirror/lang-css": "6.3.1",
     "@codemirror/lang-html": "6.4.12",
@@ -28,6 +39,7 @@
     "@gsap/react": "2.1.2",
     "@lezer/highlight": "1.2.5",
     "@tailwindcss/vite": "4.3.3",
+    "@vercel/analytics": "2.0.1",
     "astro": "7.3.8",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
@@ -52,6 +64,7 @@
     "esbuild": "0.28.2",
     "fflate": "0.8.3",
     "prettier": "3.9.9",
-    "typescript": "6.0.3"
+    "typescript": "6.0.3",
+    "vite": "8.3.4"
   }
 }

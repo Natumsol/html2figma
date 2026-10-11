@@ -65,7 +65,7 @@ export function PreviewCanvas({
             aria-pressed={mode === "actual"}
             onClick={() => setMode("actual")}
           >
-            100%
+            {t(language, "Actual size", "原始尺寸")}
           </Button>
         </div>
         <span className="mono" aria-live="polite">

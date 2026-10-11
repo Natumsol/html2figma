@@ -1,5 +1,6 @@
 import { isHtml2FigmaDocument, type Html2FigmaDocument } from "html2figma";
 import fontData from "../data/generated/font.json";
+import runnerSource from "../data/generated/runner.txt?raw";
 
 export interface PreviewResult {
   document: Html2FigmaDocument;
@@ -81,10 +82,10 @@ export class PreviewSession {
     frame.style.minWidth = `${width}px`;
     frame.setAttribute("sandbox", "allow-scripts");
     frame.referrerPolicy = "no-referrer";
-    const runner = new URL("/preview/runner.js", window.location.origin).href;
+    const runner = runnerSource.replaceAll("</script", "<\\/script");
     const font = fontData.source;
     const policy = `default-src 'none'; script-src 'nonce-${this.channel}'; style-src 'unsafe-inline' https: http:; img-src https: http: data: blob:; font-src https: http: data:; connect-src 'none'; form-action 'none'; base-uri 'none'`;
-    frame.srcdoc = `<!doctype html><html><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="${policy}"><style>@font-face{font-family:Geist;src:url('${font}') format('woff2')}html{background:white}body{margin:0;padding:24px;box-sizing:border-box;font-family:Geist,sans-serif}</style></head><body></body><script nonce="${this.channel}" data-channel="${this.channel}" src="${runner}"></script></html>`;
+    frame.srcdoc = `<!doctype html><html><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="${policy}"><style>@font-face{font-family:Geist;src:url('${font}') format('woff2')}html{background:white}body{margin:0;padding:24px;box-sizing:border-box;font-family:Geist,sans-serif}</style></head><body></body><script nonce="${this.channel}" data-channel="${this.channel}">${runner}</script></html>`;
   }
 
   private send(type: string, extra: Record<string, unknown> = {}) {
