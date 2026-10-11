@@ -1,51 +1,58 @@
 @layer components {
   .workspace-heading {
     display: flex;
-    align-items: end;
+    align-items: center;
     justify-content: space-between;
     gap: 24px;
-    padding-top: 48px;
+    padding-top: 56px;
     padding-bottom: 28px;
   }
   .workspace-heading .eyebrow {
     margin-bottom: 12px;
   }
   .workspace-heading h1 {
-    font-size: 40px;
+    font-size: 44px;
   }
-  .workspace-heading > p {
+  .workspace-description {
     font-size: 14px;
-    max-width: 390px;
-    padding-bottom: 5px;
+    margin-top: 14px;
+  }
+  .workspace-plugin-link {
+    color: var(--muted);
+    font-size: 13px;
   }
   .workbench-toolbar {
-    position: sticky;
-    top: 12px;
+    position: relative;
     z-index: var(--workbench-layer);
-    background: #f6f6f2f0;
-    backdrop-filter: blur(18px);
-    padding: 12px 0 14px;
+    padding: 8px 0;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: 14px;
-    margin-bottom: 12px;
+    margin-bottom: 24px;
   }
   .source-options {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 24px;
     font-size: 12px;
   }
-  .source-options select {
-    font-size: 13px;
-    padding: 11px 12px;
-    border: 0;
-    background: white;
-    box-shadow: 0 0 0 1px #20212607;
-    border-radius: 10px;
-    max-width: 220px;
+  .source-field {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .source-field label {
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .source-field .case-select-trigger {
+    min-width: 110px;
+  }
+  .source-field:first-child .case-select-trigger {
+    min-width: 160px;
   }
   .toolbar-actions {
     display: flex;
@@ -68,33 +75,27 @@
     stroke-width: 1.1;
   }
   .workbench-status {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-    font-size: 12px;
-    min-height: 22px;
+    font-size: 13px;
+    padding: 12px 16px;
+    background: #fff4e9;
+    border-radius: 12px;
+    margin-bottom: 16px;
   }
-  .status-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #a5a8b0;
-    flex: none;
-  }
-  .workbench-status[data-state="ready"] .status-dot,
-  .workbench-status[data-state="success"] .status-dot {
-    background: var(--green);
-  }
-  .workbench-status[data-state="warning"] .status-dot {
-    background: var(--orange);
-  }
-  .workbench-status[data-state="error"] .status-dot {
-    background: var(--red);
+  .workbench-status:not([data-state="error"], [data-state="warning"]) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    min-height: 0;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
   #result-summary {
     margin-left: auto;
-    color: #858996;
+    color: var(--muted);
+    text-align: right;
     font:
       11px "Geist Mono",
       monospace;
@@ -184,7 +185,7 @@
     line-height: 1.85;
   }
   .preview-scroll {
-    height: 428px;
+    height: 476px;
     overflow: auto;
     background: #f7f7f4;
     padding: 12px;
@@ -224,9 +225,6 @@
     .source-options {
       gap: 8px;
     }
-    .source-options select {
-      max-width: 180px;
-    }
     .source-options label {
       display: none;
     }
@@ -261,8 +259,8 @@
       grid-template-columns: 1fr 100px;
       gap: 10px;
     }
-    .source-options select {
-      max-width: none;
+    .source-field .case-select-trigger,
+    .source-field:first-child .case-select-trigger {
       min-width: 0;
       width: 100%;
       font-size: 12px;
@@ -291,9 +289,6 @@
       align-items: start;
       flex-wrap: wrap;
       gap: 6px;
-    }
-    .status-dot {
-      margin-top: 6px;
     }
     #playground-status {
       flex: 1;

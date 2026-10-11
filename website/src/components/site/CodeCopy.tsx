@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Button } from "../ui/button";
 export function CodeCopy({
   code,
   language,
@@ -23,14 +22,9 @@ export function CodeCopy({
   return (
     <>
       <span>{language}</span>
-      <Button
-        variant="secondary"
-        size="sm"
-        className="copy-code h-auto rounded-full bg-[#444955] px-3 py-1.5 text-xs text-white hover:bg-[#444955]"
-        onClick={copy}
-      >
+      <button type="button" className="copy-code" onClick={copy}>
         {text}
-      </Button>
+      </button>
     </>
   );
 }

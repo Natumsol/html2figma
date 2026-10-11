@@ -44,7 +44,12 @@ for (const language of ["", "zh-cn/"]) {
         await page.screenshot({
           path: `.artifacts/design-fixes/playground-${language ? "zh" : "en"}-mobile.png`,
         });
-      await page.getByRole("button", { name: "100%", exact: true }).click();
+      await page
+        .getByRole("button", {
+          name: language ? "原始尺寸" : "Actual size",
+          exact: true,
+        })
+        .click();
       await expect(page.locator("#preview-frame")).toHaveCSS("width", "640px");
       expect(await page.locator("#json-output").inputValue()).toBe(before);
       await tabs.getByRole("tab", { name: "JSON", exact: true }).click();
@@ -98,7 +103,9 @@ test("gallery enlargement restores focus and preserves native preview dimensions
   await page.screenshot({
     path: ".artifacts/design-fixes/gallery-enlarged-mobile.png",
   });
-  await dialog.getByRole("button", { name: "100%", exact: true }).click();
+  await dialog
+    .getByRole("button", { name: "Actual size", exact: true })
+    .click();
   await expect(dialog.locator("iframe")).toHaveCSS(
     "transform",
     "matrix(1, 0, 0, 1, 0, 0)",

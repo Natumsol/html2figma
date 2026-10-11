@@ -65,7 +65,10 @@ test("walkthrough uses actual converted data and works with keyboard in reduced 
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("/zh-cn/");
-  await page.locator("#home-case").selectOption("icon-feature-card");
+  await page
+    .getByRole("combobox", { name: /Preview example|预览案例/ })
+    .click();
+  await page.getByRole("option", { name: "功能卡片", exact: true }).click();
   await expect(page.locator("#home-copy")).toBeEnabled();
   await page.locator("#home-copy").click();
   const document = JSON.parse(
@@ -153,10 +156,11 @@ test("desktop scrolling advances the pinned story and releases it on mobile", as
       "aria-selected",
       "true",
     );
-    const top = await story.evaluate(
-      (element) => element.getBoundingClientRect().top,
-    );
-    expect(top).toBeCloseTo(110, 0);
+    await expect
+      .poll(() =>
+        story.evaluate((element) => element.getBoundingClientRect().top),
+      )
+      .toBeCloseTo(110, 0);
   }
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(page.locator(".pin-spacer")).toHaveCount(0);

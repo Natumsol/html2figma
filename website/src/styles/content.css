@@ -1,18 +1,45 @@
 @layer components {
   .gallery-heading {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 48px;
-    align-items: end;
+    display: flex;
+    justify-content: space-between;
+    gap: 32px;
+    align-items: flex-end;
+    padding-top: 56px;
+    padding-bottom: 36px;
   }
-  .gallery-heading > div > p:not(.eyebrow) {
-    font-size: 16px;
-    max-width: 440px;
+  .gallery-title-line {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+  }
+  .gallery-heading h1 {
+    font-size: 48px;
+    line-height: 1.15;
+  }
+  .gallery-count {
+    padding-top: 6px;
+    font: 12px "Geist Mono", monospace;
+    color: #89909c;
+  }
+  .gallery-description {
+    margin-top: 16px;
+    font-size: 14px;
+    line-height: 1.75;
+  }
+  .gallery-heading-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+    flex-shrink: 0;
   }
   .gallery-heading .gallery-note {
-    font-size: 12px !important;
-    margin-top: 20px;
-    color: #8b8e97;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .gallery-guide {
+    font-size: 13px;
+    color: var(--muted);
   }
   .gallery-grid {
     display: grid;
@@ -100,7 +127,7 @@
   .docs-sidebar,
   .toc {
     position: sticky;
-    top: 32px;
+    top: 120px;
     align-self: start;
   }
   .docs-sidebar {
@@ -159,7 +186,7 @@
   .prose h2 {
     font-size: 29px;
     margin: 40px 0 18px;
-    scroll-margin-top: 30px;
+    scroll-margin-top: 120px;
   }
   .prose h3 {
     font-size: 22px;
@@ -283,17 +310,27 @@
   }
   @media (max-width: 767px) {
     .gallery-heading {
-      grid-template-columns: 1fr;
-      gap: 24px;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 20px;
+      padding-top: 36px;
+      padding-bottom: 28px;
     }
     .gallery-heading h1 {
-      font-size: 38px;
+      font-size: 34px;
     }
-    .gallery-heading > div > p:not(.eyebrow) {
-      font-size: 15px;
+    .gallery-description {
+      font-size: 13px;
+      margin-top: 12px;
     }
-    .gallery-heading .gallery-note {
-      margin-top: 16px;
+    .gallery-heading-meta {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .gallery-guide {
+      font-size: 12px;
     }
     .gallery-grid {
       grid-template-columns: 1fr;

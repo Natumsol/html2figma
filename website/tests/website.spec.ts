@@ -304,7 +304,12 @@ test("real home conversion can be copied and responsive sections never overlap",
       JSON.parse(await page.evaluate(() => navigator.clipboard.readText())),
     ),
   ).toBe(true);
-  await page.locator("#home-case").selectOption("image-product-card");
+  await page
+    .getByRole("combobox", { name: /Preview example|预览案例/ })
+    .click();
+  await page
+    .getByRole("option", { name: /Image card|图片卡片/, exact: true })
+    .click();
   await expect(page.locator("#home-copy")).toBeEnabled();
   await expect(page.locator("#home-edit")).toHaveAttribute(
     "href",
@@ -363,7 +368,7 @@ test("mobile document copy controls do not cover code and gallery explains sampl
     ),
   ).toBe(true);
   await page.goto("/gallery/");
-  await expect(page.locator(".gallery-note")).toContainText("illustrative");
+  await expect(page.locator(".gallery-note")).toContainText(/illustrative/i);
   await expect(page.locator('[data-case="stats-panel"] h2')).toHaveText(
     "Statistics panel",
   );

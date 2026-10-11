@@ -12,8 +12,8 @@ export function initPlayground() {
   const l = labels(language);
   const html = document.querySelector<HTMLTextAreaElement>("#html-input")!;
   const css = document.querySelector<HTMLTextAreaElement>("#css-input")!;
-  const select = document.querySelector<HTMLSelectElement>("#case-select")!;
-  const viewport = document.querySelector<HTMLSelectElement>("#viewport")!;
+  const select = document.querySelector<HTMLInputElement>("#case-select")!;
+  const viewport = document.querySelector<HTMLInputElement>("#viewport")!;
   const frame = document.querySelector<HTMLIFrameElement>("#preview-frame")!;
   const convert = document.querySelector<HTMLButtonElement>("#convert")!;
   const copy = document.querySelector<HTMLButtonElement>("#copy-json")!;
@@ -137,7 +137,10 @@ export function initPlayground() {
     void preview();
   }
   const requested = new URLSearchParams(location.search).get("case");
-  if (cases.some((item) => item.id === requested)) select.value = requested!;
+  if (cases.some((item) => item.id === requested)) {
+    select.value = requested!;
+    select.dispatchEvent(new Event("change", { bubbles: true }));
+  }
   select.addEventListener("change", loadCase);
   viewport.addEventListener("change", () => {
     invalidate();

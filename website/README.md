@@ -6,7 +6,7 @@ Astro static site with React islands, Tailwind CSS 4 and shadcn/ui for the html2
 
 ## Local development
 
-Use Node **22.19+** (the repository's website `.nvmrc` selects 22.23.1).
+Use Node **24.x** (`.nvmrc` selects 24.21.0, matching local tooling and Vercel's configured major version). CI reads this same file.
 
 ```sh
 cd website
@@ -18,10 +18,14 @@ npm run dev
 Open `http://127.0.0.1:4321`. English routes start at `/`, Chinese at `/zh-cn/`. Language switches preserve the page.
 
 ```sh
+npm run build:preview
+npm run preview
+# Built Preview: http://127.0.0.1:4322
+
 npm run verify
 ```
 
-Verification prepares assets, checks Astro/client/plugin types, compiles the actual TypeScript snippets extracted from both sets of Markdown documentation, builds the static site and runs Playwright against the built site. On a new machine, run `npx playwright install chromium` before the browser tests. The library's independent acceptance remains `npm run verify:all` from the repository root.
+Verification prepares assets, checks Astro/client/plugin types, compiles the actual TypeScript snippets extracted from both sets of Markdown documentation, builds in Preview mode and runs Playwright against its own built-site server on port 4322. Tests never reuse the development server; stop a manual `npm run preview` session before running verification. On a new machine, run `npx playwright install chromium` before the browser tests. The library's independent acceptance remains `npm run verify:all` from the repository root.
 
 ## Organization
 
@@ -48,7 +52,7 @@ Gallery JSON is produced from the same preview input, not separately maintained 
 
 ## Design and interaction verification
 
-The UI uses shadcn Button, Card, Badge, NativeSelect, Tabs, Sheet, NavigationMenu, Accordion, Alert and Textarea. Mobile focus management and tab keyboard behavior come from the Radix primitives. `components.json` contains the registry/alias configuration; `src/styles/shadcn.css` maps its theme to the existing Figma palette.
+The UI uses shadcn Button, Card, Badge, Select, Tabs, Sheet, NavigationMenu, Accordion, Alert and Textarea. Mobile focus management and tab keyboard behavior come from the Radix primitives. `components.json` contains the registry/alias configuration; `src/styles/shadcn.css` maps its theme to the existing Figma palette.
 
 The homepage converts its live example into the same validated JSON used by Playground and Gallery. The compact tree comes from that document; full diagnostics remain in Playground. Preview labels distinguish browser input from output that must be inspected in Figma.
 
@@ -62,27 +66,61 @@ The website suite covers responsive home geometry at 390/768/1024/1440 px in bot
 
 ## Vercel
 
-For Git deployments, import the **entire repository**, set Root Directory to `website`, enable inclusion of source files outside the root directory, choose Node 22.x, use `npm ci` / `npm run build`, and set output to `dist`. Asset preparation reads `../docs/brand`; include those brand files in Git builds. The website owns its examples and no longer reads the plugin test fixtures.
+For Git deployments, import the **entire repository**, set Root Directory to `website`, enable inclusion of source files outside the root directory, choose Node 24.x, use `npm ci` / `npm run build`, and set output to `dist`. Asset preparation reads `../docs/brand`; include those brand files in Git builds. The website owns its examples and no longer reads the plugin test fixtures.
 
-Set `SITE_URL` to the real production origin for canonical/hreflang/OG URLs. `astro.config.mjs` has a configurable fallback, not a promise that a particular domain is available. `vercel.json` supplies deployment headers, including font CORS needed by the opaque iframe.
+### Environments
 
-For local prebuilt deployment:
+The commands follow [Vercel's Development / Preview / Production environments](https://vercel.com/docs/deployments/environments). A Git push to `feature/site` should create Preview deployments; keep the project's production branch set to `master` in Vercel's Git settings. Local configuration does not change that remote setting.
+
+| Task | Command | Environment / output |
+| --- | --- | --- |
+| Develop | `npm run dev` | Development, port 4321 |
+| Build for QA | `npm run build:preview` | Preview static site in `dist/` |
+| View the build | `npm run preview` | Serves existing `dist/` on port 4322; does not rebuild |
+| Verify | `npm run verify` | Config tests, type checks, Preview build, isolated browser tests |
+| Build normally | `npm run build` | Detects `VERCEL_ENV`; defaults to Production locally |
+| Build Production explicitly | `npm run build:production` | Production static site in `dist/` |
+| Deploy Preview | `npm run deploy` | Pull Preview config → Vercel build → prebuilt Preview upload |
+| Deploy Production explicitly | `npm run deploy:production` | Pull Production config → Production build → Production upload |
+
+All builds use the same `dist/` directory: the last build wins. `preview` is a local HTTP server, while `deploy` creates a remote Preview deployment. Development and Preview pages carry `noindex,nofollow` and use Analytics development mode; only Production collects real traffic.
+
+### Environment variables
+
+Copy `.env.example` to `.env.development.local`, `.env.preview.local` or `.env.production.local`, or pull the corresponding Vercel variables:
 
 ```sh
-vercel link --yes --project html2figma
-SITE_URL=https://YOUR_PRODUCTION_DOMAIN npm run build
-node scripts/prepare-vercel.mjs
-npx --registry=https://registry.npmjs.org vercel@latest deploy --prebuilt --prod
+# First use only: log in, then link this folder to the existing project.
+npm exec --yes --package=vercel@63.1.2 -- vercel login
+npm exec --yes --package=vercel@63.1.2 -- vercel link --project html2figma
+
+npm run env:development
+npm run env:preview
+npm run env:production
 ```
 
-The helper creates Build Output API v3 output including extensionless route mapping, a 404 page and static headers. `.vercel/` stays ignored. Prebuilt upload requires Vercel CLI 47.2.2 or newer. Linking or deploying needs a Vercel account; do not save tokens in project files.
+Preview pulls include the current Git branch, so branch-specific values apply. These commands overwrite only their named ignored files. Standard dotenv precedence applies: process values override mode-specific local files, then mode files, `.env.local`, and `.env`. Keep `.env.local` for truly shared values; move old environment-specific values into the corresponding file. Never commit secrets or use a `PUBLIC_` prefix for them.
+
+`SITE_URL` is an optional public HTTP(S) origin for canonical/hreflang/OG URLs. It is loaded before Astro evaluates the configuration. Defaults are `http://127.0.0.1:4321` for Development, `VERCEL_URL` for hosted Preview when available, and the existing production origin otherwise. Local Preview/prebuilt builds without a deployment URL use the production origin with `noindex`; use an explicit Preview `SITE_URL` if you need that domain in metadata. Set Production `SITE_URL` when adopting a custom domain. `SITE_ENV` is controlled by the npm scripts; do not put it in dotenv.
+
+### Prebuilt deployment
+
+```sh
+npm run vercel:build             # Pull + build Preview locally; no upload
+npm run deploy                  # Rebuild and upload Preview
+npm run deploy:production       # Rebuild and upload Production explicitly
+```
+
+The helpers use pinned Vercel CLI 63.1.2 through `npm exec`, keeping deployment tooling out of the site's CI dependency install. Login is stored by the CLI, not in this repository. [Vercel recommends `pull` before `build`](https://vercel.com/docs/cli/build); the helper follows that sequence on every build. Vercel's `.vercel/.env.<target>.local` files serve `vercel build`, whereas the dotenv pull commands above serve plain Astro commands. Both stay ignored. A failed pull or build stops the upload.
+
+`vercel.json` defines `npm ci`, the Astro build, `dist/` output and static headers. The older `scripts/prepare-vercel.mjs` remains an offline Build Output API helper; prefer the commands above so Vercel records the matching target environment. All remote deployments require an already linked project. Local QA does not need a Vercel account.
 
 ## Adopt a new library release
 
 1. Pin the newly released version with `npm install html2figma@X.Y.Z --save-exact`.
 2. Update matching version references and behavior in both language documentation sets.
 3. Review cases against that released version and run `npm run verify`.
-4. Deploy the verified site. Plugin packaging and displayed version are derived from the pinned package.
+4. Deploy the verified site. Plugin packaging and documentation version references are derived from the pinned package.
 
 Do not point the public site at `file:..` or deploy unreleased library behavior. Development previews can be used to test draft changes separately. Add a real Community URL only after the plugin is published; the development installation guide remains available.
 

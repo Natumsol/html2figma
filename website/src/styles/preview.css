@@ -1,14 +1,21 @@
 @layer components {
   .preview-canvas {
     min-width: 0;
+    position: relative;
   }
   .preview-controls {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    z-index: 1;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
-    padding: 8px 12px;
-    background: white;
+    gap: 8px;
+    padding: 4px;
+    border-radius: 14px;
+    background: #fffffff0;
+    box-shadow: 0 6px 24px #34425c14;
     font-size: 11px;
     color: var(--muted);
   }
@@ -17,7 +24,16 @@
     gap: 4px;
   }
   .preview-controls button {
-    font-size: 12px;
+    font-size: 11px;
+    height: 30px;
+    padding: 6px 9px;
+    border-radius: 10px;
+  }
+  .preview-controls .mono {
+    min-width: 42px;
+    padding-inline: 6px;
+    text-align: center;
+    font-size: 11px;
   }
   .preview-controls button[aria-pressed="true"] {
     background: var(--accent);
@@ -31,6 +47,7 @@
     position: absolute;
     inset: 0 auto auto 0;
     transform-origin: top left;
+    clip-path: inset(1px);
   }
   .expanded-preview {
     min-width: 0;
@@ -166,8 +183,15 @@
       gap: 8px;
     }
     .workspace-heading {
+      position: relative;
       padding-top: 28px;
       padding-bottom: 14px;
+    }
+    .workspace-plugin-link {
+      position: absolute;
+      top: 36px;
+      right: 16px;
+      font-size: 11px;
     }
     .workspace-heading > p {
       margin-top: 8px;

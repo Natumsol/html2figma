@@ -11,7 +11,7 @@ if (showcase) {
   const language = document.body.dataset.language as Language;
   const l = labels(language);
   const frame = showcase.querySelector<HTMLIFrameElement>("#home-preview")!;
-  const select = showcase.querySelector<HTMLSelectElement>("#home-case")!;
+  const select = showcase.querySelector<HTMLInputElement>("#home-case")!;
   const tree = showcase.querySelector<HTMLElement>("#home-tree")!;
   const status = showcase.querySelector<HTMLElement>("#home-status")!;
   const button = showcase.querySelector<HTMLButtonElement>("#home-copy")!;
@@ -22,21 +22,31 @@ if (showcase) {
   let revision = 0;
   let json = "";
   const fit = () => {
+    const maxHeight = parseFloat(
+      getComputedStyle(preview).getPropertyValue("--preview-max-height"),
+    );
     const scale = Math.min(
       1,
+      maxHeight / (parseFloat(frame.style.height) || 460),
       Math.max(
         0.1,
         (preview.clientWidth - 12) / (parseFloat(frame.style.width) || 640),
       ),
     );
     frame.style.transform = `scale(${scale})`;
-    preview.style.height = `${Math.ceil((parseFloat(frame.style.height) || 460) * scale)}px`;
   };
-  const observer = new ResizeObserver(fit);
+  let previousWidth = 0;
+  const observer = new ResizeObserver(([entry]) => {
+    if (entry && entry.contentRect.width !== previousWidth) {
+      previousWidth = entry.contentRect.width;
+      fit();
+    }
+  });
   observer.observe(preview);
   async function load() {
     const current = ++revision;
     session?.destroy();
+    showcase!.dataset.state = "loading";
     button.disabled = true;
     button.textContent = l.copy;
     status.textContent = l.loading;
@@ -82,9 +92,11 @@ if (showcase) {
             "文档校验通过 · 无转换警告",
           );
       fit();
+      showcase!.dataset.state = "ready";
       button.disabled = false;
     } catch (error) {
       if (current === revision) {
+        showcase!.dataset.state = "error";
         status.textContent = `${l.failed} ${error instanceof Error ? error.message : ""}`;
         status.classList.remove("sr-only");
         layerRoot.render(
@@ -119,6 +131,7 @@ if (showcase) {
   });
   select.addEventListener("change", () => void load());
   window.addEventListener("pagehide", () => {
+    revision++;
     session?.destroy();
     observer.disconnect();
     layerRoot.unmount();

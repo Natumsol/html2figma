@@ -3,21 +3,28 @@ import '@fontsource/geist/400.css';
 import '@fontsource/geist/500.css';
 import '@fontsource/geist/600.css';
 import '@fontsource/geist-mono/400.css';
+import geist400 from '@fontsource/geist/files/geist-latin-400-normal.woff2?url';
+import geist500 from '@fontsource/geist/files/geist-latin-500-normal.woff2?url';
+import geist600 from '@fontsource/geist/files/geist-latin-600-normal.woff2?url';
+import mono400 from '@fontsource/geist-mono/files/geist-mono-latin-400-normal.woff2?url';
 import '../styles/global.css';
+import Analytics from '@vercel/analytics/astro';
 import { SiteHeader } from '../components/site/SiteHeader';
 import { labels, link, t, type Language } from '../lib/i18n';
-import release from '../data/generated/release.json';
 interface Props { language: Language; title: string; description: string; route?: string }
 const { language, title, description, route = '' } = Astro.props;
 const l = labels(language);
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const isProduction = import.meta.env.PUBLIC_SITE_ENV === 'production';
 ---
 <!doctype html>
 <html lang={language === 'en' ? 'en' : 'zh-CN'}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {route.startsWith('docs/') && [geist400, geist500, geist600, mono400].map(href => <link rel="preload" href={href} as="font" type="font/woff2" crossorigin="anonymous" />)}
     <meta name="description" content={description} />
+    {!isProduction && <meta name="robots" content="noindex,nofollow" />}
     <meta name="theme-color" content="#f6f6f2" />
     <title>{title} · html2figma</title>
     <link rel="icon" type="image/svg+xml" href="/brand/logo.svg" />
@@ -27,15 +34,16 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:image" content={new URL('/brand/logo.png', Astro.site)} />
+    <Analytics mode={isProduction ? 'production' : 'development'} debug={false} />
   </head>
   <body data-language={language}>
     <a href="#main" class="skip-link">{t(language, 'Skip to content', '跳到正文')}</a>
-    <SiteHeader language={language} route={route} version={release.version} client:load />
+    <SiteHeader language={language} route={route} client:load />
     <main id="main"><slot /></main>
     <footer class="footer">
       <a class="wordmark" href={link(language)}><img src="/brand/logo.svg" alt="" width="30" height="30" />html2figma</a>
       <p>{t(language, 'Built for the space between code and canvas.', '连接代码与设计画布。')}</p>
-      <div><a href={link(language, 'docs/plugin')}>{l.plugin}</a><a href="https://github.com/Natumsol/html2figma/blob/v1.0.2/package.json">MIT</a><a href="https://github.com/Natumsol/html2figma/releases">v{release.version} ↗</a></div>
+      <div><a href={link(language, 'docs/plugin')}>{l.plugin}</a><a href="https://github.com/Natumsol/html2figma/blob/v1.0.2/package.json">MIT</a><a href="https://github.com/Natumsol/html2figma/releases">{t(language, 'Releases', '更新日志')} ↗</a></div>
     </footer>
     <script>
       import '../client/site';

@@ -5,7 +5,7 @@ import { initPlayground } from "@/client/playground";
 import { BrandButton } from "./BrandButton";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
-import { NativeSelect, NativeSelectOption } from "../ui/native-select";
+import { ExampleSelect } from "./ExampleSelect";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../ui/tabs";
 import { Textarea } from "../ui/textarea";
 import { Download } from "lucide-react";
@@ -43,44 +43,52 @@ export function Workbench({ language }: { language: Language }) {
     <>
       <section className="workspace-heading wrap">
         <div>
-          <p className="eyebrow">HTML → JSON → FIGMA</p>
-          <h1>
-            Playground<span className="violet-text">.</span>
-          </h1>
+          <h1>Playground</h1>
+          <p className="workspace-description">
+            {t(
+              language,
+              "Edit HTML & CSS. Export Figma layers.",
+              "编辑 HTML 与 CSS，导出 Figma 图层。",
+            )}
+          </p>
         </div>
-        <p>
-          {t(
-            language,
-            "Edit the source. Inspect the document. Take it to Figma.",
-            "编辑源码，检查转换文档，然后带入 Figma。",
-          )}
-        </p>
+        <a
+          className="workspace-plugin-link text-link"
+          href={link(language, "docs/plugin")}
+        >
+          {t(language, "Figma plugin", "Figma 插件")} ↗
+        </a>
       </section>
       <section className="workbench wrap" data-playground>
         <div className="workbench-toolbar">
           <div className="source-options">
-            <label htmlFor="case-select">
-              {t(language, "Example", "案例")}
-            </label>
-            <NativeSelect
-              id="case-select"
-              className="h-auto rounded-xl border-0 bg-white py-2.5 pr-9 shadow-none"
-            >
-              {cases.map((item) => (
-                <NativeSelectOption key={item.id} value={item.id}>
-                  {caseText(item.id, language).title}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
-            <label htmlFor="viewport">{t(language, "Viewport", "视口")}</label>
-            <NativeSelect
-              id="viewport"
-              className="h-auto rounded-xl border-0 bg-white py-2.5 pr-9 shadow-none"
-            >
-              <NativeSelectOption value="640">640 px</NativeSelectOption>
-              <NativeSelectOption value="375">375 px</NativeSelectOption>
-              <NativeSelectOption value="1024">1024 px</NativeSelectOption>
-            </NativeSelect>
+            <div className="source-field">
+              <label htmlFor="case-select-trigger">
+                {t(language, "Example", "案例")}
+              </label>
+              <ExampleSelect
+                id="case-select"
+                label={t(language, "Example", "案例")}
+                options={cases.map((item) => ({
+                  value: item.id,
+                  label: caseText(item.id, language).title,
+                }))}
+              />
+            </div>
+            <div className="source-field">
+              <label htmlFor="viewport-trigger">
+                {t(language, "Viewport", "视口")}
+              </label>
+              <ExampleSelect
+                id="viewport"
+                label={t(language, "Viewport", "视口")}
+                kind="viewport"
+                options={[640, 375, 1024].map((width) => ({
+                  value: String(width),
+                  label: `${width} px`,
+                }))}
+              />
+            </div>
           </div>
           <div className="toolbar-actions">
             <BrandButton
@@ -109,25 +117,11 @@ export function Workbench({ language }: { language: Language }) {
               <Download strokeWidth={1.2} />
             </Button>
           </div>
-          <div className="workbench-status" data-state="loading">
-            <span className="status-dot" />
-            <p id="playground-status" role="status" aria-live="polite">
-              {l.loading}
-            </p>
-            <span id="result-summary" />
-          </div>
         </div>
-        <div className="copy-next-step">
-          <span>
-            {t(
-              language,
-              "Copy JSON, then continue in Figma.",
-              "复制 JSON 后，在 Figma 中继续。",
-            )}
-          </span>
-          <a className="text-link" href={link(language, "docs/plugin")}>
-            {l.plugin} →
-          </a>
+        <div className="workbench-status" data-state="loading">
+          <p id="playground-status" role="status" aria-live="polite">
+            {l.loading}
+          </p>
         </div>
         <Tabs
           value={view}
@@ -256,9 +250,7 @@ export function Workbench({ language }: { language: Language }) {
                       <span id="warning-count" hidden />
                     </TabsTrigger>
                   </TabsList>
-                  <span className="panel-caption">
-                    {t(language, "INSPECT", "检查")}
-                  </span>
+                  <span id="result-summary" className="panel-caption" />
                 </div>
                 <TabsContent
                   forceMount
